@@ -78,3 +78,5 @@ gradle-app.setting
 # End of https://www.gitignore.io/api/intellij,gradle
 /.idea/
 /.idea/workspace.xml
+/enonce.pdf
+/SDD2-Project.iml
