@@ -41,6 +41,8 @@ public class Main {
 		 * System.out.print(segments.get(j).getY1()); System.out.print(" ");
 		 * System.out.println(segments.get(j).getY2()); }
 		 */
+		new SegmentsWindow(fwindow, segments);
+		
 		lecteur.close();
     }
 }
