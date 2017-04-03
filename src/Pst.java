@@ -21,11 +21,11 @@ public class Pst {
 
     private void construct(ArrayList<Tuple> list,Node temp) {
         while (list.size()!=1) {
-            temp=new Node(list.remove(firstx(list)), (list.get(list.size()-1).y1 - list.get(0).y1)/2);
+            temp=new Node(list.remove(firstx(list)), (list.get(list.size() - 1).getY1() - list.get(0).getY1())/2);
             construct((ArrayList<Tuple>) list.subList(0,list.size()/2),temp.nextl);//voir si compris ou pas le dernier elem
             construct((ArrayList<Tuple>) list.subList(list.size()/2,list.size()-1),temp.nextr);
         }
-        temp=new Node(list.remove(firstx(list)), (list.get(list.size()-1).y1 - list.get(0).y1)/2);
+        temp=new Node(list.remove(firstx(list)), (list.get(list.size() - 1).getY1() - list.get(0).getY1())/2);
         construct((ArrayList<Tuple>) list.subList(0,list.size()/2),temp.nextl);
     }
 
@@ -41,10 +41,10 @@ public class Pst {
         for (int i=1;i<list.size();i++){
             val=list.get(i);
             mini=list.get(min);
-            if (val.x1<mini.x1)
+            if (val.getX1() < mini.getX1())
                 min=i;
             else {
-                if (val.x1==mini.x1 && val.x2<mini.x2)
+                if (val.getX1() == mini.getX1() && val.getX2() < mini.getX2())
                     min=i;
             }
         }

@@ -33,11 +33,11 @@ public class Main {
         }
         //faire un quicksort - peut être plus rapide que sort de base
         segments.sort(Tuple::compareTo);
-        /*for (int j=0 ; j<segments.size();j++) {
+        for (int j=0 ; j<segments.size();j++) {
             System.out.print(segments.get(j).getY1());
             System.out.print(" ");
             System.out.println(segments.get(j).getY2());
-        }*/
+        }
 
         lecteur.close();
     }
