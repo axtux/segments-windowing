@@ -1,11 +1,12 @@
 /**
  * Created by marco on 28/03/17.
  */
+
 public class Tuple implements Comparable<Tuple> {
-	final int x1;
-	final int x2;
-	final int y1;
-	final int y2;
+	private final int x1;
+	private final int x2;
+	private final int y1;
+	private final int y2;
 	
 	public Tuple(float x1, float x2, float y1, float y2) {
 		this.x1=(int)x1;

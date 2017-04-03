@@ -13,8 +13,6 @@ public class Main {
 		lecteur.useLocale(Locale.US);
 
 		// System.out.println(lecteur.hasNextFloat());
-		int k = 5 / 2;
-		System.out.println(k);
 		// System.out.println(lecteur.nextFloat());
 		// System.out.println((int)Float.parseFloat(lecteur.next()));
 
@@ -38,7 +36,6 @@ public class Main {
 		 * System.out.print(segments.get(j).getY1()); System.out.print(" ");
 		 * System.out.println(segments.get(j).getY2()); }
 		 */
-
 		lecteur.close();
-	}
+    }
 }
