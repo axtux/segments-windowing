@@ -4,14 +4,16 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
-
-public class JCanvas extends JPanel {
+/**
+ * Panel drawing segments
+ */
+public class SegmentsPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
 	private Point origin;
 	private ArrayList<Tuple> relative_segments;
 
-	public JCanvas(Tuple window, ArrayList<Tuple> segments) {
+	public SegmentsPanel(Tuple window, ArrayList<Tuple> segments) {
 		setWindow(window);
 		setSegments(segments);
 		setBackground(Color.WHITE);
@@ -66,7 +68,9 @@ public class JCanvas extends JPanel {
 		
 		return new Tuple(x1, x2, y1, y2);
 	}
-	
+	/**
+	 * Draw segments
+	 */
 	public void paint(Graphics g) {
 		super.paint(g);
 		Color oldColor = g.getColor();
