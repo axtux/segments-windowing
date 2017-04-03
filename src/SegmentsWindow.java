@@ -6,29 +6,34 @@ import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
-
+/**
+ * Window to display segments using {@link SegmentsPanel} and enable mouse scrolling.
+ */
 public class SegmentsWindow {
-	SegmentsPanel panel;
+	private SegmentsPanel panel;
+	
 	public SegmentsWindow(Tuple window, ArrayList<Tuple> segments) {
 		panel = new SegmentsPanel(window, segments);
 		JScrollPane scroll = new JScrollPane(panel);
 		JFrame frame = new JFrame("Segments Window");
-		frame.getContentPane().add(scroll);
+		frame.add(scroll);
 		frame.pack();
 		// center window
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 		
-		activateScroll();
+		activateMouseScroll();
 	}
 	
-	private void activateScroll() {
+	private void activateMouseScroll() {
 		MouseScroller ms = new MouseScroller();
 		panel.addMouseListener(ms);
 		panel.addMouseMotionListener(ms);
 		ms.mouseReleased(null);
 	}
-	
+	/**
+	 * Mouse listener that enable mouse scrolling.
+	 */
 	private class MouseScroller extends MouseAdapter {
 		private Point origin;
 		
