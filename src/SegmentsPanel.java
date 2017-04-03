@@ -11,12 +11,15 @@ public class SegmentsPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
 	private Point origin;
+	private int width, height;
 	private ArrayList<Tuple> relative_segments;
-
+	double scale;
+	
 	public SegmentsPanel(Tuple window, ArrayList<Tuple> segments) {
 		setWindow(window);
 		setSegments(segments);
 		setBackground(Color.WHITE);
+		setScale(1);
 	}
 	/**
 	 * Set window sizes and origin Point
@@ -27,8 +30,8 @@ public class SegmentsPanel extends JPanel {
 			throw new NullPointerException();
 		}
 		
-		int width = window.getX2()-window.getX1();
-		int height = window.getY2()-window.getY1();
+		width = window.getX2()-window.getX1();
+		height = window.getY2()-window.getY1();
 		this.setSize(new Dimension(width, height));
 		this.setPreferredSize(new Dimension(width, height));
 		this.origin = new Point(-window.getX1(), -window.getY1());
@@ -48,6 +51,25 @@ public class SegmentsPanel extends JPanel {
 		// compute segments relative to graphics axis
 		for(Tuple s : segments) {
 			relative_segments.add(relativise(s));
+		}
+	}
+	/**
+	 * Get scaling factor.
+	 * @return Scaling factor.
+	 */
+	public double getScale() {
+		return scale;
+	}
+	/**
+	 * Set scaling factor.
+	 * @param scale Scaling factor should be > 0. 1 is normal, less is zoomed out and more is zoomed in.
+	 */
+	public void setScale(double scale) {
+		if(scale > 0) {
+			this.scale = scale;
+			int scaledWidth = (int) (width*scale);
+			int scaledHeight = (int) (height*scale);
+			this.setPreferredSize(new Dimension(scaledWidth, scaledHeight));
 		}
 	}
 	/**
@@ -73,11 +95,19 @@ public class SegmentsPanel extends JPanel {
 	 */
 	public void paint(Graphics g) {
 		super.paint(g);
+		
 		Color oldColor = g.getColor();
 		g.setColor(Color.BLACK);
 		
+		int x1, y1, x2, y2;
 		for(Tuple s : relative_segments) {
-			g.drawLine(s.getX1(), s.getY1(), s.getX2(), s.getY2());
+			x1 = (int) (s.getX1()*scale);
+			y1 = (int) (s.getY1()*scale);
+			x2 = (int) (s.getX2()*scale);
+			y2 = (int) (s.getY2()*scale);
+			
+			g.drawLine(x1, y1, x2, y2);
+			//g.drawLine(s.getX1(), s.getY1(), s.getX2(), s.getY2());
 		}
 		
 		g.setColor(oldColor);
