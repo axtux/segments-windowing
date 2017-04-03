@@ -10,21 +10,29 @@ import javax.swing.JScrollPane;
 /**
  * Window to display segments using {@link SegmentsPanel} and enable mouse scrolling.
  */
-public class SegmentsWindow {
-	private JFrame frame;
+public class SegmentsWindow extends JFrame {
+	private static final long serialVersionUID = 1L;
+	private SegmentsWindow self;
 	private SegmentsPanel panel;
 	
 	public SegmentsWindow(Tuple window, ArrayList<Tuple> segments) {
+		super("Segments Window");
+		self = this;
 		panel = new SegmentsPanel(window, segments);
-		JScrollPane scroll = new JScrollPane(panel);
-		frame = new JFrame("Segments Window");
-		frame.add(scroll);
-		frame.pack();
+		add(new JScrollPane(panel));
 		// center window
-		frame.setLocationRelativeTo(null);
-		frame.setVisible(true);
+		setLocationRelativeTo(null);
+		setVisible(true);
 		
 		activateMouseScroll();
+		updateSize();
+	}
+	
+	public void updateSize() {
+		// minimize when needed
+		setExtendedState(NORMAL);
+		// update size
+		pack();
 	}
 	
 	private void activateMouseScroll() {
@@ -67,7 +75,7 @@ public class SegmentsWindow {
 			// adjut scale per 0.1, zoom in on wheel up zoom out on wheel down
 			panel.setScale(panel.getScale()-0.1*e.getWheelRotation());
 			// adjust frame size and repaint panel
-			frame.pack();
+			self.updateSize();
 		}
-	};
+	}
 }
