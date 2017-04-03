@@ -47,8 +47,8 @@ public class SegmentsWindow {
 			}
 			
 			Rectangle view = panel.getVisibleRect();
-			view.x += origin.x - e.getX();
-			view.y += origin.y - e.getY();
+			view.x += origin.getX() - e.getX();
+			view.y += origin.getY() - e.getY();
 			
 			panel.scrollRectToVisible(view);
 		}
