@@ -80,3 +80,9 @@ gradle-app.setting
 /.idea/workspace.xml
 /enonce.pdf
 /SDD2-Project.iml
+
+# Eclipse
+/bin/
+.classpath
+.project
+
