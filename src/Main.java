@@ -17,16 +17,21 @@ public class Main {
 		// System.out.println((int)Float.parseFloat(lecteur.next()));
 
 		// première ligne
-		Tuple fwindow = new Tuple(lecteur.nextFloat(), lecteur.nextFloat(), lecteur.nextFloat(), lecteur.nextFloat());
+		Tuple fwindow = new Tuple(
+			(int) lecteur.nextFloat(),
+			(int) lecteur.nextFloat(),
+			(int) lecteur.nextFloat(),
+			(int) lecteur.nextFloat()
+		);
 
 		// autres lignes
 		ArrayList<Tuple> segments = new ArrayList<Tuple>();
 		int i = 0;
 		while (lecteur.hasNextFloat()) {
-			float x1 = lecteur.nextFloat();
-			float y1 = lecteur.nextFloat();
-			float x2 = lecteur.nextFloat();
-			float y2 = lecteur.nextFloat();
+			int x1 = (int) lecteur.nextFloat();
+			int y1 = (int) lecteur.nextFloat();
+			int x2 = (int) lecteur.nextFloat();
+			int y2 = (int) lecteur.nextFloat();
 			segments.add(new Tuple(x1, x2, y1, y2));
 		}
 		// faire un quicksort - peut être plus rapide que sort de base
@@ -36,6 +41,8 @@ public class Main {
 		 * System.out.print(segments.get(j).getY1()); System.out.print(" ");
 		 * System.out.println(segments.get(j).getY2()); }
 		 */
+		new SegmentsWindow(fwindow, segments);
+		
 		lecteur.close();
     }
 }
