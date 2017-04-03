@@ -1,4 +1,8 @@
+package data;
+
 import java.util.ArrayList;
+
+import graphics.SegmentsWindow;
 
 /**
  * Main class

@@ -1,9 +1,14 @@
+package graphics;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
+
+import data.Point;
+import data.Tuple;
 /**
  * Panel drawing segments
  */

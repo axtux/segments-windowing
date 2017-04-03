@@ -1,3 +1,4 @@
+package graphics;
 import java.awt.Cursor;
 import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
@@ -7,6 +8,9 @@ import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
+
+import data.Point;
+import data.Tuple;
 /**
  * Window to display segments using {@link SegmentsPanel} and enable mouse scrolling.
  */
