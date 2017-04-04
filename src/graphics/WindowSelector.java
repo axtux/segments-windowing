@@ -20,6 +20,7 @@ public class WindowSelector extends JFrame implements ActionListener {
 	private String scenesDir;
 	
 	private JPanel content;
+	private JPanel filesContainer;
 	private JComboBox<String> files;
 	private JLabel error;
 	
@@ -28,7 +29,7 @@ public class WindowSelector extends JFrame implements ActionListener {
 	}
 	
 	public WindowSelector(String scenesDir) {
-		super("Window Selector");
+		super("File and Window Selector");
 		setScenesDir(scenesDir);
 		
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -60,6 +61,7 @@ public class WindowSelector extends JFrame implements ActionListener {
 	
 	private void addFileSelector() {
 		JPanel container = new JPanel();
+		filesContainer = container;
 		files = new JComboBox<String>(new String[0]);
 		container.add(files);
 		content.add(container);
@@ -76,10 +78,17 @@ public class WindowSelector extends JFrame implements ActionListener {
 			error("No valid files found into directory "+scenesDir);
 			return;
 		}
-		
+		/*
+		files.removeAll();
+		for(String filename : filenames) {
+			files.addItem(filename);
+		}
+		files.revalidate();
+		files.repaint();
+		//*/
+		filesContainer.removeAll();
 		files = new JComboBox<String>(filenames.toArray(new String[0]));
-		
-		
+		filesContainer.add(files);
 	}
 	
 	private void addWindowSelector() {
