@@ -113,6 +113,10 @@ public class File {
 			return null;
 		}
 		
+		if(suffix == null || suffix.isEmpty()) {
+			return paths;
+		}
+		
 		ArrayList<String> filtered = new ArrayList<String>(paths.size());
 		suffix = suffix.toLowerCase();
 		for(String path : paths) {
