@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Scanner;
 
-public class Segments {
+public class Scene {
 	private Tuple window;
 	private ArrayList<Tuple> segments;
 	/**
@@ -14,9 +14,9 @@ public class Segments {
 	 * @param filename File from which to read Segments.
 	 * @return Segments or null on error.
 	 */
-	public static Segments getSegments(String filename) {
+	public static Scene getScene(String filename) {
 		try {
-			return new Segments(filename);
+			return new Scene(filename);
 		} catch (IOException e) {
 			return null;
 		}
@@ -26,7 +26,7 @@ public class Segments {
 	 * @param filename File from which to read Segments.
 	 * @throws IOException In case an error occurs reading file.
 	 */
-	public Segments(String filename) throws IOException {
+	public Scene(String filename) throws IOException {
 		if(filename == null) throw new NullPointerException();
 		
 		Scanner lecteur = new Scanner(new File(filename));

@@ -9,21 +9,21 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 
 import data.Point;
-import data.Segments;
+import data.Scene;
 /**
- * Window to display segments using {@link SegmentsPanel} and enable mouse scrolling.
+ * Window to display segments using {@link ScenePanel} and enable mouse scrolling.
  */
-public class SegmentsWindow extends JFrame {
+public class SceneWindow extends JFrame {
 	private static final long serialVersionUID = 1L;
-	private SegmentsWindow self;
-	private SegmentsPanel panel;
+	private SceneWindow self;
+	private ScenePanel panel;
 	
-	public SegmentsWindow(Segments segments) {
+	public SceneWindow(Scene scene) {
 		super("Segments Window");
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		
 		self = this;
-		panel = new SegmentsPanel(segments);
+		panel = new ScenePanel(scene);
 		add(new JScrollPane(panel));
 		activateMouseScroll();
 		updateSize();

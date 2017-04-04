@@ -12,7 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import data.File;
-import data.Segments;
+import data.Scene;
 
 public class WindowSelector extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
@@ -127,13 +127,13 @@ public class WindowSelector extends JFrame implements ActionListener {
 		}
 		
 		String file = files.getItemAt(i);
-		Segments segments = Segments.getSegments(file);
-		if(segments == null) {
-			error("Unable to get segments from file "+file+". Please check readability and/or format.");
+		Scene scene = Scene.getScene(file);
+		if(scene == null) {
+			error("Unable to get scene from file "+file+". Please check readability and/or format.");
 			return;
 		}
 		
-		new SegmentsWindow(segments);
+		new SceneWindow(scene);
 	}
 	
 	private void error(String error) {
