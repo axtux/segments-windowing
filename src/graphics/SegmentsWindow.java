@@ -4,13 +4,12 @@ import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
-import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 
 import data.Point;
-import data.Tuple;
+import data.Segments;
 /**
  * Window to display segments using {@link SegmentsPanel} and enable mouse scrolling.
  */
@@ -19,12 +18,12 @@ public class SegmentsWindow extends JFrame {
 	private SegmentsWindow self;
 	private SegmentsPanel panel;
 	
-	public SegmentsWindow(Tuple window, ArrayList<Tuple> segments) {
+	public SegmentsWindow(Segments segments) {
 		super("Segments Window");
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		
 		self = this;
-		panel = new SegmentsPanel(window, segments);
+		panel = new SegmentsPanel(segments);
 		add(new JScrollPane(panel));
 		activateMouseScroll();
 		updateSize();

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import javax.swing.JPanel;
 
 import data.Point;
+import data.Segments;
 import data.Tuple;
 /**
  * Panel drawing segments
@@ -21,9 +22,11 @@ public class SegmentsPanel extends JPanel {
 	private double scale;
 	private ArrayList<Tuple> scaled_segments;
 	
-	public SegmentsPanel(Tuple window, ArrayList<Tuple> segments) {
-		setWindow(window);
-		setSegments(segments);
+	public SegmentsPanel(Segments segments) {
+		if(segments == null) throw new NullPointerException();
+		
+		setWindow(segments.getWindow());
+		setSegments(segments.getSegments());
 		setBackground(Color.WHITE);
 		setScale(1);
 	}
