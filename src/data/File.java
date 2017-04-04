@@ -114,8 +114,9 @@ public class File {
 		}
 		
 		ArrayList<String> filtered = new ArrayList<String>(paths.size());
+		suffix = suffix.toLowerCase();
 		for(String path : paths) {
-			if(path.toLowerCase().endsWith(suffix.toLowerCase())) {
+			if(path.toLowerCase().endsWith(suffix)) {
 				filtered.add(path);
 			}
 		}
