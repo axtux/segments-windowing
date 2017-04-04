@@ -11,17 +11,17 @@ public class Pst {
 
 	public Pst(ArrayList<Tuple> list) {
 		construct(list,root);
-			//root.setNextl(list.subList(0,(list.size()/2)-1));
+		//root.setNextl(list.subList(0,(list.size()/2)-1));
 	}
 
 	private void construct(ArrayList<Tuple> list,Node temp) {
+		float median;
 		while (list.size()!=1) {
 			temp=new Node(list.remove(firstx(list)), (list.get(list.size() - 1).getY1() - list.get(0).getY1())/2);
 			construct((ArrayList<Tuple>) list.subList(0,list.size()/2),temp.nextl);//voir si compris ou pas le dernier elem
 			construct((ArrayList<Tuple>) list.subList(list.size()/2,list.size()-1),temp.nextr);
 		}
 		temp=new Node(list.remove(firstx(list)), (list.get(list.size() - 1).getY1() - list.get(0).getY1())/2);
-		construct((ArrayList<Tuple>) list.subList(0,list.size()/2),temp.nextl);
 	}
 
 
