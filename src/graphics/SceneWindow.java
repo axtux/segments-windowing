@@ -26,17 +26,21 @@ public class SceneWindow extends JFrame {
 		panel = new ScenePanel(scene);
 		add(new JScrollPane(panel));
 		activateMouseScroll();
-		updateSize();
+		
 		// center window
+		setExtendedState(MAXIMIZED_BOTH);
+		// size when user minimizes window
+		setSize(500, 500);
+		update();
 		setLocationRelativeTo(null);
 		setVisible(true);
 	}
-	
-	public void updateSize() {
-		// minimize when needed
-		setExtendedState(NORMAL);
-		// update size
-		pack();
+	/**
+	 * Update scroll bars and repaint
+	 */
+	public void update() {
+		panel.revalidate();
+		panel.repaint();
 	}
 	
 	private void activateMouseScroll() {
@@ -76,17 +80,24 @@ public class SceneWindow extends JFrame {
 		public void mouseWheelMoved(MouseWheelEvent e) {
 			// prevent default behaviour
 			e.consume();
-			// adjut scale per 0.1, zoom in on wheel up zoom out on wheel down
-			panel.setScale(panel.getScale()-0.1*e.getWheelRotation());
-			// adjust frame size and repaint panel
-			self.updateSize();
-			// TODO UI improvement : update view to keep mouse point at same place
-			/* Try to update view but not working
+			
+			// backup old view
+			Rectangle oldView = panel.getVisibleRect();
+			double oldCenterX = oldView.getX()+oldView.getWidth()/2;
+			double oldCenterY = oldView.getY()+oldView.getHeight()/2;
+			
+			// ratio 0.9 or 1.1 depending on rotation, zoom in on wheel up zoom out on wheel down
+			double ratio = 1-0.1*e.getWheelRotation();
+			panel.setScale(panel.getScale()*ratio);
+			
+			// Update scroll bars and repaint
+			self.update();
+			
+			// set view back to centered point
 			Rectangle view = panel.getVisibleRect();
-			view.x = 100;
-			view.y = 100;
+			view.x = (int) (oldCenterX*ratio-view.getWidth()/2);
+			view.y = (int) (oldCenterY*ratio-view.getHeight()/2);
 			panel.scrollRectToVisible(view);
-			//*/
 		}
 	}
 }
