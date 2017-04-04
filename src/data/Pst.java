@@ -26,7 +26,13 @@ public class Pst {
 			construct((ArrayList<Seg>) list.subList(0,list.size()/2),temp.nextl);
 			construct((ArrayList<Seg>) list.subList(list.size()/2,list.size()-1),temp.nextr);
 		}
-		temp=new Node(list.remove(firstx(list)), (list.get(0).getY1()) );
+		if (list.size()==1) //base case where the sub tree containt one element
+			temp=new Node(list.remove(firstx(list)));//median is null ( it's a leaf)
+		else { //base case where subtree containt two element
+			temp=new Node(list.remove(firstx(list)), (list.get(1).getY1()));//the median is the y1 unique element
+			temp.setNextl(new Node(list.remove(0)));
+		}
+
 	}
 
 
