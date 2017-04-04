@@ -9,7 +9,8 @@ import javax.swing.JPanel;
 
 import data.Point;
 import data.Scene;
-import data.Tuple;
+import data.Seg;
+
 /**
  * Panel drawing segments
  */
@@ -18,9 +19,9 @@ public class ScenePanel extends JPanel {
 	
 	private Point origin;
 	private int width, height;
-	private ArrayList<Tuple> relative_segments;
+	private ArrayList<Seg> relative_segments;
 	private double scale;
-	private ArrayList<Tuple> scaled_segments;
+	private ArrayList<Seg> scaled_segments;
 	
 	public ScenePanel(Scene scene) {
 		if(scene == null) throw new NullPointerException();
@@ -34,7 +35,7 @@ public class ScenePanel extends JPanel {
 	 * Set window sizes and origin Point
 	 * @param window The window limits.
 	 */
-	private void setWindow(Tuple window) {
+	private void setWindow(Seg window) {
 		if(window == null) {
 			throw new NullPointerException();
 		}
@@ -47,14 +48,14 @@ public class ScenePanel extends JPanel {
 	 * Relativise segments and save them
 	 * @param segments Segments relative to the origin, x-axis counting from left to right, y-axis counting from bottom to top.
 	 */
-	private void setSegments(ArrayList<Tuple> segments) {
+	private void setSegments(ArrayList<Seg> segments) {
 		if(segments == null) {
 			throw new NullPointerException();
 		}
 		
-		relative_segments = new ArrayList<Tuple>(segments.size());
+		relative_segments = new ArrayList<Seg>(segments.size());
 		// compute segments relative to graphics axis
-		for(Tuple s : segments) {
+		for(Seg s : segments) {
 			relative_segments.add(relativise(s));
 		}
 	}
@@ -80,24 +81,24 @@ public class ScenePanel extends JPanel {
 		setPreferredSize(new Dimension(scaledWidth, scaledHeight));
 		
 		// update scaled segments
-		scaled_segments = new ArrayList<Tuple>(relative_segments.size());
+		scaled_segments = new ArrayList<Seg>(relative_segments.size());
 		int x1, y1, x2, y2;
 		
-		for(Tuple s : relative_segments) {
+		for(Seg s : relative_segments) {
 			x1 = (int) (s.getX1()*scale);
 			y1 = (int) (s.getY1()*scale);
 			x2 = (int) (s.getX2()*scale);
 			y2 = (int) (s.getY2()*scale);
 			
-			scaled_segments.add(new Tuple(x1, x2, y1, y2));
+			scaled_segments.add(new Seg(x1, x2, y1, y2));
 		}
 	}
 	/**
 	 * Relativise a segment to graphics axis
-	 * @param s Tuple to relativise
+	 * @param s Seg to relativise
 	 * @return Relativised tuple
 	 */
-	private Tuple relativise(Tuple s) {
+	private Seg relativise(Seg s) {
 		// move X to origin
 		int x1 = s.getX1()+origin.getX();
 		int x2 = s.getX2()+origin.getX();
@@ -108,7 +109,7 @@ public class ScenePanel extends JPanel {
 		y1 = height-y1;
 		y2 = height-y2;
 		
-		return new Tuple(x1, x2, y1, y2);
+		return new Seg(x1, x2, y1, y2);
 	}
 	/**
 	 * Draw segments
@@ -119,7 +120,7 @@ public class ScenePanel extends JPanel {
 		Color oldColor = g.getColor();
 		g.setColor(Color.BLACK);
 		
-		for(Tuple s : scaled_segments) {
+		for(Seg s : scaled_segments) {
 			g.drawLine(s.getX1(), s.getY1(), s.getX2(), s.getY2());
 		}
 		
