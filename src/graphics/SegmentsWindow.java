@@ -21,6 +21,8 @@ public class SegmentsWindow extends JFrame {
 	
 	public SegmentsWindow(Tuple window, ArrayList<Tuple> segments) {
 		super("Segments Window");
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		
 		self = this;
 		panel = new SegmentsPanel(window, segments);
 		add(new JScrollPane(panel));
