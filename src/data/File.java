@@ -101,4 +101,25 @@ public class File {
 		
 		return paths;
 	}
+	/**
+	 * List entries ending with suffix into directory.
+	 * @param pathname Directory to read.
+	 * @param suffix only entries ending with this suffix will be listed.
+	 * @return List of entry names relative to application root or null on error.
+	 */
+	public static ArrayList<String> list(String pathname, String suffix) {
+		ArrayList<String> paths = list(pathname);
+		if(paths == null) {
+			return null;
+		}
+		
+		ArrayList<String> filtered = new ArrayList<String>(paths.size());
+		for(String path : paths) {
+			if(path.endsWith(suffix)) {
+				filtered.add(path);
+			}
+		}
+		
+		return filtered;
+	}
 }
