@@ -2,10 +2,13 @@ package tests;
 
 import java.util.ArrayList;
 
+import org.junit.Test;
+
 import data.File;
 
 public class FileTests {
-	public void main(String[] args) {
+	@Test
+	public void consoleTest() {
 		ArrayList<String> files = File.list("scenes");
 		System.out.println("Files are "+files.toString());
 		

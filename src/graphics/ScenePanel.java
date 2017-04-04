@@ -8,11 +8,12 @@ import java.util.ArrayList;
 import javax.swing.JPanel;
 
 import data.Point;
+import data.Scene;
 import data.Tuple;
 /**
  * Panel drawing segments
  */
-public class SegmentsPanel extends JPanel {
+public class ScenePanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
 	private Point origin;
@@ -21,9 +22,11 @@ public class SegmentsPanel extends JPanel {
 	private double scale;
 	private ArrayList<Tuple> scaled_segments;
 	
-	public SegmentsPanel(Tuple window, ArrayList<Tuple> segments) {
-		setWindow(window);
-		setSegments(segments);
+	public ScenePanel(Scene scene) {
+		if(scene == null) throw new NullPointerException();
+		
+		setWindow(scene.getWindow());
+		setSegments(scene.getSegments());
 		setBackground(Color.WHITE);
 		setScale(1);
 	}
