@@ -1,11 +1,13 @@
 package graphics;
 import java.awt.Cursor;
+import java.awt.GridBagLayout;
 import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import data.Point;
@@ -24,7 +26,16 @@ public class SceneWindow extends JFrame {
 		
 		self = this;
 		panel = new ScenePanel(scene);
-		add(new JScrollPane(panel));
+		
+		// container to center panel
+		JPanel container = new JPanel(new GridBagLayout());
+		container.add(panel);
+		
+		// scroll panel without wheel
+		JScrollPane scroll = new JScrollPane(container);
+		scroll.setWheelScrollingEnabled(false);
+		add(scroll);
+		
 		activateMouseScroll();
 		
 		// center window
@@ -45,9 +56,14 @@ public class SceneWindow extends JFrame {
 	
 	private void activateMouseScroll() {
 		MouseScroller ms = new MouseScroller();
+		
+		// mouse click and drag only on panel
 		panel.addMouseListener(ms);
 		panel.addMouseMotionListener(ms);
-		panel.addMouseWheelListener(ms);
+		
+		// wheel on all window
+		addMouseWheelListener(ms);
+		
 		ms.mouseReleased(null);
 	}
 	/**
