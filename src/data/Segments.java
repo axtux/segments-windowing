@@ -9,7 +9,23 @@ import java.util.Scanner;
 public class Segments {
 	private Tuple window;
 	private ArrayList<Tuple> segments;
-	
+	/**
+	 * Get Segments from file.
+	 * @param filename File from which to read Segments.
+	 * @return Segments or null on error.
+	 */
+	public static Segments getSegments(String filename) {
+		try {
+			return new Segments(filename);
+		} catch (IOException e) {
+			return null;
+		}
+	}
+	/**
+	 * Build Segments from file.
+	 * @param filename File from which to read Segments.
+	 * @throws IOException In case an error occurs reading file.
+	 */
 	public Segments(String filename) throws IOException {
 		if(filename == null) throw new NullPointerException();
 		
