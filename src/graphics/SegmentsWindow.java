@@ -24,12 +24,11 @@ public class SegmentsWindow extends JFrame {
 		self = this;
 		panel = new SegmentsPanel(window, segments);
 		add(new JScrollPane(panel));
+		activateMouseScroll();
+		updateSize();
 		// center window
 		setLocationRelativeTo(null);
 		setVisible(true);
-		
-		activateMouseScroll();
-		updateSize();
 	}
 	
 	public void updateSize() {
@@ -80,6 +79,13 @@ public class SegmentsWindow extends JFrame {
 			panel.setScale(panel.getScale()-0.1*e.getWheelRotation());
 			// adjust frame size and repaint panel
 			self.updateSize();
+			// TODO UI improvement : update view to keep mouse point at same place
+			/* Try to update view but not working
+			Rectangle view = panel.getVisibleRect();
+			view.x = 100;
+			view.y = 100;
+			panel.scrollRectToVisible(view);
+			//*/
 		}
 	}
 }
