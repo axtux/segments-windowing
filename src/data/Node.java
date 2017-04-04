@@ -4,7 +4,7 @@ package data;
  */
 public class Node {
 
-	private Tuple data;
+	private Seg data;
 	public final float median;
 	public Node nextr;
 	public Node nextl;
@@ -21,16 +21,16 @@ public class Node {
         return median;
     }
 
-	public Tuple getData() {
+	public Seg getData() {
 		return data;
 	}
 
-	public Node(Tuple data){
+	public Node(Seg data){
 		this.data=data;
 		median = 0;
 	}
 
-	public Node(Tuple data,float median){
+	public Node(Seg data, float median){
 		this.data=data;
 		this.median=median;
 	}

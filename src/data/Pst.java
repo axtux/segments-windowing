@@ -1,7 +1,6 @@
 package data;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by marco on 1/04/17.
@@ -11,30 +10,35 @@ public class Pst {
 
 	private Node root;
 
-	public Pst(ArrayList<Tuple> list) {
+	public Pst(ArrayList<Seg> list) {
 		construct(list,root);
-		//root.setNextl(list.subList(0,(list.size()/2)-1));
 	}
 
-	private void construct(ArrayList<Tuple> list,Node temp) {
-		float median;
+	/***
+	 * This method is used by the constructor to create step by step the priority search tree.
+	 * @param list a list of element sorted in y
+	 * @param temp a Node variable that will stock the root of the tree
+	 */
+	private void construct(ArrayList<Seg> list, Node temp) {
+		//for the method list.sublist() , the first index is inclusive and the second exclusive
 		while (list.size()!=1) {
-			temp=new Node(list.remove(firstx(list)), (list.get(list.size() - 1).getY1() - list.get(0).getY1())/2);
-			construct((ArrayList<Tuple>) list.subList(0,list.size()/2),temp.nextl);//voir si compris ou pas le dernier elem
-			construct((ArrayList<Tuple>) list.subList(list.size()/2,list.size()-1),temp.nextr);
+			temp=new Node(list.remove(firstx(list)), (list.get((list.size()-1)/2).getY1()) );
+			construct((ArrayList<Seg>) list.subList(0,list.size()/2),temp.nextl);
+			construct((ArrayList<Seg>) list.subList(list.size()/2,list.size()-1),temp.nextr);
 		}
-		temp=new Node(list.remove(firstx(list)), (list.get(list.size() - 1).getY1() - list.get(0).getY1())/2);
+		temp=new Node(list.remove(firstx(list)), (list.get(0).getY1()) );
 	}
 
 
 	/***
-	 * this method is used to have the minimum in x in a list of Tuple sorted in y, there is no duplicate value in x
+	 * this method is used to have the minimum in x in a list of Seg sorted in y,
+	 * note that there is no duplicate value in x (prerequisite).
 	 * @param list
-	 * @return the INDICE of the minimum Tuple in x
+	 * @return the INDICE of the minimum Seg in x
 	 */
-	public int firstx(ArrayList<Tuple> list) {
+	public int firstx(ArrayList<Seg> list) {
 		int min = 0;
-		Tuple val, mini;
+		Seg val, mini;
 		for (int i=1;i<list.size();i++){
 			val=list.get(i);
 			mini=list.get(min);
