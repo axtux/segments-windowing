@@ -41,8 +41,6 @@ public class ScenePanel extends JPanel {
 		
 		width = window.getX2()-window.getX1();
 		height = window.getY2()-window.getY1();
-		setSize(new Dimension(width, height));
-		setPreferredSize(new Dimension(width, height));
 		origin = new Point(-window.getX1(), -window.getY1());
 	}
 	/**
@@ -80,7 +78,6 @@ public class ScenePanel extends JPanel {
 		int scaledWidth = (int) (width*scale);
 		int scaledHeight = (int) (height*scale);
 		setPreferredSize(new Dimension(scaledWidth, scaledHeight));
-		//setSize(new Dimension(scaledWidth, scaledHeight));
 		
 		// update scaled segments
 		scaled_segments = new ArrayList<Tuple>(relative_segments.size());
@@ -108,8 +105,8 @@ public class ScenePanel extends JPanel {
 		int y1 = s.getY1()+origin.getY();
 		int y2 = s.getY2()+origin.getY();
 		// Graphics Y is counting UPside down, so we reverse Y
-		y1 = getHeight()-y1;
-		y2 = getHeight()-y2;
+		y1 = height-y1;
+		y2 = height-y2;
 		
 		return new Tuple(x1, x2, y1, y2);
 	}
