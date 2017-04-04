@@ -1,9 +1,14 @@
+package graphics;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
+
+import data.Point;
+import data.Tuple;
 /**
  * Panel drawing segments
  */
@@ -13,7 +18,8 @@ public class SegmentsPanel extends JPanel {
 	private Point origin;
 	private int width, height;
 	private ArrayList<Tuple> relative_segments;
-	double scale;
+	private double scale;
+	private ArrayList<Tuple> scaled_segments;
 	
 	public SegmentsPanel(Tuple window, ArrayList<Tuple> segments) {
 		setWindow(window);
@@ -32,11 +38,9 @@ public class SegmentsPanel extends JPanel {
 		
 		width = window.getX2()-window.getX1();
 		height = window.getY2()-window.getY1();
-		this.setSize(new Dimension(width, height));
-		this.setPreferredSize(new Dimension(width, height));
-		this.origin = new Point(-window.getX1(), -window.getY1());
-		
-		System.out.println("window size is "+Integer.toString(width)+"x"+Integer.toString(height));
+		setSize(new Dimension(width, height));
+		setPreferredSize(new Dimension(width, height));
+		origin = new Point(-window.getX1(), -window.getY1());
 	}
 	/**
 	 * Relativise segments and save them
@@ -65,11 +69,27 @@ public class SegmentsPanel extends JPanel {
 	 * @param scale Scaling factor should be > 0. 1 is normal, less is zoomed out and more is zoomed in.
 	 */
 	public void setScale(double scale) {
-		if(scale > 0) {
-			this.scale = scale;
-			int scaledWidth = (int) (width*scale);
-			int scaledHeight = (int) (height*scale);
-			this.setPreferredSize(new Dimension(scaledWidth, scaledHeight));
+		if(scale < 0.001) {
+			return;
+		}
+		
+		this.scale = scale;
+		int scaledWidth = (int) (width*scale);
+		int scaledHeight = (int) (height*scale);
+		setPreferredSize(new Dimension(scaledWidth, scaledHeight));
+		//setSize(new Dimension(scaledWidth, scaledHeight));
+		
+		// update scaled segments
+		scaled_segments = new ArrayList<Tuple>(relative_segments.size());
+		int x1, y1, x2, y2;
+		
+		for(Tuple s : relative_segments) {
+			x1 = (int) (s.getX1()*scale);
+			y1 = (int) (s.getY1()*scale);
+			x2 = (int) (s.getX2()*scale);
+			y2 = (int) (s.getY2()*scale);
+			
+			scaled_segments.add(new Tuple(x1, x2, y1, y2));
 		}
 	}
 	/**
@@ -99,15 +119,8 @@ public class SegmentsPanel extends JPanel {
 		Color oldColor = g.getColor();
 		g.setColor(Color.BLACK);
 		
-		int x1, y1, x2, y2;
-		for(Tuple s : relative_segments) {
-			x1 = (int) (s.getX1()*scale);
-			y1 = (int) (s.getY1()*scale);
-			x2 = (int) (s.getX2()*scale);
-			y2 = (int) (s.getY2()*scale);
-			
-			g.drawLine(x1, y1, x2, y2);
-			//g.drawLine(s.getX1(), s.getY1(), s.getX2(), s.getY2());
+		for(Tuple s : scaled_segments) {
+			g.drawLine(s.getX1(), s.getY1(), s.getX2(), s.getY2());
 		}
 		
 		g.setColor(oldColor);

@@ -1,8 +1,12 @@
+package data;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Scanner;
+
+import graphics.SegmentsWindow;
 
 public class Main {
 	public static void main(String[] args) throws IOException {

@@ -1,3 +1,4 @@
+package data;
 /**
  * Point with X and Y integer coordinates
  */
