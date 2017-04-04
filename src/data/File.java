@@ -102,7 +102,7 @@ public class File {
 		return paths;
 	}
 	/**
-	 * List entries ending with suffix into directory.
+	 * List entries ending with suffix into directory. Comparison is case insensitive.
 	 * @param pathname Directory to read.
 	 * @param suffix only entries ending with this suffix will be listed.
 	 * @return List of entry names relative to application root or null on error.
@@ -115,7 +115,7 @@ public class File {
 		
 		ArrayList<String> filtered = new ArrayList<String>(paths.size());
 		for(String path : paths) {
-			if(path.endsWith(suffix)) {
+			if(path.toLowerCase().endsWith(suffix.toLowerCase())) {
 				filtered.add(path);
 			}
 		}
