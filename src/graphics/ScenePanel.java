@@ -24,6 +24,7 @@ public class ScenePanel extends JPanel {
 	private ArrayList<Seg> scaled_segments;
 	
 	public ScenePanel(Scene scene) {
+		super();
 		if(scene == null) throw new NullPointerException();
 		
 		setWindow(scene.getWindow());
