@@ -1,5 +1,6 @@
 package graphics;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -104,12 +105,13 @@ public class WindowSelector extends JFrame implements ActionListener, StatusList
 		pack();
 	}
 	
-	public boolean updateStatus(boolean noError, String status) {
-		status = (noError ? "Status : " : "Error : ")+status;
-		System.out.println(status);
-		if(this.status != null) {
-			this.status.setText(status);
+	public boolean updateStatus(boolean noError, String message) {
+		System.out.println((noError ? "Status : " : "Error : ")+message);
+		if(status != null) {
+			status.setForeground(noError ? Color.BLACK : Color.RED);
+			status.setText(message);
 		}
+		pack();
 		return noError;
 	}
 	
