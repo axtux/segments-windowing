@@ -106,8 +106,10 @@ public class WindowSelector extends JFrame implements ActionListener, StatusList
 	
 	public boolean updateStatus(boolean noError, String status) {
 		status = (noError ? "Status : " : "Error : ")+status;
-		//System.out.println(status);
-		error(status);
+		System.out.println(status);
+		if(this.status != null) {
+			this.status.setText(status);
+		}
 		return noError;
 	}
 	
