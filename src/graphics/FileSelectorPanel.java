@@ -18,8 +18,9 @@ public class FileSelectorPanel extends JPanel implements ActionListener {
 	private JButton button;
 	private String directory;
 	private String suffix;
+	private StatusListener statusListener;
 	
-	public FileSelectorPanel(String suffix) {
+	public FileSelectorPanel(String suffix, StatusListener statusListener) {
 		super();
 		boxContainer = new JPanel();
 		//box = new JComboBox<String>(new String[0]);
@@ -29,6 +30,7 @@ public class FileSelectorPanel extends JPanel implements ActionListener {
 		// open application root directory by default
 		this.directory = System.getProperty("user.dir");
 		this.suffix = suffix ==  null ? "" : suffix;
+		this.statusListener = statusListener == null ? new StatusListener(){} : statusListener;
 	}
 	
 	public boolean changeDir(String newDir) {
@@ -77,8 +79,7 @@ public class FileSelectorPanel extends JPanel implements ActionListener {
 	}
 	
 	private boolean setStatus(boolean noError, String status) {
-		System.out.println((noError ? "Status : " : "Error : ")+status);
-		return noError;
+		return statusListener.updateStatus(noError, status);
 	}
 	
 	public void actionPerformed(ActionEvent e) {

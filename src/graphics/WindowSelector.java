@@ -10,7 +10,7 @@ import javax.swing.JPanel;
 
 import data.Scene;
 
-public class WindowSelector extends JFrame implements ActionListener {
+public class WindowSelector extends JFrame implements ActionListener, StatusListener {
 	private static final long serialVersionUID = 1L;
 	
 	private FileSelectorPanel fileSelector;
@@ -41,7 +41,7 @@ public class WindowSelector extends JFrame implements ActionListener {
 	
 	private void addFileSelector(boolean bottom_margin) {
 		JPanel container = new LabeledPanel("Scene file selector", bottom_margin);
-		fileSelector = new FileSelectorPanel(".txt");
+		fileSelector = new FileSelectorPanel(".txt", this);
 		container.add(fileSelector);
 		add(container);
 	}
@@ -85,7 +85,7 @@ public class WindowSelector extends JFrame implements ActionListener {
 	private boolean openScene() {
 		String file = fileSelector.getSelectedFile();
 		if(file == null) {
-			return setStatus(false, "No file selected");
+			return updateStatus(false, "No file selected");
 		}
 		
 		Scene scene = Scene.getScene(file);
@@ -104,7 +104,7 @@ public class WindowSelector extends JFrame implements ActionListener {
 		pack();
 	}
 	
-	private boolean setStatus(boolean noError, String status) {
+	public boolean updateStatus(boolean noError, String status) {
 		status = (noError ? "Status : " : "Error : ")+status;
 		//System.out.println(status);
 		error(status);
