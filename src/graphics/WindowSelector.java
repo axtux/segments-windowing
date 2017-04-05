@@ -18,10 +18,7 @@ import data.Scene;
 public class WindowSelector extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	
-	private String scenesDir;
-	
-	private JPanel filesContainer;
-	private JComboBox<String> files;
+	private FileSelectorPanel fileSelector;
 	private JLabel status;
 	
 	public static void main(String[] args) {
@@ -40,47 +37,17 @@ public class WindowSelector extends JFrame implements ActionListener {
 		addButton(false);
 		addStatus(true);
 		// refresh when error element exists
-		setScenesDir(scenesDir);
+		fileSelector.changeDir(scenesDir);
 		// center window
 		pack();
 		setLocationRelativeTo(null);
 		setVisible(true);
 	}
 	
-	private void setScenesDir(String scenesDir) {
-		if(scenesDir == null) throw new NullPointerException();
-		
-		ArrayList<String> filenames = File.list(scenesDir, ".txt");
-		if(filenames == null) {
-			error("Enable to list files into directory "+scenesDir);
-			return;
-		}
-		
-		if(filenames.size() == 0) {
-			error("No valid files found into directory "+scenesDir);
-			return;
-		}
-		
-		this.scenesDir = scenesDir;
-		filesContainer.removeAll();
-		files = new JComboBox<String>(filenames.toArray(new String[0]));
-		filesContainer.add(files);
-		
-		JButton button = new JButton("Change directory");
-		button.setActionCommand("ACTION_CHANGE_DIRECTORY");
-		button.addActionListener(this);
-		filesContainer.add(button);
-		
-		error("Changed directory to "+scenesDir);
-		pack();
-		
-	}
-	
 	private void addFileSelector(boolean bottom_margin) {
 		JPanel container = new LabeledPanel("Scene file selector", bottom_margin);
-		filesContainer = container;
-		files = new JComboBox<String>(new String[0]);
-		container.add(files);
+		fileSelector = new FileSelectorPanel(".txt");
+		container.add(fileSelector);
 		add(container);
 	}
 	
@@ -95,15 +62,8 @@ public class WindowSelector extends JFrame implements ActionListener {
 	private void addButton(boolean bottom_margin) {
 		JPanel container = new LabeledPanel("Open scene", bottom_margin);
 		
-		JButton button = new JButton("whole scene");
-		button.setActionCommand("ACTION_OPEN_WHOLE_SCENE");
-		button.addActionListener(this);
-		container.add(button);
-		
-		button = new JButton("restricted window");
-		button.setActionCommand("ACTION_OPEN_RESTRICTED_WINDOW");
-		button.addActionListener(this);
-		container.add(button);
+		Factory.createButton("whole scene", "ACTION_OPEN_WHOLE_SCENE", this, container);
+		Factory.createButton("restricted window", "ACTION_OPEN_RESTRICTED_WINDOW", this, container);
 		
 		add(container);
 	}
@@ -118,11 +78,7 @@ public class WindowSelector extends JFrame implements ActionListener {
 	}
 	
 	public void actionPerformed(ActionEvent e) {
-		System.out.println("Action performed : "+e.getActionCommand());
 		switch(e.getActionCommand()) {
-		case "ACTION_CHANGE_DIRECTORY":
-			changeDir();
-			return;
 		case "ACTION_OPEN_WHOLE_SCENE":
 			openScene();
 			return;
@@ -132,13 +88,7 @@ public class WindowSelector extends JFrame implements ActionListener {
 	}
 	
 	private void openScene() {
-		int i = files.getSelectedIndex();
-		if(i == -1) {
-			error("No file selected");
-			return;
-		}
-		
-		String file = files.getItemAt(i);
+		String file = fileSelector.getSelectedFile();
 		Scene scene = Scene.getScene(file);
 		if(scene == null) {
 			error("Unable to get scene from file "+file+". Please check readability and/or format.");
@@ -146,16 +96,6 @@ public class WindowSelector extends JFrame implements ActionListener {
 		}
 		
 		new SceneWindow(scene);
-	}
-	
-	private void changeDir() {
-		JFileChooser fc = new JFileChooser(scenesDir);
-		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		
-		int r = fc.showOpenDialog(this);
-		if (r == JFileChooser.APPROVE_OPTION) {
-			setScenesDir(fc.getSelectedFile().getPath());
-		}
 	}
 	
 	private void error(String error) {
