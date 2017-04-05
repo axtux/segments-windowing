@@ -34,9 +34,8 @@ public class WindowSelector extends JFrame implements ActionListener, StatusList
 		addStatus(true);
 		// refresh when error element exists
 		fileSelector.changeDir(scenesDir);
-		// center window
-		pack();
-		setLocationRelativeTo(null);
+		// size and center
+		resize();
 		setVisible(true);
 	}
 	
@@ -91,18 +90,11 @@ public class WindowSelector extends JFrame implements ActionListener, StatusList
 		
 		Scene scene = Scene.getScene(file);
 		if(scene == null) {
-			error("Unable to get scene from file "+file+". Please check readability and/or format.");
-			return false;
+			return updateStatus(false, "Unable to get scene from file "+file+". Please check readability and/or format.");
 		}
 		
 		new SceneWindow(scene);
 		return true;
-	}
-	
-	private void error(String error) {
-		System.out.println("Error : "+error);
-		status.setText(error);
-		pack();
 	}
 	
 	public boolean updateStatus(boolean noError, String message) {
@@ -111,8 +103,13 @@ public class WindowSelector extends JFrame implements ActionListener, StatusList
 			status.setForeground(noError ? Color.BLACK : Color.RED);
 			status.setText(message);
 		}
-		pack();
+		resize();
 		return noError;
+	}
+	
+	private void resize() {
+		pack();
+		setLocationRelativeTo(null);
 	}
 	
 }
