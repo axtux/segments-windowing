@@ -20,28 +20,25 @@ public class WindowSelector extends JFrame implements ActionListener {
 	
 	private String scenesDir;
 	
-	private JPanel content;
 	private JPanel filesContainer;
 	private JComboBox<String> files;
-	private JLabel error;
+	private JLabel status;
 	
 	public static void main(String[] args) {
 		new WindowSelector("scenes");
 	}
 	
 	public WindowSelector(String scenesDir) {
-		super("File and Window Selector");
+		super("Scene file/window selector");
 		
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		
-		content = new JPanel();
-		content.setLayout(new BoxLayout(content, BoxLayout.X_AXIS));
-		add(content);
+		getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.PAGE_AXIS));
 		
-		addFileSelector();
-		addWindowSelector();
-		addButton();
-		addError();
+		addFileSelector(false);
+		addWindowSelector(false);
+		addButton(false);
+		addStatus(true);
 		// refresh when error element exists
 		setScenesDir(scenesDir);
 		// center window
@@ -52,19 +49,7 @@ public class WindowSelector extends JFrame implements ActionListener {
 	
 	private void setScenesDir(String scenesDir) {
 		if(scenesDir == null) throw new NullPointerException();
-		this.scenesDir = scenesDir;
-		refreshFileSelector();
-	}
-	
-	private void addFileSelector() {
-		JPanel container = new JPanel();
-		filesContainer = container;
-		files = new JComboBox<String>(new String[0]);
-		container.add(files);
-		content.add(container);
-	}
-	
-	private void refreshFileSelector() {
+		
 		ArrayList<String> filenames = File.list(scenesDir, ".txt");
 		if(filenames == null) {
 			error("Enable to list files into directory "+scenesDir);
@@ -75,12 +60,8 @@ public class WindowSelector extends JFrame implements ActionListener {
 			error("No valid files found into directory "+scenesDir);
 			return;
 		}
-		/*
-		files.removeAll();
-		for(String filename : filenames) {
-			files.addItem(filename);
-		}
-		//*/
+		
+		this.scenesDir = scenesDir;
 		filesContainer.removeAll();
 		files = new JComboBox<String>(filenames.toArray(new String[0]));
 		filesContainer.add(files);
@@ -90,33 +71,50 @@ public class WindowSelector extends JFrame implements ActionListener {
 		button.addActionListener(this);
 		filesContainer.add(button);
 		
+		error("Changed directory to "+scenesDir);
 		pack();
+		
 	}
 	
-	private void addWindowSelector() {
-		JPanel container = new JPanel();
-		
-		content.add(container);
+	private void addFileSelector(boolean bottom_margin) {
+		JPanel container = new LabeledPanel("Scene file selector", bottom_margin);
+		filesContainer = container;
+		files = new JComboBox<String>(new String[0]);
+		container.add(files);
+		add(container);
 	}
 	
-	private void addButton() {
-		JPanel container = new JPanel();
+	private void addWindowSelector(boolean bottom_margin) {
+		JPanel container = new LabeledPanel("Scene window selector", bottom_margin);
 		
-		JButton button = new JButton("Display all segments");
-		button.setActionCommand("ACTION_DISPLAY_ALL");
+		container.add(new JLabel("TODO"));
+		
+		add(container);
+	}
+	
+	private void addButton(boolean bottom_margin) {
+		JPanel container = new LabeledPanel("Open scene", bottom_margin);
+		
+		JButton button = new JButton("whole scene");
+		button.setActionCommand("ACTION_OPEN_WHOLE_SCENE");
 		button.addActionListener(this);
 		container.add(button);
 		
-		content.add(container);
+		button = new JButton("restricted window");
+		button.setActionCommand("ACTION_OPEN_RESTRICTED_WINDOW");
+		button.addActionListener(this);
+		container.add(button);
+		
+		add(container);
 	}
 	
-	private void addError() {
-		JPanel container = new JPanel();
+	private void addStatus(boolean bottom_margin) {
+		JPanel container = new LabeledPanel("Status", bottom_margin);
 		
-		error = new JLabel("Select a file");
-		container.add(error);
+		status = new JLabel("Select a file");
+		container.add(status);
 		
-		content.add(container);
+		add(container);
 	}
 	
 	public void actionPerformed(ActionEvent e) {
@@ -125,15 +123,15 @@ public class WindowSelector extends JFrame implements ActionListener {
 		case "ACTION_CHANGE_DIRECTORY":
 			changeDir();
 			return;
-		case "ACTION_DISPLAY_ALL":
-			displayAll();
+		case "ACTION_OPEN_WHOLE_SCENE":
+			openScene();
 			return;
 		default:
 			System.out.println("Action not implemented : "+e.getActionCommand());
 		}
 	}
 	
-	private void displayAll() {
+	private void openScene() {
 		int i = files.getSelectedIndex();
 		if(i == -1) {
 			error("No file selected");
@@ -162,7 +160,7 @@ public class WindowSelector extends JFrame implements ActionListener {
 	
 	private void error(String error) {
 		System.out.println("Error : "+error);
-		this.error.setText(error);
+		status.setText(error);
 		pack();
 	}
 	
