@@ -78,7 +78,7 @@ public class File {
 	/**
 	 * List entries into directory.
 	 * @param pathname Directory to read.
-	 * @return List of entry names relative to application root or null on error.
+	 * @return List of entry names relative to pathname.
 	 */
 	public static ArrayList<String> list(String pathname) {
 		Path path = FileSystems.getDefault().getPath(pathname);
@@ -96,7 +96,7 @@ public class File {
 		
 		ArrayList<String> paths = new ArrayList<String>();
 		while(it.hasNext()) {
-			paths.add(it.next().toString());
+			paths.add(it.next().getFileName().toString());
 		}
 		
 		return paths;
@@ -105,7 +105,7 @@ public class File {
 	 * List entries ending with suffix into directory. Comparison is case insensitive.
 	 * @param pathname Directory to read.
 	 * @param suffix only entries ending with this suffix will be listed.
-	 * @return List of entry names relative to application root or null on error.
+	 * @return List of entry names relative to pathname.
 	 */
 	public static ArrayList<String> list(String pathname, String suffix) {
 		ArrayList<String> paths = list(pathname);

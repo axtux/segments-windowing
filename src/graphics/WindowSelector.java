@@ -1,169 +1,115 @@
 package graphics;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import data.File;
 import data.Scene;
 
-public class WindowSelector extends JFrame implements ActionListener {
+public class WindowSelector extends JFrame implements ActionListener, StatusListener {
 	private static final long serialVersionUID = 1L;
 	
-	private String scenesDir;
-	
-	private JPanel content;
-	private JPanel filesContainer;
-	private JComboBox<String> files;
-	private JLabel error;
+	private FileSelectorPanel fileSelector;
+	private JLabel status;
 	
 	public static void main(String[] args) {
 		new WindowSelector("scenes");
 	}
 	
 	public WindowSelector(String scenesDir) {
-		super("File and Window Selector");
+		super("Scene file/window selector");
 		
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		
-		content = new JPanel();
-		content.setLayout(new BoxLayout(content, BoxLayout.X_AXIS));
-		add(content);
+		getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.PAGE_AXIS));
 		
-		addFileSelector();
-		addWindowSelector();
-		addButton();
-		addError();
+		addFileSelector(false);
+		addWindowSelector(false);
+		addButton(false);
+		addStatus(true);
 		// refresh when error element exists
-		setScenesDir(scenesDir);
-		// center window
-		pack();
-		setLocationRelativeTo(null);
+		fileSelector.changeDir(scenesDir);
+		// size and center
+		resize();
 		setVisible(true);
 	}
 	
-	private void setScenesDir(String scenesDir) {
-		if(scenesDir == null) throw new NullPointerException();
-		this.scenesDir = scenesDir;
-		refreshFileSelector();
+	private void addFileSelector(boolean bottom_margin) {
+		JPanel container = new LabeledPanel("Scene file selector", bottom_margin);
+		fileSelector = new FileSelectorPanel(".txt", this);
+		container.add(fileSelector);
+		add(container);
 	}
 	
-	private void addFileSelector() {
-		JPanel container = new JPanel();
-		filesContainer = container;
-		files = new JComboBox<String>(new String[0]);
-		container.add(files);
-		content.add(container);
+	private void addWindowSelector(boolean bottom_margin) {
+		JPanel container = new LabeledPanel("Scene window selector", bottom_margin);
+		
+		container.add(new JLabel("TODO"));
+		
+		add(container);
 	}
 	
-	private void refreshFileSelector() {
-		ArrayList<String> filenames = File.list(scenesDir, ".txt");
-		if(filenames == null) {
-			error("Enable to list files into directory "+scenesDir);
-			return;
-		}
+	private void addButton(boolean bottom_margin) {
+		JPanel container = new LabeledPanel("Open scene", bottom_margin);
 		
-		if(filenames.size() == 0) {
-			error("No valid files found into directory "+scenesDir);
-			return;
-		}
-		/*
-		files.removeAll();
-		for(String filename : filenames) {
-			files.addItem(filename);
-		}
-		//*/
-		filesContainer.removeAll();
-		files = new JComboBox<String>(filenames.toArray(new String[0]));
-		filesContainer.add(files);
+		Factory.createButton("whole scene", "ACTION_OPEN_WHOLE_SCENE", this, container);
+		Factory.createButton("restricted window", "ACTION_OPEN_RESTRICTED_WINDOW", this, container);
 		
-		JButton button = new JButton("Change directory");
-		button.setActionCommand("ACTION_CHANGE_DIRECTORY");
-		button.addActionListener(this);
-		filesContainer.add(button);
-		
-		pack();
+		add(container);
 	}
 	
-	private void addWindowSelector() {
-		JPanel container = new JPanel();
+	private void addStatus(boolean bottom_margin) {
+		JPanel container = new LabeledPanel("Status", bottom_margin);
 		
-		content.add(container);
-	}
-	
-	private void addButton() {
-		JPanel container = new JPanel();
+		status = new JLabel("Select a file");
+		container.add(status);
 		
-		JButton button = new JButton("Display all segments");
-		button.setActionCommand("ACTION_DISPLAY_ALL");
-		button.addActionListener(this);
-		container.add(button);
-		
-		content.add(container);
-	}
-	
-	private void addError() {
-		JPanel container = new JPanel();
-		
-		error = new JLabel("Select a file");
-		container.add(error);
-		
-		content.add(container);
+		add(container);
 	}
 	
 	public void actionPerformed(ActionEvent e) {
-		System.out.println("Action performed : "+e.getActionCommand());
 		switch(e.getActionCommand()) {
-		case "ACTION_CHANGE_DIRECTORY":
-			changeDir();
-			return;
-		case "ACTION_DISPLAY_ALL":
-			displayAll();
+		case "ACTION_OPEN_WHOLE_SCENE":
+			openScene();
 			return;
 		default:
 			System.out.println("Action not implemented : "+e.getActionCommand());
 		}
 	}
 	
-	private void displayAll() {
-		int i = files.getSelectedIndex();
-		if(i == -1) {
-			error("No file selected");
-			return;
+	private boolean openScene() {
+		String file = fileSelector.getSelectedFile();
+		if(file == null) {
+			return updateStatus(false, "No file selected");
 		}
 		
-		String file = files.getItemAt(i);
 		Scene scene = Scene.getScene(file);
 		if(scene == null) {
-			error("Unable to get scene from file "+file+". Please check readability and/or format.");
-			return;
+			return updateStatus(false, "Unable to get scene from file "+file+". Please check readability and/or format.");
 		}
 		
 		new SceneWindow(scene);
+		return true;
 	}
 	
-	private void changeDir() {
-		JFileChooser fc = new JFileChooser(scenesDir);
-		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		
-		int r = fc.showOpenDialog(this);
-		if (r == JFileChooser.APPROVE_OPTION) {
-			setScenesDir(fc.getSelectedFile().getPath());
+	public boolean updateStatus(boolean noError, String message) {
+		System.out.println((noError ? "Status : " : "Error : ")+message);
+		if(status != null) {
+			status.setForeground(noError ? Color.BLACK : Color.RED);
+			status.setText(message);
 		}
+		resize();
+		return noError;
 	}
 	
-	private void error(String error) {
-		System.out.println("Error : "+error);
-		this.error.setText(error);
+	private void resize() {
 		pack();
+		setLocationRelativeTo(null);
 	}
 	
 }

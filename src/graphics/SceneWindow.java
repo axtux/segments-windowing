@@ -1,11 +1,13 @@
 package graphics;
 import java.awt.Cursor;
+import java.awt.GridBagLayout;
 import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import data.Point;
@@ -24,7 +26,16 @@ public class SceneWindow extends JFrame {
 		
 		self = this;
 		panel = new ScenePanel(scene);
-		add(new JScrollPane(panel));
+		
+		// container to center panel
+		JPanel container = new JPanel(new GridBagLayout());
+		container.add(panel);
+		
+		// scroll panel without wheel
+		JScrollPane scroll = new JScrollPane(container);
+		scroll.setWheelScrollingEnabled(false);
+		add(scroll);
+		
 		activateMouseScroll();
 		
 		// center window
@@ -45,10 +56,31 @@ public class SceneWindow extends JFrame {
 	
 	private void activateMouseScroll() {
 		MouseScroller ms = new MouseScroller();
+		
+		// mouse click and drag only on panel
 		panel.addMouseListener(ms);
 		panel.addMouseMotionListener(ms);
-		panel.addMouseWheelListener(ms);
-		ms.mouseReleased(null);
+		
+		// wheel on all window
+		addMouseWheelListener(ms);
+		
+		ms.updateCursor();
+	}
+	
+	private static boolean isScrollable(JPanel panel) {
+		/* Not working when view is on top
+		Rectangle view = panel.getVisibleRect();
+		
+		if(
+			Double.compare(view.getX(), view.getMinX()) == 0
+			&& Double.compare(view.getY(), view.getMinY()) == 0
+			&& Double.compare(view.getWidth(), view.getMaxX()) == 0
+			&& Double.compare(view.getHeight(), view.getMaxY()) == 0
+		) {
+			return false;
+		}
+		//*/
+		return true;
 	}
 	/**
 	 * Mouse listener that enable mouse scrolling.
@@ -58,11 +90,22 @@ public class SceneWindow extends JFrame {
 		
 		public void mousePressed(MouseEvent e) {
 			origin = new Point(e.getX(), e.getY());
-			panel.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
+			
+			if(isScrollable(panel)) {
+				panel.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
+				return;
+			}
+			
+			panel.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		}
 		
 		public void mouseReleased(MouseEvent e) {
-			panel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			if(isScrollable(panel)) {
+				panel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+				return;
+			}
+			
+			panel.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		}
 		
 		public void mouseDragged(MouseEvent e) {
@@ -98,6 +141,12 @@ public class SceneWindow extends JFrame {
 			view.x = (int) (oldCenterX*ratio-view.getWidth()/2);
 			view.y = (int) (oldCenterY*ratio-view.getHeight()/2);
 			panel.scrollRectToVisible(view);
+			
+			updateCursor();
+		}
+		
+		public void updateCursor() {
+			mouseReleased(null);
 		}
 	}
 }
