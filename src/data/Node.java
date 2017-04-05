@@ -4,7 +4,7 @@ package data;
  */
 public class Node {
 
-	private Seg data;
+	private Segment data;
 	public final float median;
 	public Node nextr;
 	public Node nextl;
@@ -21,16 +21,16 @@ public class Node {
         return median;
     }
 
-	public Seg getData() {
+	public Segment getData() {
 		return data;
 	}
 
-	public Node(Seg data){
+	public Node(Segment data){
 		this.data=data;
-		median = 0;
+		median = 0;//put a special number here
 	}
 
-	public Node(Seg data, float median){
+	public Node(Segment data, float median){
 		this.data=data;
 		this.median=median;
 	}

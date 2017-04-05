@@ -7,8 +7,8 @@ import java.util.Locale;
 import java.util.Scanner;
 
 public class Scene {
-	private Seg window;
-	private ArrayList<Seg> segments;
+	private Segment window;
+	private ArrayList<Segment> segments;
 	/**
 	 * Get Segments from file.
 	 * @param filename File from which to read Segments.
@@ -33,7 +33,7 @@ public class Scene {
 		lecteur.useLocale(Locale.US);
 		
 		// first line contains x x' y y', [x, x']x[y, y'] being window limits
-		window = new Seg(
+		window = new Segment(
 			(int) lecteur.nextFloat(),
 			(int) lecteur.nextFloat(),
 			(int) lecteur.nextFloat(),
@@ -41,14 +41,14 @@ public class Scene {
 		);
 		
 		// following line contains x y x' y', each one define a segment (why different order ?)
-		segments = new ArrayList<Seg>();
+		segments = new ArrayList<Segment>();
 		
 		while (lecteur.hasNextFloat()) {
 			int x1 = (int) lecteur.nextFloat();
 			int y1 = (int) lecteur.nextFloat();
 			int x2 = (int) lecteur.nextFloat();
 			int y2 = (int) lecteur.nextFloat();
-			segments.add(new Seg(x1, x2, y1, y2));
+			segments.add(new Segment(x1, x2, y1, y2));
 		}
 		
 		lecteur.close();
@@ -56,11 +56,11 @@ public class Scene {
 		// TODO sort segments ?
 	}
 	
-	public Seg getWindow() {
+	public Segment getWindow() {
 		return window;
 	}
 	
-	public ArrayList<Seg> getSegments() {
+	public ArrayList<Segment> getSegments() {
 		return segments;
 	}
 }

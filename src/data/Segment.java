@@ -4,7 +4,7 @@ package data;
  *  This class represnets a segment
  */
 
-public class Seg implements Comparable<Seg> {
+public class Segment implements Comparable<Segment> {
 
 	private final int x1;
 	private final int x2;
@@ -18,12 +18,20 @@ public class Seg implements Comparable<Seg> {
 	 * @param y1 the first coordinate in y
 	 * @param y2 the last coordinate in y
 	 */
-	public Seg(int x1, int x2, int y1, int y2) {
-		//we here take the min or max to instaure an order in the segments ([a,b] where a < b)
-		this.x1 = Math.min(x1,x2);
-		this.x2 = Math.max(x1,x2);
-		this.y1 = Math.min(y1,y2);
-		this.y2 = Math.max(y1,y2);
+	public Segment(int x1, int x2, int y1, int y2) {
+		//we here take the min or max to instaure an order in the segments (y1,y2 where y1 < y2)
+		if (Math.min(y1,y2)==y1) {
+			this.x1=x1;
+			this.y1=y1;
+			this.x2=x2;
+			this.y2=y2;
+		}
+		else { //we put the y coordinate in the order
+			this.x1=x2;
+			this.y1=y2;
+			this.x2=x1;
+			this.y2=y1;
+		}
 	}
 	
 	public int getX1() {
@@ -41,7 +49,7 @@ public class Seg implements Comparable<Seg> {
 	/***
 	 * compare y1 then y2
 	 */
-	public int compareTo(Seg o) {
+	public int compareTo(Segment o) {
 		if(o == null) {
 			throw new NullPointerException();
 		}
