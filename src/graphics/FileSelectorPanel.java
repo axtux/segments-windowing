@@ -26,12 +26,15 @@ public class FileSelectorPanel extends JPanel implements ActionListener {
 		//boxContainer.add(box);
 		add(boxContainer);
 		button = Factory.createButton("Select directory", "ACTION_CHANGE_DIRECTORY", this, this);
+		// open application root directory by default
+		this.directory = System.getProperty("user.dir");
 		this.suffix = suffix ==  null ? "" : suffix;
 	}
 	
 	public boolean changeDir(String newDir) {
 		directory = newDir;
 		boxContainer.removeAll();
+		box = null;
 		
 		ArrayList<String> filenames = File.list(newDir, suffix);
 		if(filenames == null) {
@@ -49,6 +52,11 @@ public class FileSelectorPanel extends JPanel implements ActionListener {
 	}
 	
 	public String getSelectedFile() {
+		if(box == null) {
+			setStatus(false, "No valid directory chosen");
+			return null;
+		}
+		
 		int i = box.getSelectedIndex();
 		if(i == -1) {
 			setStatus(false, "No file selected");
