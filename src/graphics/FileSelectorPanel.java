@@ -27,10 +27,10 @@ public class FileSelectorPanel extends JPanel implements ActionListener {
 		//boxContainer.add(box);
 		add(boxContainer);
 		button = Factory.createButton("Select directory", "ACTION_CHANGE_DIRECTORY", this, this);
-		// open application root directory by default
-		this.directory = System.getProperty("user.dir");
 		this.suffix = suffix ==  null ? "" : suffix;
 		this.statusListener = statusListener == null ? new StatusListener(){} : statusListener;
+		// open application root directory by default
+		changeDir(".");
 	}
 	
 	public boolean changeDir(String newDir) {
@@ -65,7 +65,7 @@ public class FileSelectorPanel extends JPanel implements ActionListener {
 			return null;
 		}
 		
-		return box.getItemAt(i);
+		return directory+"/"+box.getItemAt(i);
 	}
 	
 	private void changeDir() {
