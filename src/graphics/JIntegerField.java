@@ -90,8 +90,8 @@ public class JIntegerField extends JTextField implements KeyListener {
 			setValue(Integer.MAX_VALUE);
 			return;
 		}
-		// typing "min" or "max"
-		if("min".startsWith(text) || "max".startsWith(text)) {
+		// typing "-" or "min" or "max"
+		if(text.equals("-") || "min".startsWith(text) || "max".startsWith(text)) {
 			value = null;
 			return;
 		}
@@ -102,6 +102,15 @@ public class JIntegerField extends JTextField implements KeyListener {
 			// don't change value
 			setValue(value);
 		}
+	}
+	/**
+	 * Don't update value when text is already into JTextField. Keeps the caret at the same place.
+	 */
+	public void setText(String t) {
+		if(getText().equals(t)) {
+			return;
+		}
+		super.setText(t);
 	}
 	
 	
