@@ -78,7 +78,7 @@ public class SelectorFrame extends JFrame implements ActionListener, StatusListe
 			openScene();
 			return;
 		default:
-			System.out.println("Action not implemented : "+e.getActionCommand());
+			updateStatus(false, "Action not implemented : "+e.getActionCommand());
 		}
 	}
 	
