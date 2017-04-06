@@ -124,8 +124,8 @@ public class SelectorFrame extends JFrame implements ActionListener, StatusListe
 		if(window == null) {
 			return;
 		}
-		// TODO filter scene with window
-		new SceneFrame(scene);
+		
+		new SceneFrame(scene.filter(window));
 		updateStatus(true, "Opened filtered scene.");
 	}
 	
