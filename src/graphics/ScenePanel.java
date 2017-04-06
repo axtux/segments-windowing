@@ -79,7 +79,8 @@ public class ScenePanel extends JPanel {
 		this.scale = scale;
 		int scaledWidth = (int) (width*scale);
 		int scaledHeight = (int) (height*scale);
-		setPreferredSize(new Dimension(scaledWidth, scaledHeight));
+		// add one pixel because axes were not counted
+		setPreferredSize(new Dimension(scaledWidth+1, scaledHeight+1));
 		
 		// update scaled segments
 		scaled_segments = new ArrayList<Segment>(relative_segments.size());
