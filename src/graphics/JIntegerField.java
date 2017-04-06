@@ -1,5 +1,7 @@
 package graphics;
 
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -7,7 +9,7 @@ import javax.swing.JTextField;
 /**
  * Field for user to enter an integer. Empty field has null value, "min" field has Integer.MIN_VALUE value and "max" field has Integer.MAX_VALUE value.
  */
-public class JIntegerField extends JTextField implements KeyListener {
+public class JIntegerField extends JTextField implements KeyListener, FocusListener {
 	private static final long serialVersionUID = 1L;
 	private Integer value;
 	/**
@@ -17,6 +19,7 @@ public class JIntegerField extends JTextField implements KeyListener {
 	public JIntegerField(int columns) {
 		super(columns);
 		addKeyListener(this);
+		addFocusListener(this);
 	}
 	/**
 	 * 
@@ -53,21 +56,6 @@ public class JIntegerField extends JTextField implements KeyListener {
 		}
 		
 		System.out.println("Value is now "+(value == null ? "null" : value.toString()));
-	}
-	
-	/**
-	 * Unused KeyListener methods
-	 */
-	public void keyTyped(KeyEvent e) {}
-	/**
-	 * Unused KeyListener methods
-	 */
-	public void keyPressed(KeyEvent e) {}
-	/**
-	 * Update value when key is released
-	 */
-	public void keyReleased(KeyEvent e) {
-		updateValue();
 	}
 	/**
 	 * Update value. Empty field will set value to null, "min" will set value to Integer.MIN_VALUE and "max" will set value to Integer.MAX_VALUE.
@@ -111,6 +99,32 @@ public class JIntegerField extends JTextField implements KeyListener {
 			return;
 		}
 		super.setText(t);
+	}
+	/**
+	 * Unused KeyListener methods
+	 */
+	public void keyTyped(KeyEvent e) {}
+	/**
+	 * Unused KeyListener methods
+	 */
+	public void keyPressed(KeyEvent e) {}
+	/**
+	 * Update value when key is released
+	 */
+	public void keyReleased(KeyEvent e) {
+		updateValue();
+	}
+	/**
+	 * Select all text when focus is gained
+	 */
+	public void focusGained(FocusEvent e) {
+		selectAll();
+	}
+	/**
+	 * Update value when focus is lost
+	 */
+	public void focusLost(FocusEvent e) {
+		updateValue();
 	}
 	
 	
