@@ -25,7 +25,17 @@ public class Node {
 		return data;
 	}
 
+	public Node getNextl() {
+		return nextl;
+	}
+
+	public Node getNextr() {
+
+		return nextr;
+	}
+
 	public Node(Segment data){
+
 		this.data=data;
 		median = 0;//put a special number here
 	}
