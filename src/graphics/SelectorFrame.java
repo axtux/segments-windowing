@@ -60,8 +60,8 @@ public class SelectorFrame extends JFrame implements ActionListener, StatusListe
 	private void addButtons(boolean bottom_margin) {
 		JPanel container = new LabeledPanel("Open scene", bottom_margin);
 		
-		Factory.createButton("whole scene", "ACTION_OPEN_WHOLE_SCENE", this, container);
-		Factory.createButton("restricted window", "ACTION_OPEN_WINDOW", this, container);
+		Factory.createButton("Whole scene", "ACTION_OPEN_WHOLE_SCENE", this, container);
+		Factory.createButton("Selected window", "ACTION_OPEN_WINDOW", this, container);
 		
 		add(container);
 	}
