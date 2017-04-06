@@ -46,7 +46,7 @@ public class ScenePanel extends JPanel {
 		origin = new Point(-window.getX1(), -window.getY1());
 	}
 	/**
-	 * Relativise segments and save them
+	 * Make segments relative to graphics axes and save them
 	 * @param segments Segments relative to the origin, x-axis counting from left to right, y-axis counting from bottom to top.
 	 */
 	private void setSegments(ArrayList<Segment> segments) {
@@ -95,9 +95,9 @@ public class ScenePanel extends JPanel {
 		}
 	}
 	/**
-	 * Relativise a segment to graphics axis
-	 * @param s Segment to relativise
-	 * @return Relativised tuple
+	 * Make a segment relative to graphics axes
+	 * @param s Segment to make relative to graphics axes
+	 * @return Segment relative to graphics axes
 	 */
 	private Segment relativise(Segment s) {
 		// move X to origin
