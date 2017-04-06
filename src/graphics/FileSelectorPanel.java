@@ -4,9 +4,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import data.File;
@@ -15,6 +17,7 @@ import data.File;
  */
 public class FileSelectorPanel extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
+	private JLabel dirLabel;
 	private JPanel boxContainer;
 	private JComboBox<String> box;
 	private JButton button;
@@ -28,13 +31,28 @@ public class FileSelectorPanel extends JPanel implements ActionListener {
 	 */
 	public FileSelectorPanel(String suffix, StatusListener statusListener) {
 		super();
-		boxContainer = new JPanel();
-		add(boxContainer);
-		button = Factory.createButton("Select directory", "ACTION_CHANGE_DIRECTORY", this, this);
 		this.suffix = suffix ==  null ? "" : suffix;
 		this.statusListener = statusListener == null ? new StatusListener(){} : statusListener;
+		// add UI components
+		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+		addAll();
 		// open application root directory by default
 		changeDir(".");
+	}
+	
+	private void addAll() {
+		JPanel line = new JPanel();
+		line.add(new JLabel("Directory :"));
+		dirLabel = new JLabel();
+		line.add(dirLabel);
+		add(line);
+		
+		line = new JPanel();
+		button = Factory.createButton("Select directory", "ACTION_CHANGE_DIRECTORY", this, line);
+		add(line);
+		
+		boxContainer = new JPanel();
+		add(boxContainer);
 	}
 	/**
 	 * Change directory from which files are proposed.
@@ -44,19 +62,26 @@ public class FileSelectorPanel extends JPanel implements ActionListener {
 	 */
 	public boolean changeDir(String newDir) {
 		directory = newDir;
+		dirLabel.setText(directory);
 		boxContainer.removeAll();
 		box = null;
 		
 		ArrayList<String> filenames = File.list(newDir, suffix);
 		if(filenames == null) {
-			return setStatus(false, "Enable to list files into directory "+newDir);
+			boxContainer.add(new JLabel("Enable to list files into directory."));
+			updateSize();
+			return false;
 		}
 		
 		if(filenames.size() == 0) {
-			return setStatus(false, "No valid files found into directory "+newDir);
+			boxContainer.add(new JLabel("No valid file found into directory."));
+			updateSize();
+			return false;
 		}
 		
 		button.setText("Change directory");
+		
+		boxContainer.add(new JLabel("Select file :"));
 		box = new JComboBox<String>(filenames.toArray(new String[0]));
 		boxContainer.add(box);
 		return setStatus(true, "Changed directory to "+newDir);
@@ -102,5 +127,9 @@ public class FileSelectorPanel extends JPanel implements ActionListener {
 		default:
 			setStatus(false, "Action not implemented : "+e.getActionCommand());
 		}
+	}
+	
+	private void updateSize() {
+		setStatus(true, "updated");
 	}
 }
