@@ -23,15 +23,15 @@ public class Pst {
 		Node temp = null;
 		while (list.size()>=3) {
 			temp=new Node(list.remove(firstx(list)), (list.get((list.size()-1)/2).getY1()) );
-			temp.setNextl(construct(new ArrayList<Segment>(list.subList(0,(list.size()-1)/2))));
-			temp.setNextr(construct(new ArrayList<Segment>(list.subList((list.size()-1)/2,list.size()))));
+			temp.setLeft(construct(new ArrayList<Segment>(list.subList(0,(list.size()-1)/2))));
+			temp.setRight(construct(new ArrayList<Segment>(list.subList((list.size()-1)/2,list.size()))));
 			return temp;
 		}
 		if (list.size()==1) //base case where the sub tree containt one element
 			temp=new Node(list.remove(firstx(list)));//median is null ( it's a leaf)
 		else if (list.size()==2){ //base case where subtree containt two element
 			temp=new Node(list.remove(firstx(list)), (list.get(0).getY1()));//the median is the y1 of the unique son
-			temp.setNextl(new Node(list.remove(0)));
+			temp.setLeft(new Node(list.remove(0)));
 		}
 		//case size == 0 , do nothing
 		return temp;
