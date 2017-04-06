@@ -93,7 +93,7 @@ public class WindowSelector extends JFrame implements ActionListener, StatusList
 			return updateStatus(false, "Unable to get scene from file "+file+". Please check readability and/or format.");
 		}
 		
-		new SceneWindow(scene);
+		new SceneFrame(scene);
 		return true;
 	}
 	

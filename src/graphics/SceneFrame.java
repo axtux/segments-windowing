@@ -15,12 +15,12 @@ import data.Scene;
 /**
  * Window to display segments using {@link ScenePanel} and enable mouse scrolling.
  */
-public class SceneWindow extends JFrame {
+public class SceneFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
-	private SceneWindow self;
+	private SceneFrame self;
 	private ScenePanel panel;
 	
-	public SceneWindow(Scene scene) {
+	public SceneFrame(Scene scene) {
 		super("Segments Window");
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		
