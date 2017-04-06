@@ -2,17 +2,17 @@ package data;
 /**
  * Created by marco on 1/04/17.
  */
-public class Node {
-	private Segment data;
+public class Node<E> {
+	private E data;
 	private final float median;
-	private Node left;
-	private Node right;
+	private Node<E> left;
+	private Node<E> right;
 	
-	public void setLeft(Node left) {
+	public void setLeft(Node<E> left) {
 		this.left = left;
 	}
 	
-	public void setRight(Node right) {
+	public void setRight(Node<E> right) {
 		this.right = right;
 	}
 	
@@ -20,24 +20,24 @@ public class Node {
 		return median;
 	}
 	
-	public Node getLeft() {
+	public Node<E> getLeft() {
 		return left;
 	}
 	
-	public Node getRight() {
+	public Node<E> getRight() {
 		return right;
 	}
 	
-	public Segment getData() {
+	public E getData() {
 		return data;
 	}
 	
-	public Node(Segment data){
+	public Node(E data){
 		this.data=data;
 		median = 0;//put a special number here
 	}
 	
-	public Node(Segment data, float median){
+	public Node(E data, float median){
 		this.data=data;
 		this.median=median;
 	}

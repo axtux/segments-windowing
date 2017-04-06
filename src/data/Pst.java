@@ -8,7 +8,7 @@ import java.util.ArrayList;
  */
 public class Pst {
 
-	private Node root;
+	private Node<Segment> root;
 
 	public Pst(ArrayList<Segment> list) {
 		this.root=construct(list);
@@ -18,26 +18,26 @@ public class Pst {
 	 * This method is used by the constructor to create step by step the priority search tree.
 	 * @param list a list of element sorted in y
 	 */
-	private Node construct(ArrayList<Segment> list) {
+	private Node<Segment> construct(ArrayList<Segment> list) {
 		//for the method list.sublist() , the first index is inclusive and the second exclusive
-		Node temp = null;
+		Node<Segment> temp = null;
 		while (list.size()>=3) {
-			temp=new Node(list.remove(firstx(list)), (list.get((list.size()-1)/2).getY1()) );
+			temp=new Node<Segment>(list.remove(firstx(list)), (list.get((list.size()-1)/2).getY1()) );
 			temp.setLeft(construct(new ArrayList<Segment>(list.subList(0,(list.size()-1)/2))));
 			temp.setRight(construct(new ArrayList<Segment>(list.subList((list.size()-1)/2,list.size()))));
 			return temp;
 		}
 		if (list.size()==1) //base case where the sub tree containt one element
-			temp=new Node(list.remove(firstx(list)));//median is null ( it's a leaf)
+			temp=new Node<Segment>(list.remove(firstx(list)));//median is null ( it's a leaf)
 		else if (list.size()==2){ //base case where subtree containt two element
-			temp=new Node(list.remove(firstx(list)), (list.get(0).getY1()));//the median is the y1 of the unique son
-			temp.setLeft(new Node(list.remove(0)));
+			temp=new Node<Segment>(list.remove(firstx(list)), (list.get(0).getY1()));//the median is the y1 of the unique son
+			temp.setLeft(new Node<Segment>(list.remove(0)));
 		}
 		//case size == 0 , do nothing
 		return temp;
 	}
 
-	public Node getRoot(){
+	public Node<Segment> getRoot(){
 		return root;
 	}
 
