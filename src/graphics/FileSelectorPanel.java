@@ -10,7 +10,9 @@ import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 
 import data.File;
-
+/**
+ * Display a combo box to select a file within a directory and a button to change directory.
+ */
 public class FileSelectorPanel extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	private JPanel boxContainer;
@@ -19,12 +21,14 @@ public class FileSelectorPanel extends JPanel implements ActionListener {
 	private String directory;
 	private String suffix;
 	private StatusListener statusListener;
-	
+	/**
+	 * Create a selector.
+	 * @param suffix Only files with this suffix will be proposed to the user.
+	 * @param statusListener Status listener.
+	 */
 	public FileSelectorPanel(String suffix, StatusListener statusListener) {
 		super();
 		boxContainer = new JPanel();
-		//box = new JComboBox<String>(new String[0]);
-		//boxContainer.add(box);
 		add(boxContainer);
 		button = Factory.createButton("Select directory", "ACTION_CHANGE_DIRECTORY", this, this);
 		this.suffix = suffix ==  null ? "" : suffix;
@@ -32,7 +36,12 @@ public class FileSelectorPanel extends JPanel implements ActionListener {
 		// open application root directory by default
 		changeDir(".");
 	}
-	
+	/**
+	 * Change directory from which files are proposed.
+	 * @param newDir New directory.
+	 * @return True on success, false on error.
+	 * An error occurs if directory is not readable or if no files with suffix are fount into it.
+	 */
 	public boolean changeDir(String newDir) {
 		directory = newDir;
 		boxContainer.removeAll();
@@ -52,7 +61,10 @@ public class FileSelectorPanel extends JPanel implements ActionListener {
 		boxContainer.add(box);
 		return setStatus(true, "Changed directory to "+newDir);
 	}
-	
+	/**
+	 * Get selected file absolute path or relative to application root directory.
+	 * @return Selected file by user or null if no file has been selected.
+	 */
 	public String getSelectedFile() {
 		if(box == null) {
 			setStatus(false, "No valid directory chosen");
