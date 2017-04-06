@@ -1,5 +1,6 @@
 package graphics;
 
+import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -17,6 +18,8 @@ public class WindowSelectorPanel extends JPanel {
 		this.statusListener = statusListener == null ? new StatusListener(){} : statusListener;
 		
 		createFields();
+		
+		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		addAll();
 	}
 	
@@ -28,15 +31,29 @@ public class WindowSelectorPanel extends JPanel {
 	}
 	
 	private void addAll() {
-		add(new JLabel("[ X, X' ] x [ Y, Y' ] = ["));
-		add(fields[0]);
-		add(new JLabel(","));
-		add(fields[1]);
-		add(new JLabel("] x ["));
-		add(fields[2]);
-		add(new JLabel(","));
-		add(fields[3]);
-		add(new JLabel("]"));
+		JPanel line = new JPanel();
+		line.add(new JLabel("[ X, X' ] x [ Y, Y' ]"));
+		add(line);
+		
+		line = new JPanel();
+		line.add(new JLabel("="));
+		add(line);
+		
+		line = new JPanel();
+		line.add(new JLabel("["));
+		line.add(fields[0]);
+		line.add(new JLabel(","));
+		line.add(fields[1]);
+		line.add(new JLabel("] x ["));
+		line.add(fields[2]);
+		line.add(new JLabel(","));
+		line.add(fields[3]);
+		line.add(new JLabel("]"));
+		add(line);
+		
+		line = new JPanel();
+		line.add(new JLabel("Enter \"min\" to get -∞ or \"max\" to get +∞."));
+		add(line);
 	}
 	/**
 	 * Get selected window.
