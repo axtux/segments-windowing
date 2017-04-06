@@ -1,37 +1,41 @@
 package data;
 
 import java.util.ArrayList;
-
+/**
+ * Create and manage heap into an ArrayList.
+ * Heap nodes are stores into an array using breadth-first search.
+ * Counting indexes from 1, left child index is 2i, right child index is 2i+1 and father index i/2 using integer division.
+ */
 public class Heap {
 	/**
-	 * Heapify array with maximum on top.
-	 * @param array Original array that will be modified to become a heap.
+	 * Make a heap into array with maximum on top.
+	 * @param array Original array which will be reordered to become a heap.
 	 */
 	public static <E extends Comparable<E>> void heapify(ArrayList<E> array) {
 		heapify(array, true);
 	}
 	/**
-	 * Heapify array.
-	 * @param array Original array that will be modified to become a heap.
+	 * Make a heap into array.
+	 * @param array Original array which will be reordered to become a heap.
 	 * @param useMax If true, maximum will be on top. If false, minimum will be.
 	 */
 	public static <E extends Comparable<E>> void heapify(ArrayList<E> array, boolean useMax) {
 		int size = array.size();
-		for(int i = Father(size-1); i >= 0; --i) {
+		for(int i = father(size-1); i >= 0; --i) {
 			heapify(array, i, size, useMax);
 		}
 	}
 	/**
-	 * Make size-sized heap from array considering array is already a heap except for element i. 
+	 * Make size-sized heap into array considering array is already a heap except for element i. 
 	 * @param array Heap array.
-	 * @param i Element that could be at wrong place in the heap.
+	 * @param i Element which could be at wrong place in the heap.
 	 * @param size Size of the heap (array size won't be used here).
 	 * @param useMax If true, maximum will be on top. If false, minimum will be.
 	 */
 	private static <E extends Comparable<E>> void heapify(ArrayList<E> array, int i, int size, boolean useMax) {
 		int max = i;
-		int left = Left(i);
-		int right = Right(i);
+		int left = left(i);
+		int right = right(i);
 		// m change comparison result
 		int m = useMax ? 1 : -1;
 		
@@ -80,7 +84,7 @@ public class Heap {
 	 * @param i Element index.
 	 * @return Index of father element.
 	 */
-	private static int Father(int i) {
+	public static int father(int i) {
 		return (i+1)/2 -1;
 	}
 	/**
@@ -88,7 +92,7 @@ public class Heap {
 	 * @param i Element index.
 	 * @return Index of left child element.
 	 */
-	private static int Left(int i) {
+	public static int left(int i) {
 		return 2*(i+1) -1;
 	}
 	/**
@@ -96,7 +100,7 @@ public class Heap {
 	 * @param i Element index.
 	 * @return Index of right child element.
 	 */
-	private static int Right(int i) {
+	public static int right(int i) {
 		return 2*(i+1)+1 -1;
 	}
 }
