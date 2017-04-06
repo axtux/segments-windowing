@@ -20,13 +20,12 @@ public class Segment implements Comparable<Segment> {
 	 */
 	public Segment(int x1, int x2, int y1, int y2) {
 		//we here take the min or max to instaure an order in the segments (y1,y2 where y1 < y2)
-		if (Math.min(y1,y2)==y1) {
+		if (y1 < y2) {
 			this.x1=x1;
 			this.y1=y1;
 			this.x2=x2;
 			this.y2=y2;
-		}
-		else { //we put the y coordinate in the order
+		} else { // y1 >= y2, put y coordinates in right order
 			this.x1=x2;
 			this.y1=y2;
 			this.x2=x1;
