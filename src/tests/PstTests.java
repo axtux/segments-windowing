@@ -34,6 +34,7 @@ public class PstTests {
 		list.add(new Segment(-42,-42,-42,-42));
 		list.sort(Segment::compareTo);
 		Pst abr = new Pst(list);
+		//the first segment is the min in x 
 		assertTrue(new Segment(-42,-42,-42,-42).getX1() == abr.getRoot().getData().getX1());
 	}
 
