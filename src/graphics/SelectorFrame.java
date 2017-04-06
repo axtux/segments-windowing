@@ -11,17 +11,17 @@ import javax.swing.JPanel;
 
 import data.Scene;
 
-public class WindowSelector extends JFrame implements ActionListener, StatusListener {
+public class SelectorFrame extends JFrame implements ActionListener, StatusListener {
 	private static final long serialVersionUID = 1L;
 	
 	private FileSelectorPanel fileSelector;
 	private JLabel status;
 	
 	public static void main(String[] args) {
-		new WindowSelector("scenes");
+		new SelectorFrame("scenes");
 	}
 	
-	public WindowSelector(String scenesDir) {
+	public SelectorFrame(String scenesDir) {
 		super("Scene file/window selector");
 		
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
