@@ -67,7 +67,10 @@ public class Scene {
 	 * @return Filtered scene.
 	 */
 	public Scene filter(Segment window) {
-		// TODO implement
+		
+		// TODO implement, for now only display window is changed
+		this.window = window;
+		
 		return this;
 	}
 }
