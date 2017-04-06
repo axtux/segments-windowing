@@ -26,7 +26,7 @@ public class SelectorFrame extends JFrame implements ActionListener, StatusListe
 	public SelectorFrame(String scenesDir) {
 		super("Scene file/window selector");
 		
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
 		getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.PAGE_AXIS));
 		
