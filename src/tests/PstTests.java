@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.Random;
 
+import data.Node;
 import data.Pst;
 import data.Segment;
 import org.junit.Before;
@@ -34,8 +35,12 @@ public class PstTests {
 		list.add(new Segment(-42,-42,-42,-42));
 		list.sort(Segment::compareTo);
 		Pst abr = new Pst(list);
-		//the first segment is the min in x 
+		//the first segment is the min in x
 		assertTrue(new Segment(-42,-42,-42,-42).getX1() == abr.getRoot().getData().getX1());
+		//assertTrue(new Segment(-42,-42,-42,-42).getX2() == abr.getRoot().getData().getX2());
+		//assertTrue(new Segment(-42,-42,-42,-42).getY1() == abr.getRoot().getData().getY1());
+		//assertTrue(new Segment(-42,-42,-42,-42).getY2() == abr.getRoot().getData().getY2());
+		//faire méthode printAbr qui va print tout l'abre niveau par niveau comme ca Seg1:x1,x2,y1,y2
 	}
 
 

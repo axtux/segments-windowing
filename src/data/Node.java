@@ -4,7 +4,7 @@ package data;
  */
 public class Node<E> {
 	private E data;
-	private final float median;
+	private float median;
 	private Node<E> left;
 	private Node<E> right;
 	
@@ -30,6 +30,14 @@ public class Node<E> {
 	
 	public E getData() {
 		return data;
+	}
+	public Node getNextl() {
+		return left;
+	}
+
+	public Node getNextr() {
+
+		return right;
 	}
 	
 	public Node(E data){
