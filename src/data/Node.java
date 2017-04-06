@@ -31,14 +31,6 @@ public class Node<E> {
 	public E getData() {
 		return data;
 	}
-	public Node getNextl() {
-		return left;
-	}
-
-	public Node getNextr() {
-
-		return right;
-	}
 	
 	public Node(E data){
 		this.data=data;
