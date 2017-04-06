@@ -1,7 +1,7 @@
 package data;
 /**
  *  Created by marco on 28/03/17.
- *  This class represnets a segment
+ *  This class represents a segment with y1 <= y2
  */
 
 public class Segment implements Comparable<Segment> {
