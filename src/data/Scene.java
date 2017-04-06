@@ -52,8 +52,6 @@ public class Scene {
 		}
 		
 		lecteur.close();
-		
-		// TODO sort segments ?
 	}
 	
 	public Segment getWindow() {
@@ -62,5 +60,17 @@ public class Scene {
 	
 	public ArrayList<Segment> getSegments() {
 		return segments;
+	}
+	/**
+	 * Filter scene using priority search tree.
+	 * @param window Only segments visible on this window will be kept.
+	 * @return Filtered scene.
+	 */
+	public Scene filter(Segment window) {
+		
+		// TODO implement, for now only display window is changed
+		this.window = window;
+		
+		return this;
 	}
 }

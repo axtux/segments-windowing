@@ -10,18 +10,20 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import data.Scene;
+import data.Segment;
 
-public class WindowSelector extends JFrame implements ActionListener, StatusListener {
+public class SelectorFrame extends JFrame implements ActionListener, StatusListener {
 	private static final long serialVersionUID = 1L;
 	
 	private FileSelectorPanel fileSelector;
+	private WindowSelectorPanel windowSelector;
 	private JLabel status;
 	
 	public static void main(String[] args) {
-		new WindowSelector("scenes");
+		new SelectorFrame("scenes");
 	}
 	
-	public WindowSelector(String scenesDir) {
+	public SelectorFrame(String scenesDir) {
 		super("Scene file/window selector");
 		
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -30,7 +32,7 @@ public class WindowSelector extends JFrame implements ActionListener, StatusList
 		
 		addFileSelector(false);
 		addWindowSelector(false);
-		addButton(false);
+		addButtons(false);
 		addStatus(true);
 		// refresh when error element exists
 		fileSelector.changeDir(scenesDir);
@@ -49,16 +51,17 @@ public class WindowSelector extends JFrame implements ActionListener, StatusList
 	private void addWindowSelector(boolean bottom_margin) {
 		JPanel container = new LabeledPanel("Scene window selector", bottom_margin);
 		
-		container.add(new JLabel("TODO"));
+		windowSelector = new WindowSelectorPanel(this);
+		container.add(windowSelector);
 		
 		add(container);
 	}
 	
-	private void addButton(boolean bottom_margin) {
+	private void addButtons(boolean bottom_margin) {
 		JPanel container = new LabeledPanel("Open scene", bottom_margin);
 		
-		Factory.createButton("whole scene", "ACTION_OPEN_WHOLE_SCENE", this, container);
-		Factory.createButton("restricted window", "ACTION_OPEN_RESTRICTED_WINDOW", this, container);
+		Factory.createButton("Whole scene", "ACTION_OPEN_WHOLE_SCENE", this, container);
+		Factory.createButton("Selected window", "ACTION_OPEN_WINDOW", this, container);
 		
 		add(container);
 	}
@@ -77,24 +80,53 @@ public class WindowSelector extends JFrame implements ActionListener, StatusList
 		case "ACTION_OPEN_WHOLE_SCENE":
 			openScene();
 			return;
+		case "ACTION_OPEN_WINDOW":
+			openWindow();
+			return;
 		default:
-			System.out.println("Action not implemented : "+e.getActionCommand());
+			updateStatus(false, "Action not implemented : "+e.getActionCommand());
 		}
 	}
 	
-	private boolean openScene() {
+	private Scene getScene() {
 		String file = fileSelector.getSelectedFile();
 		if(file == null) {
-			return updateStatus(false, "No file selected");
+			updateStatus(false, "No file selected");
+			return null;
 		}
 		
 		Scene scene = Scene.getScene(file);
 		if(scene == null) {
-			return updateStatus(false, "Unable to get scene from file "+file+". Please check readability and/or format.");
+			updateStatus(false, "Unable to get scene from file "+file+". Please check readability and/or format.");
+			return null;
 		}
 		
-		new SceneWindow(scene);
-		return true;
+		return scene;
+	}
+	
+	private void openScene() {
+		Scene scene = getScene();
+		if(scene == null) {
+			return;
+		}
+		
+		new SceneFrame(scene);
+		updateStatus(true, "Opened whole scene.");
+	}
+	
+	private void openWindow() {
+		Scene scene = getScene();
+		if(scene == null) {
+			return;
+		}
+		
+		Segment window = windowSelector.getSelectedWindow();
+		if(window == null) {
+			return;
+		}
+		
+		new SceneFrame(scene.filter(window));
+		updateStatus(true, "Opened filtered scene.");
 	}
 	
 	public boolean updateStatus(boolean noError, String message) {
