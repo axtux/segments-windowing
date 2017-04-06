@@ -21,18 +21,19 @@ public class Pst {
 	 */
 	private void construct(ArrayList<Segment> list, Node temp) {
 		//for the method list.sublist() , the first index is inclusive and the second exclusive
+		//problem root is null ??????
 		while (list.size()>=3) {
 			temp=new Node(list.remove(firstx(list)), (list.get((list.size()-1)/2).getY1()) );
-			construct(new ArrayList<Segment>(list.subList(0,list.size()/2)),temp.nextl);
-			construct(new ArrayList<Segment>(list.subList(list.size()/2,list.size()-1)),temp.nextr);
+			construct(new ArrayList<Segment>(list.subList(0,(list.size()-1)/2)),temp.nextl);
+			construct(new ArrayList<Segment>(list.subList((list.size()-1)/2,list.size())),temp.nextr);
 		}
 		if (list.size()==1) //base case where the sub tree containt one element
 			temp=new Node(list.remove(firstx(list)));//median is null ( it's a leaf)
-		else { //base case where subtree containt two element
+		else if (list.size()==2){ //base case where subtree containt two element
 			temp=new Node(list.remove(firstx(list)), (list.get(0).getY1()));//the median is the y1 of the unique son
 			temp.setNextl(new Node(list.remove(0)));
 		}
-
+		//case size == 0 , do nothing
 	}
 
 	public Node getRoot(){
