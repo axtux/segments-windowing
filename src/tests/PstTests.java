@@ -20,10 +20,10 @@ public class PstTests {
 	public void  initList(){
 		int i=0;
 		while (i<10) {
-			int x1= new Random().nextInt(50);
-			int x2= new Random().nextInt(100);
-			int y1= new Random().nextInt(200);
-			int y2= new Random().nextInt(200);
+			int x1= i+1;
+			int x2= i+2;
+			int y1= i+1;
+			int y2= i+2;
 			list.add(new Segment(x1,x2,y1,y2));
 			i++;
 		}
@@ -34,7 +34,8 @@ public class PstTests {
 		list.add(new Segment(-42,-42,-42,-42));
 		list.sort(Segment::compareTo);
 		Pst abr = new Pst(list);
-		assertEquals(new Segment(-42,-42,-42,-42),abr.getRoot().getData());
+		//the first segment is the min in x 
+		assertTrue(new Segment(-42,-42,-42,-42).getX1() == abr.getRoot().getData().getX1());
 	}
 
 
