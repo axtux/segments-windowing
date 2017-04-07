@@ -30,7 +30,7 @@ public class Scene {
 		if(filename == null) throw new NullPointerException();
 		
 		Scanner lecteur = new Scanner(new File(filename));
-		lecteur.useLocale(Locale.US);
+		lecteur.useLocale(Locale.US);//used to detected the representation of the float
 		
 		// first line contains x x' y y', [x, x']x[y, y'] being window limits
 		window = new Segment(
