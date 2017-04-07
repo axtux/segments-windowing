@@ -77,7 +77,11 @@ public class Segment implements Comparable<Segment> {
 	/**
 	 * This method print the Segment in this form : "Seg : x1,y1,x2,y2"
 	 */
-	public void printSeg(){
-		System.out.print(" Seg : "+getX1()+" "+getY1()+" "+getX2()+" "+getY2());
+	public void printSeg() {
+		System.out.print(" Seg : " + getX1() + " " + getY1() + " " + getX2() + " " + getY2());
+	}
+
+	public String toString() {
+		return "Segment(x1="+Integer.toString(x1)+", x2="+Integer.toString(x2)+", y1="+Integer.toString(y1)+", y2="+Integer.toString(y2)+")";
 	}
 }

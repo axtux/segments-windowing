@@ -121,13 +121,11 @@ public class SceneFrame extends JFrame {
 		}
 		
 		public void mouseWheelMoved(MouseWheelEvent e) {
-			// prevent default behaviour
+			// prevent default behavior
 			e.consume();
 			
 			// backup old view
 			Rectangle oldView = panel.getVisibleRect();
-			double oldCenterX = oldView.getX()+oldView.getWidth()/2;
-			double oldCenterY = oldView.getY()+oldView.getHeight()/2;
 			
 			// ratio 0.9 or 1.1 depending on rotation, zoom in on wheel up zoom out on wheel down
 			double ratio = 1-0.1*e.getWheelRotation();
@@ -136,10 +134,15 @@ public class SceneFrame extends JFrame {
 			// Update scroll bars and repaint
 			self.update();
 			
-			// set view back to centered point
 			Rectangle view = panel.getVisibleRect();
-			view.x = (int) (oldCenterX*ratio-view.getWidth()/2);
-			view.y = (int) (oldCenterY*ratio-view.getHeight()/2);
+			/* set view back to centered point
+			view.x = (int) (oldView.getCenterX()*ratio-view.getWidth()/2);
+			view.y = (int) (oldView.getCenterY()*ratio-view.getHeight()/2);
+			//*/
+			//* set view back to mouse point
+			view.x = (int) ((oldView.getX()+e.getX())*ratio-e.getX());
+			view.y = (int) ((oldView.getY()+e.getY())*ratio-e.getY());
+			//*/
 			panel.scrollRectToVisible(view);
 			
 			updateCursor();

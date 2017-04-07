@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class Scene {
@@ -19,14 +20,17 @@ public class Scene {
 			return new Scene(filename);
 		} catch (IOException e) {
 			return null;
+		} catch (NoSuchElementException e) {
+			return null;
 		}
 	}
 	/**
 	 * Build Segments from file.
 	 * @param filename File from which to read Segments.
 	 * @throws IOException In case an error occurs reading file.
+	 * @throws NoSuchElementException If input is exhausted, if the next token does not match the Float regular expression, or is out of range.
 	 */
-	public Scene(String filename) throws IOException {
+	public Scene(String filename) throws IOException, NoSuchElementException {
 		if(filename == null) throw new NullPointerException();
 		
 		Scanner lecteur = new Scanner(new File(filename));
