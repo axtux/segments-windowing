@@ -23,8 +23,8 @@ public class Pst {
 		Node<Segment> temp = null;
 		while (list.size()>=3) {
 			temp=new Node<Segment>(list.remove(firstx(list)), (list.get((list.size()-1)/2).getY1()) );
-			temp.setLeft(construct(new ArrayList<Segment>(list.subList(0,(list.size()-1)/2))));
-			temp.setRight(construct(new ArrayList<Segment>(list.subList((list.size()-1)/2,list.size()))));
+			temp.setLeft(construct(new ArrayList<Segment>(list.subList(0,(list.size())/2))));
+			temp.setRight(construct(new ArrayList<Segment>(list.subList((list.size())/2,list.size()))));
 			return temp;
 		}
 		if (list.size()==1) //base case where the sub tree containt one element
@@ -59,5 +59,26 @@ public class Pst {
 				min=i;
 		}
 		return min;
+	}
+
+	/**
+	 * This method print a Pst wich the root is given in parameter using the printSeg() method in Segment.
+	 * @param temp the root of the tree to be print
+	 * @param acc the Symbol of a node ( examples : @,|,(), ...)
+	 */
+	public void printPst(Node<Segment> temp, String acc) {
+
+		System.out.print(acc);
+		temp.getData().printSeg();
+		if (temp.getLeft() != null) {
+			System.out.println();
+			System.out.print("l-son:");
+			printPst(temp.getLeft(), acc+"|-----");
+		}
+		if (temp.getRight() != null) {
+			System.out.println();
+			System.out.print("r-son:");;
+			printPst(temp.getRight(), acc+"|-----");
+		}
 	}
 }

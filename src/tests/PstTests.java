@@ -7,6 +7,7 @@ import java.util.Random;
 import data.Node;
 import data.Pst;
 import data.Segment;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -20,7 +21,7 @@ public class PstTests {
 	@Before
 	public void  initList(){
 		int i=0;
-		while (i<10) {
+		while (i<30) {
 			int x1= i+1;
 			int x2= i+2;
 			int y1= i+1;
@@ -30,17 +31,33 @@ public class PstTests {
 		}
 	}
 
+	/**
+	 * Test is passed if the root of the tree is correct (it's the minimum in x)
+	 */
 	@Test
-	public void constructPst(){
-		list.add(new Segment(-42,-42,-42,-42));
+	public void constructRootTest(){
+		Segment seg=new Segment(-42,-42,-42,-42);
+		list.add(seg);
 		list.sort(Segment::compareTo);
 		Pst abr = new Pst(list);
 		//the first segment is the min in x
-		assertTrue(new Segment(-42,-42,-42,-42).getX1() == abr.getRoot().getData().getX1());
-		//assertTrue(new Segment(-42,-42,-42,-42).getX2() == abr.getRoot().getData().getX2());
-		//assertTrue(new Segment(-42,-42,-42,-42).getY1() == abr.getRoot().getData().getY1());
-		//assertTrue(new Segment(-42,-42,-42,-42).getY2() == abr.getRoot().getData().getY2());
-		//faire méthode printAbr qui va print tout l'abre niveau par niveau comme ca Seg1:x1,x2,y1,y2
+		assertTrue(abr.getRoot().getData().equals(seg));
+		abr.printPst(abr.getRoot(),"");//used to see the Pst in terminal
+
+	}
+
+	/**
+	 * Test is passed if the median is correct by definition
+	 */
+	@Test
+	public void  medianTest(){
+		list.sort(Segment::compareTo);
+		Pst abr = new Pst(list);
+		Node<Segment> temp=abr.getRoot();
+		float median=temp.getMedian();
+		assertTrue(temp.getLeft().getData().getY1()<=median);
+		assertTrue(temp.getRight().getData().getY1()>=median);
+
 	}
 
 
