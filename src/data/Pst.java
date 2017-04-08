@@ -81,4 +81,10 @@ public class Pst {
 			printPst(temp.getRight(), acc+"|-----");
 		}
 	}
+
+	public void windowing(Segment window){
+		//TODO marco is doing it 
+	}
+
+
 }
