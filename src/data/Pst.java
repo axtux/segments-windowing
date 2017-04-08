@@ -82,8 +82,38 @@ public class Pst {
 		}
 	}
 
-	public void windowing(Segment window){
-		//TODO marco is doing it 
+	/**
+	 * This method apply the windowing method on the Pst and return an ArrayList with the Segment in it,
+	 * or an empty ArrayList if there is no Segment in the window.
+	 * The window have to be in that form : [x:x']X[y:y'] where x<=x' and y<=y'(prerequisite)
+	 * @param window a Segment object representing the window to apply
+	 * @return an ArrayList with the Segment in it, or an empty ArrayList
+	 */
+	public ArrayList<Segment> windowing(Segment window){//window is like that : [x:x']X[y:y']
+		ArrayList<Segment> rep=new ArrayList<>();
+		Node<Segment> temp=root;
+		if (window.getX1()==Integer.MAX_VALUE){//the window is without min in x : [-infinity;x2]X[y1,y2]
+			while (temp!=null){//this will take all the segment
+				if (Math.max(temp.getData().getX1(), temp.getData().getX2())<=window.getX2()){//it's in the x window
+					if (window.getY1()<=temp.getData().getY1() && window.getY2()>=temp.getData().getY2())//it's in the y window
+						rep.add(temp.getData());
+					if (window.getY1()<=temp.getMedian())
+						temp=temp.getLeft();
+					if (window.getY1()>=temp.getMedian())
+						temp=temp.getRight();
+				}
+			}
+		}
+		if (window.getX2()==Integer.MAX_VALUE){//the window is without min in x : [x1;+infinity]X[y1,y2]
+
+		}
+		if (window.getY1()==Integer.MAX_VALUE){//the window is without min in y : [x1;x2]X[-infinity,y2]
+
+		}
+		if (window.getY2()==Integer.MAX_VALUE){//the window is without max in y : [x1;x2]X[y1,+infinity]
+
+		}
+		return rep;
 	}
 
 
