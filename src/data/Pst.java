@@ -83,37 +83,53 @@ public class Pst {
 	}
 
 	/**
-	 * This method apply the windowing method on the Pst and return an ArrayList with the Segment in it,
+	 * This method apply the windowing method on the Pst and return an ArrayList with the Segment in it where the segment have one end-point in it,
 	 * or an empty ArrayList if there is no Segment in the window.
 	 * The window have to be in that form : [x:x']X[y:y'] where x<=x' and y<=y'(prerequisite)
 	 * @param window a Segment object representing the window to apply
-	 * @return an ArrayList with the Segment in it, or an empty ArrayList
+	 * @return an ArrayList of the Segment, or an empty ArrayList
 	 */
-	public ArrayList<Segment> windowing(Segment window){//window is like that : [x:x']X[y:y']
+	public ArrayList<Segment> windowing(Segment window, Node<Segment> root){//window is like that : [x:x']X[y:y']
 		ArrayList<Segment> rep=new ArrayList<>();
-		Node<Segment> temp=root;
-		if (window.getX1()==Integer.MAX_VALUE){//the window is without min in x : [-infinity;x2]X[y1,y2]
-			while (temp!=null){//this will take all the segment
-				if (Math.max(temp.getData().getX1(), temp.getData().getX2())<=window.getX2()){//it's in the x window
-					if (window.getY1()<=temp.getData().getY1() && window.getY2()>=temp.getData().getY2())//it's in the y window
-						rep.add(temp.getData());
-					if (window.getY1()<=temp.getMedian())
-						temp=temp.getLeft();
-					if (window.getY1()>=temp.getMedian())
-						temp=temp.getRight();
+		if (root!=null) {
+			if (window.getX1() == Integer.MAX_VALUE) {//the window is without min in x : [-infinity;x2]X[y1,y2]
+				if (Math.min(root.getData().getX1(), root.getData().getX2()) <= window.getX2()) {
+					//we can continue because all the element in the subtree aren't greater than the window in x
+					report(root, window, rep);
+					if (window.getY1() < root.getMedian())
+						windowing(window, root.getLeft());
+					if (window.getY1() > root.getMedian())
+						windowing(window, root.getRight());
+					if (window.getY1() == root.getMedian()) {//case where there are y1 elements equals to the median
+						windowing(window, root.getLeft());
+						windowing(window, root.getRight());
+					}
 				}
 			}
-		}
-		if (window.getX2()==Integer.MAX_VALUE){//the window is without min in x : [x1;+infinity]X[y1,y2]
+			if (window.getX2() == Integer.MAX_VALUE) {//the window is without min in x : [x1;+infinity]X[y1,y2]
+			}
+			if (window.getY1() == Integer.MAX_VALUE) {//the window is without min in y : [x1;x2]X[-infinity,y2]
 
-		}
-		if (window.getY1()==Integer.MAX_VALUE){//the window is without min in y : [x1;x2]X[-infinity,y2]
+			}
+			if (window.getY2() == Integer.MAX_VALUE) {//the window is without max in y : [x1;x2]X[y1,+infinity]
 
-		}
-		if (window.getY2()==Integer.MAX_VALUE){//the window is without max in y : [x1;x2]X[y1,+infinity]
-
+			}
 		}
 		return rep;
+	}
+
+	/**
+	 * Add the segment (Node data) to rep if one of its end points is in the window, otherwise do nothing
+	 * @param n a node<Segment> to report
+	 * @param window a Segment wich represents the window
+	 * @param rep The ArrayList<Segment> in wich whe add the segment
+	 */
+	public void report(Node<Segment> n,Segment window,ArrayList<Segment> rep){
+		if ( (window.getY1()<=root.getData().getY1() && window.getX1()<=Math.min(n.getData().getX1(),n.getData().getX2()))
+						// search if there is one end point in the window
+						|| (window.getY2()>=root.getData().getY2() && window.getX2()>=Math.max(n.getData().getX1(),n.getData().getX2()))
+				)
+			rep.add(root.getData());
 	}
 
 
