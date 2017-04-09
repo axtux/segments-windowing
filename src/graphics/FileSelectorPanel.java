@@ -68,7 +68,7 @@ public class FileSelectorPanel extends JPanel implements ActionListener {
 		
 		ArrayList<String> filenames = File.list(newDir, suffix);
 		if(filenames == null) {
-			boxContainer.add(new JLabel("Enable to list files into directory."));
+			boxContainer.add(new JLabel("Unable to list files into directory."));
 			updateSize();
 			return false;
 		}
