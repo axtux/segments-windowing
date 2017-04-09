@@ -15,14 +15,14 @@ public class Point implements Comparable<Point> {
 		this.y = y;
 	}
 	/**
-	 * Get X.
+	 * Get X Coordinate.
 	 * @return X Coordinate.
 	 */
 	public int getX() {
 		return x;
 	}
 	/**
-	 * Get Y.
+	 * Get Y Coordinate.
 	 * @return Y Coordinate.
 	 */
 	public int getY(){
