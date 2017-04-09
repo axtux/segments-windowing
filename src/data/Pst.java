@@ -3,8 +3,7 @@ package data;
 import java.util.ArrayList;
 
 /**
- * Created by marco on 1/04/17.
- * this class represents the priority search tree
+ * This class represents a priority search tree.
  */
 public class Pst {
 
@@ -68,8 +67,7 @@ public class Pst {
 	 */
 	public void printPst(Node<Segment> temp, String acc) {
 
-		System.out.print(acc);
-		temp.getData().printSeg();
+		System.out.print(acc + temp.getData());
 		if (temp.getLeft() != null) {
 			System.out.println();
 			System.out.print("l-son:");
@@ -193,7 +191,7 @@ public class Pst {
 					subWindowing(window, root.getRight());
 			}
 
-			else {
+			else {//case of a limited window
 				if (Math.min(root.getData().getX1(), root.getData().getX2()) <= window.getX2()) {
 					report(root, window, rep);//it will do nothing if the node is not in the x window
 					if (window.getY1() < root.getMedian() && window.getY2() < root.getMedian())

@@ -86,3 +86,7 @@ gradle-app.setting
 .classpath
 .project
 
+# Ant
+/build/
+/doc/
+

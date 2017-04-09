@@ -4,20 +4,22 @@ import java.util.ArrayList;
 /**
  * Create and manage heap into an ArrayList.
  * Heap nodes are stores into an array using breadth-first search.
- * Counting indexes from 1, left child index is 2i, right child index is 2i+1 and father index i/2 using integer division.
+ * Counting indexes from 1, left child index is 2i, right child index is 2i+1 and father index is i/2 using integer division.
  */
 public class Heap {
 	/**
-	 * Make a heap into array with maximum on top.
+	 * Make a heap into given array with maximum on top.
 	 * @param array Original array which will be reordered to become a heap.
+	 * @param <E> Comparable class.
 	 */
 	public static <E extends Comparable<E>> void heapify(ArrayList<E> array) {
 		heapify(array, true);
 	}
 	/**
-	 * Make a heap into array.
+	 * Make a heap into given array.
 	 * @param array Original array which will be reordered to become a heap.
 	 * @param useMax If true, maximum will be on top. If false, minimum will be.
+	 * @param <E> Comparable class.
 	 */
 	public static <E extends Comparable<E>> void heapify(ArrayList<E> array, boolean useMax) {
 		int size = array.size();
@@ -56,6 +58,7 @@ public class Heap {
 	/**
 	 * Sort array using heap sort in ascending order.
 	 * @param array Array to sort.
+	 * @param <E> Comparable class.
 	 */
 	public static <E extends Comparable<E>> void sortArray(ArrayList<E> array) {
 		sortArray(array, true);
@@ -64,6 +67,7 @@ public class Heap {
 	 * Sort array using heap sort.
 	 * @param array Array to sort.
 	 * @param asc_order If true, ascending order will be use. If false, descending order will be.
+	 * @param <E> Comparable class.
 	 */
 	public static <E extends Comparable<E>> void sortArray(ArrayList<E> array, boolean asc_order) {
 		heapify(array, asc_order);
@@ -80,7 +84,7 @@ public class Heap {
 		
 	}
 	/**
-	 * Considering an 0-indexed array as a tree, get father index of element i.
+	 * Considering an 0-indexed array as a binary tree, get father index of element i.
 	 * @param i Element index.
 	 * @return Index of father element.
 	 */
@@ -88,7 +92,7 @@ public class Heap {
 		return (i+1)/2 -1;
 	}
 	/**
-	 * Considering an 0-indexed array as a tree, get left child index of element i.
+	 * Considering an 0-indexed array as a binary tree, get left child index of element i.
 	 * @param i Element index.
 	 * @return Index of left child element.
 	 */
@@ -96,7 +100,7 @@ public class Heap {
 		return 2*(i+1) -1;
 	}
 	/**
-	 * Considering an 0-indexed array as a tree, get right child index of element i.
+	 * Considering an 0-indexed array as a binary tree, get right child index of element i.
 	 * @param i Element index.
 	 * @return Index of right child element.
 	 */

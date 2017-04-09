@@ -13,13 +13,16 @@ import javax.swing.JScrollPane;
 import data.Point;
 import data.Scene;
 /**
- * Window to display segments using {@link ScenePanel} and enable mouse scrolling.
+ * JFrame to display segments using {@link ScenePanel}, enable mouse scroll and wheel zoom.
  */
 public class SceneFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private SceneFrame self;
 	private ScenePanel panel;
-	
+	/**
+	 * Create frame from scene.
+	 * @param scene Scene to display.
+	 */
 	public SceneFrame(Scene scene) {
 		super("Segments Window");
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -36,7 +39,7 @@ public class SceneFrame extends JFrame {
 		scroll.setWheelScrollingEnabled(false);
 		add(scroll);
 		
-		activateMouseScroll();
+		addMouseListeners();
 		
 		// center window
 		setExtendedState(MAXIMIZED_BOTH);
@@ -54,8 +57,8 @@ public class SceneFrame extends JFrame {
 		panel.repaint();
 	}
 	
-	private void activateMouseScroll() {
-		MouseScroller ms = new MouseScroller();
+	private void addMouseListeners() {
+		MouseScrollWheelZoom ms = new MouseScrollWheelZoom();
 		
 		// mouse click and drag only on panel
 		panel.addMouseListener(ms);
@@ -83,11 +86,13 @@ public class SceneFrame extends JFrame {
 		return true;
 	}
 	/**
-	 * Mouse listener that enable mouse scrolling.
+	 * Manages mouse events. Moving pressed mouse will scroll panel and wheel movements will affect zoom level.
 	 */
-	private class MouseScroller extends MouseAdapter {
+	private class MouseScrollWheelZoom extends MouseAdapter {
 		private Point origin;
-		
+		/**
+		 * Save origin and set pressed cursor.
+		 */
 		public void mousePressed(MouseEvent e) {
 			origin = new Point(e.getX(), e.getY());
 			
@@ -98,7 +103,9 @@ public class SceneFrame extends JFrame {
 			
 			panel.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		}
-		
+		/**
+		 * Set released cusor.
+		 */
 		public void mouseReleased(MouseEvent e) {
 			if(isScrollable(panel)) {
 				panel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -107,7 +114,9 @@ public class SceneFrame extends JFrame {
 			
 			panel.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		}
-		
+		/**
+		 * Scroll panel view with mouse movements.
+		 */
 		public void mouseDragged(MouseEvent e) {
 			if (origin == null) {
 				return;
@@ -119,7 +128,9 @@ public class SceneFrame extends JFrame {
 			
 			panel.scrollRectToVisible(view);
 		}
-		
+		/**
+		 * Change zoom level with wheel movements.
+		 */
 		public void mouseWheelMoved(MouseWheelEvent e) {
 			// prevent default behavior
 			e.consume();
@@ -129,7 +140,10 @@ public class SceneFrame extends JFrame {
 			
 			// ratio 0.9 or 1.1 depending on rotation, zoom in on wheel up zoom out on wheel down
 			double ratio = 1-0.1*e.getWheelRotation();
-			panel.setScale(panel.getScale()*ratio);
+			if(! panel.setScale(panel.getScale()*ratio) ) {
+				// minimum or maximum scale has been reached
+				return;
+			}
 			
 			// Update scroll bars and repaint
 			self.update();
@@ -147,7 +161,9 @@ public class SceneFrame extends JFrame {
 			
 			updateCursor();
 		}
-		
+		/**
+		 * Set released cursor.
+		 */
 		public void updateCursor() {
 			mouseReleased(null);
 		}
