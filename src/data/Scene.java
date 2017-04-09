@@ -3,6 +3,7 @@ package data;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Locale;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
@@ -37,25 +38,58 @@ public class Scene {
 		lecteur.useLocale(Locale.US);//used to detected the representation of the float
 		
 		// first line contains x x' y y', [x, x']x[y, y'] being window limits
-		window = new Segment(
+		Segment w = new Segment(
 			(int) lecteur.nextFloat(),
 			(int) lecteur.nextFloat(),
 			(int) lecteur.nextFloat(),
 			(int) lecteur.nextFloat()
 		);
+		if(!setWindow(w)) {
+			lecteur.close();
+			throw new InputMismatchException("window width/height must be >= 10");
+		}
 		
 		// following line contains x y x' y', each one define a segment (why different order ?)
 		segments = new ArrayList<Segment>();
+		Segment tmp;
 		
 		while (lecteur.hasNextFloat()) {
 			int x1 = (int) lecteur.nextFloat();
 			int y1 = (int) lecteur.nextFloat();
 			int x2 = (int) lecteur.nextFloat();
 			int y2 = (int) lecteur.nextFloat();
-			segments.add(new Segment(x1, x2, y1, y2));
+			tmp = new Segment(x1, x2, y1, y2);
+			if(!addSegment(tmp)) {
+				lecteur.close();
+				throw new InputMismatchException("segment must be vertical or horizontal");
+			}
 		}
 		
 		lecteur.close();
+	}
+	
+	private boolean setWindow(Segment window) {
+		int width = window.getX2()-window.getX1();
+		int height = window.getY2()-window.getY1();
+		if(width < 10 || height < 10) {
+			return false;
+		}
+		
+		this.window = window;
+		return true;
+	}
+	/**
+	 * Check that the segment is vertical or horizontal and add it.
+	 * @param s Segment to add.
+	 * @return True on success, false on error. An error occurs if segment is neither vertical neither horizontal.
+	 */
+	private boolean addSegment(Segment s) {
+		if(s.getX1() != s.getX2() && s.getY1() != s.getY2()) {
+			return false;
+		}
+		
+		segments.add(s);
+		return true;
 	}
 	
 	public Segment getWindow() {
