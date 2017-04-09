@@ -45,7 +45,7 @@ public class Pst {
 	/***
 	 * this method is used to have the minimum in x in a list of Segment sorted in y,
 	 * note that there is no duplicate value in x (prerequisite).
-	 * @param list
+	 * @param list An ArrayList<Segment> of Segment
 	 * @return the INDICE of the minimum Segment in x
 	 */
 	public int firstx(ArrayList<Segment> list) {
@@ -77,8 +77,33 @@ public class Pst {
 		}
 		if (temp.getRight() != null) {
 			System.out.println();
-			System.out.print("r-son:");;
+			System.out.print("r-son:");
 			printPst(temp.getRight(), acc+"|-----");
+		}
+	}
+
+	public ArrayList<Segment> windowing(Segment window){
+		ArrayList<Segment> answer = subWindowing(window,this.root);
+		if (window.getX1() == Integer.MIN_VALUE) {
+			Segment other=new Segment(window.getX1(),window.getX2(),Integer.MIN_VALUE,window.getY1());
+			//case to add with two infinity x1 and y1
+			//add the value without duplicate
+		}
+		if (window.getX2() == Integer.MAX_VALUE) {
+			Segment other=new Segment(window.getX1(),window.getX2(),window.getY2(),Integer.MAX_VALUE);
+			//case to add too with infinity in x2,y2
+		}
+		if (window.getY1() == Integer.MIN_VALUE) {
+			Segment other=new Segment(Integer.MIN_VALUE,window.getX1(),window.getY1(),window.getY2());
+			// """ """"  x1,y1
+		}
+		if (window.getY2() == Integer.MAX_VALUE) {
+			Segment other=new Segment(window.getX2(),Integer.MAX_VALUE,window.getY1(),window.getY2());
+			//""""  x2,y2
+		}
+		else {
+			Segment other1=new Segment(window.getX2(),Integer.MAX_VALUE,window.getY1(),window.getY2());
+			Segment other2=new Segment(window.getX1(),window.getX1(),window.getY2(),Integer.MAX_VALUE);
 		}
 	}
 
@@ -92,7 +117,7 @@ public class Pst {
 	public ArrayList<Segment> subWindowing(Segment window, Node<Segment> root){//window is like that : [x:x']X[y:y']
 		ArrayList<Segment> rep=new ArrayList<>();
 		if (root!=null) {
-			if (window.getX1() == Integer.MAX_VALUE) {//the window is without min in x : [-infinity;x2]X[y1,y2]
+			if (window.getX1() == Integer.MIN_VALUE) {//the window is without min in x : [-infinity;x2]X[y1,y2]
 				if (Math.min(root.getData().getX1(), root.getData().getX2()) <= window.getX2()) {
 					//we can continue because all the element in the subtree aren't greater than the window in x
 					report(root, window, rep);
@@ -117,7 +142,7 @@ public class Pst {
 					subWindowing(window, root.getRight());
 				}
 			}
-			if (window.getY1() == Integer.MAX_VALUE) {//the window is without min in y : [x1;x2]X[-infinity,y2]
+			if (window.getY1() == Integer.MIN_VALUE) {//the window is without min in y : [x1;x2]X[-infinity,y2]
 				if (Math.min(root.getData().getX1(), root.getData().getX2()) <= window.getX2()) {
 					//we can continue because all the element in the subtree aren't greater than the window in x
 					report(root, window, rep);
