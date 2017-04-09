@@ -7,6 +7,7 @@ public class Node<E> {
 	private float median;
 	private Node<E> left;
 	private Node<E> right;
+	private boolean flag=false;
 	
 	public void setLeft(Node<E> left) {
 		this.left = left;
@@ -31,7 +32,11 @@ public class Node<E> {
 	public E getData() {
 		return data;
 	}
-	
+
+	public void putflag(){
+		flag=true;
+	}
+
 	public Node(E data){
 		this.data=data;
 		median = 0;//put a special number here
@@ -40,5 +45,9 @@ public class Node<E> {
 	public Node(E data, float median){
 		this.data=data;
 		this.median=median;
+	}
+
+	public boolean notmarqued() {
+		return !flag;
 	}
 }
