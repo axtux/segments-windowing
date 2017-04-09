@@ -20,10 +20,6 @@ public class SelectorFrame extends JFrame implements ActionListener, StatusListe
 	private FileSelectorPanel fileSelector;
 	private WindowSelectorPanel windowSelector;
 	private JLabel status;
-	
-	public static void main(String[] args) {
-		new SelectorFrame("scenes");
-	}
 	/**
 	 * Create frame.
 	 * @param scenesDir Default directory for scene files selection.
