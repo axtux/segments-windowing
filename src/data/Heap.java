@@ -10,6 +10,7 @@ public class Heap {
 	/**
 	 * Make a heap into array with maximum on top.
 	 * @param array Original array which will be reordered to become a heap.
+	 * @param <E> Comparable class.
 	 */
 	public static <E extends Comparable<E>> void heapify(ArrayList<E> array) {
 		heapify(array, true);
@@ -18,6 +19,7 @@ public class Heap {
 	 * Make a heap into array.
 	 * @param array Original array which will be reordered to become a heap.
 	 * @param useMax If true, maximum will be on top. If false, minimum will be.
+	 * @param <E> Comparable class.
 	 */
 	public static <E extends Comparable<E>> void heapify(ArrayList<E> array, boolean useMax) {
 		int size = array.size();
@@ -56,6 +58,7 @@ public class Heap {
 	/**
 	 * Sort array using heap sort in ascending order.
 	 * @param array Array to sort.
+	 * @param <E> Comparable class.
 	 */
 	public static <E extends Comparable<E>> void sortArray(ArrayList<E> array) {
 		sortArray(array, true);
@@ -64,6 +67,7 @@ public class Heap {
 	 * Sort array using heap sort.
 	 * @param array Array to sort.
 	 * @param asc_order If true, ascending order will be use. If false, descending order will be.
+	 * @param <E> Comparable class.
 	 */
 	public static <E extends Comparable<E>> void sortArray(ArrayList<E> array, boolean asc_order) {
 		heapify(array, asc_order);

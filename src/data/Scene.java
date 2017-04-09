@@ -108,7 +108,7 @@ public class Scene {
 	}
 	/**
 	 * Filter scene using priority search tree.
-	 * @param window Only segments visible on this window will be kept. Window width/height must be >= 10.
+	 * @param window Only segments visible on this window will be kept. Window width/height must be {@code >= 10}.
 	 * @return Filtered scene or null if window is not valid.
 	 */
 	public Scene filter(Segment window) {

@@ -45,7 +45,7 @@ public class Pst {
 	/***
 	 * this method is used to have the minimum in x in a list of Segment sorted in y,
 	 * note that there is no duplicate value in x (prerequisite).
-	 * @param list
+	 * @param list List
 	 * @return the INDICE of the minimum Segment in x
 	 */
 	public int firstx(ArrayList<Segment> list) {

@@ -37,7 +37,7 @@ public class PstTests {
 	/**
 	 * This function is used to have each Segment object in all the nodes of the Priority Search Tree
 	 * @param root the root of the Priority Search Tree
-	 * @return an ArrayList<Segment> of all the Segment in the tree
+	 * @return a list containing all {@link Segment}s in the tree
 	 */
 	public ArrayList<Segment> listofSonsData(Node<Segment> root){
 		ArrayList<Segment> rep=new ArrayList<Segment>();
@@ -54,7 +54,7 @@ public class PstTests {
 	/**
 	 * This function is used to have all the nodes of a Priority search tree
 	 * @param root the root of the Pst
-	 * @return an ArrayList<Node> of all the Node of the tree
+	 * @return a list containing all {@link Node}s in the tree
 	 */
 	public ArrayList<Node> listofNodes(Node<Segment> root){
 		ArrayList<Node> rep=new ArrayList<>();

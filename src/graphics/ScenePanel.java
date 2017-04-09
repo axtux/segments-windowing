@@ -24,7 +24,7 @@ public class ScenePanel extends JPanel {
 	private ArrayList<Segment> scaled_segments;
 	/**
 	 * Build panel from scene.
-	 * @param scene Scene with window width/height >= 10
+	 * @param scene Scene with window width/height {@code >= 10}
 	 */
 	public ScenePanel(Scene scene) {
 		super();
@@ -74,8 +74,8 @@ public class ScenePanel extends JPanel {
 	}
 	/**
 	 * Set scaling factor.
-	 * @param scale Scaling factor should be > 0. 1 is normal, less is zoomed out and more is zoomed in.
-	 * @return True on success, false on error. An error occurs if new scaled width or height is < 10 or > {@link Integer.MAX_VALUE}.
+	 * @param scale Scaling factor should be {@code > 0}. 1 is normal, less is zoomed out and more is zoomed in.
+	 * @return True on success, false on error. An error occurs if new scaled width or height is {@code < 10} or {@code >} {@link Integer#MAX_VALUE}.
 	 */
 	public boolean setScale(double scale) {
 		// add one pixel because axes were not counted

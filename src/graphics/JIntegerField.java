@@ -40,7 +40,7 @@ public class JIntegerField extends JTextField implements KeyListener, FocusListe
 	}
 	/**
 	 * Set integer value. Integer.MIN_VALUE will display "min", Integer.MAX_VALUE will display "max" and null will display "" (empty field).
-	 * @param newValue
+	 * @param newValue New value.
 	 */
 	public void setValue(Integer newValue) {
 		value = newValue;
