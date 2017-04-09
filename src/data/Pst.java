@@ -106,8 +106,8 @@ public class Pst {
 					}
 				}
 			}
-			if (window.getX2() == Integer.MAX_VALUE) {//the window is without min in x : [x1;+infinity]X[y1,y2]
-				report(root, window, rep);
+			if (window.getX2() == Integer.MAX_VALUE ) {//the window is without min in x : [x1;+infinity]X[y1,y2]
+				report(root, window, rep);//it will do nothing if the node is not in the x window
 				if (window.getY1() < root.getMedian())
 					windowing(window, root.getLeft());
 				if (window.getY1() > root.getMedian())
@@ -138,6 +138,17 @@ public class Pst {
 						windowing(window, root.getRight());
 					if (window.getY1() >= root.getMedian())
 						windowing(window, root.getRight());
+				}
+			}
+			else {
+				report(root, window, rep);//it will do nothing if the node is not in the x window
+				if (window.getY1() < root.getMedian() && window.getY2() < root.getMedian())
+					windowing(window, root.getLeft());
+				if (window.getY1() > root.getMedian() && window.getX2() > root.getMedian())
+					windowing(window, root.getRight());
+				if (window.getY1() <= root.getMedian() && window.getY2() >= root.getMedian()) {
+					windowing(window, root.getLeft());
+					windowing(window, root.getRight());
 				}
 			}
 		}
