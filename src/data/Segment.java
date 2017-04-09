@@ -61,14 +61,13 @@ public class Segment implements Comparable<Segment> {
 	}
 	@Override
 	public boolean equals(Object o){
-
-		if (o==this)
-			return true;
-		if (o==null)
-			throw new NullPointerException("the object to compare for equals is null");
-		Segment other = (Segment) o;
+		if (o==null) throw new NullPointerException("the object to compare for equals is null");
+		if (o==this) return true;
+		if(!(o instanceof Segment)) return false;
+		
+		Segment s = (Segment) o;
 		// compare coordinates
-		return this.getX1() == other.getX1() && this.getX2() == other.getX2() && this.getY1() == other.getY1() && this.getY2() == other.getY2();
+		return getX1() == s.getX1() && getX2() == s.getX2() && getY1() == s.getY1() && getY2() == s.getY2();
 	}
 	
 	public String toString() {
