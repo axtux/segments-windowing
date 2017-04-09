@@ -103,7 +103,7 @@ public class Pst {
 					if (window.getY1() == root.getMedian()) {//case where there are y1 elements equals to the median
 						windowing(window, root.getLeft());
 						windowing(window, root.getRight());
-					}
+					}//to verify
 				}
 			}
 			if (window.getX2() == Integer.MAX_VALUE ) {//the window is without min in x : [x1;+infinity]X[y1,y2]
@@ -115,7 +115,7 @@ public class Pst {
 				if (window.getY1() == root.getMedian()) {//case where there are y1 elements equals to the median
 					windowing(window, root.getLeft());
 					windowing(window, root.getRight());
-				}
+				}//To verify
 			}
 			if (window.getY1() == Integer.MAX_VALUE) {//the window is without min in y : [x1;x2]X[-infinity,y2]
 				if (Math.min(root.getData().getX1(), root.getData().getX2()) <= window.getX2()) {
@@ -127,7 +127,7 @@ public class Pst {
 						windowing(window, root.getLeft());
 						windowing(window, root.getRight());
 					}
-				}
+				}//to change <<>>
 			}
 			if (window.getY2() == Integer.MAX_VALUE) {//the window is without max in y : [x1;x2]X[y1,+infinity]
 				if (Math.min(root.getData().getX1(), root.getData().getX2()) <= window.getX2()) {
@@ -138,17 +138,19 @@ public class Pst {
 						windowing(window, root.getRight());
 					if (window.getY1() >= root.getMedian())
 						windowing(window, root.getRight());
-				}
+				}//to change >><<
 			}
 			else {
-				report(root, window, rep);//it will do nothing if the node is not in the x window
-				if (window.getY1() < root.getMedian() && window.getY2() < root.getMedian())
-					windowing(window, root.getLeft());
-				if (window.getY1() > root.getMedian() && window.getX2() > root.getMedian())
-					windowing(window, root.getRight());
-				if (window.getY1() <= root.getMedian() && window.getY2() >= root.getMedian()) {
-					windowing(window, root.getLeft());
-					windowing(window, root.getRight());
+				if (Math.min(root.getData().getX1(), root.getData().getX2()) <= window.getX2()) {
+					report(root, window, rep);//it will do nothing if the node is not in the x window
+					if (window.getY1() < root.getMedian() && window.getY2() < root.getMedian())
+						windowing(window, root.getLeft());
+					if (window.getY1() > root.getMedian() && window.getX2() > root.getMedian())
+						windowing(window, root.getRight());
+					if (window.getY1() <= root.getMedian() && window.getY2() >= root.getMedian()) {
+						windowing(window, root.getLeft());
+						windowing(window, root.getRight());
+					}//to verify
 				}
 			}
 		}
