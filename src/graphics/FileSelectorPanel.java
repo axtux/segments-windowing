@@ -87,7 +87,7 @@ public class FileSelectorPanel extends JPanel implements ActionListener {
 		return setStatus(true, "Changed directory to "+newDir);
 	}
 	/**
-	 * Get selected file absolute path or relative to application root directory.
+	 * Get selected file path. Path can be absolute or relative to application root directory.
 	 * @return Selected file by user or null if no file has been selected.
 	 */
 	public String getSelectedFile() {
@@ -105,7 +105,7 @@ public class FileSelectorPanel extends JPanel implements ActionListener {
 		return directory+"/"+box.getItemAt(i);
 	}
 	
-	private void changeDir() {
+	private void changeDirDialog() {
 		JFileChooser fc = new JFileChooser(directory);
 		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		
@@ -122,7 +122,7 @@ public class FileSelectorPanel extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		switch(e.getActionCommand()) {
 		case "ACTION_CHANGE_DIRECTORY":
-			changeDir();
+			changeDirDialog();
 			return;
 		default:
 			setStatus(false, "Action not implemented : "+e.getActionCommand());
