@@ -11,7 +11,9 @@ import javax.swing.JPanel;
 
 import data.Scene;
 import data.Segment;
-
+/**
+ * Main frame to select a scene file and a window. User can open whole scene or custom window.
+ */
 public class SelectorFrame extends JFrame implements ActionListener, StatusListener {
 	private static final long serialVersionUID = 1L;
 	
@@ -22,7 +24,10 @@ public class SelectorFrame extends JFrame implements ActionListener, StatusListe
 	public static void main(String[] args) {
 		new SelectorFrame("scenes");
 	}
-	
+	/**
+	 * Create frame.
+	 * @param scenesDir Default directory for scene files selection.
+	 */
 	public SelectorFrame(String scenesDir) {
 		super("Scene file/window selector");
 		

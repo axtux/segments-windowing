@@ -23,7 +23,7 @@ public class ScenePanel extends JPanel {
 	private double scale;
 	private ArrayList<Segment> scaled_segments;
 	/**
-	 * Build panel from scene.
+	 * Create panel.
 	 * @param scene Scene with window width/height {@code >= 10}
 	 */
 	public ScenePanel(Scene scene) {
