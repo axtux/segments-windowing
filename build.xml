@@ -4,7 +4,7 @@
   <property name="build.dir" value="build"/>
   <property name="classes.dir" value="${build.dir}/classes"/>
   <property name="jar.dir" value="${build.dir}/jar"/>
-  <property name="doc.dir" value="doc"/>
+  <property name="doc.dir" value="${build.dir}/doc"/>
   <property name="lib.dir" value="lib"/>
   
   <property name="main.class" value="graphics/SelectorFrame"/>
@@ -15,7 +15,6 @@
   
   <target name="clean">
     <delete dir="${build.dir}"/>
-    <delete dir="${doc.dir}"/>
   </target>
   <target name="build">
     <mkdir dir="${classes.dir}"/>
