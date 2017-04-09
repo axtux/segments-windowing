@@ -1,22 +1,18 @@
 package data;
 /**
- *  Created by marco on 28/03/17.
- *  This class represents a segment with {@code y1 <= y2}
+ * Segment represented by 2 points (x1, y1) and (x2, y2).
  */
-
 public class Segment implements Comparable<Segment> {
-
 	private final int x1;
 	private final int x2;
 	private final int y1;
 	private final int y2;
-
-	/***
-	 * This class represents a segment
-	 * @param x1 the first coordinate in x
-	 * @param x2 the last coordinate in x
-	 * @param y1 the first coordinate in y
-	 * @param y2 the last coordinate in y
+	/**
+	 * Create a segment from its points coordinates and make sure {@code y1 <= y2}.
+	 * @param x1 X first coordinate
+	 * @param x2 X last coordinate
+	 * @param y1 Y first coordinate
+	 * @param y2 Y last coordinate
 	 */
 	public Segment(int x1, int x2, int y1, int y2) {
 		// check order to get y1 <= y2
@@ -45,21 +41,18 @@ public class Segment implements Comparable<Segment> {
 	public int getY2(){
 		return y2;
 	}
-	/***
-	 * compare y1 then y2
+	/**
+	 * Compare y1 then y2 if y1 is equal.
 	 */
 	public int compareTo(Segment o) {
-		if(o == null) {
-			throw new NullPointerException("the object to compare for compareTo is null");
-		}
+		if(o == null) throw new NullPointerException("the object to compare for compareTo is null");
 		
 		int c = Integer.compare(y1, o.getY1());
-		if(c != 0) {
-			return c;
-		}
-		return Integer.compare(y2, o.getY2());
+		return c == 0 ? Integer.compare(y2, o.getY2()) : c;
 	}
-	@Override
+	/**
+	 * Compares all coordinates
+	 */
 	public boolean equals(Object o){
 		if (o==null) throw new NullPointerException("the object to compare for equals is null");
 		if (o==this) return true;
@@ -69,7 +62,9 @@ public class Segment implements Comparable<Segment> {
 		// compare coordinates
 		return getX1() == s.getX1() && getX2() == s.getX2() && getY1() == s.getY1() && getY2() == s.getY2();
 	}
-	
+	/**
+	 * String representation of this segment.
+	 */
 	public String toString() {
 		return "Segment(x1="+x1+", x2="+x2+", y1="+y1+", y2="+y2+")";
 	}

@@ -8,12 +8,15 @@ import java.util.Locale;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
+/**
+ * Scene containing a window and a list of segments.
+ */
 public class Scene {
 	private Segment window;
 	private ArrayList<Segment> segments;
 	/**
-	 * Get Segments from file.
-	 * @param filename File from which to read Segments.
+	 * Get Scene from file.
+	 * @param filename File from which to read Scene.
 	 * @return Segments or null on error.
 	 */
 	public static Scene getScene(String filename) {
@@ -26,8 +29,8 @@ public class Scene {
 		}
 	}
 	/**
-	 * Build Segments from file.
-	 * @param filename File from which to read Segments.
+	 * Build Scene from file.
+	 * @param filename File from which to read Scene.
 	 * @throws IOException In case an error occurs reading file.
 	 * @throws NoSuchElementException If input is exhausted, if the next token does not match the Float regular expression, or is out of range.
 	 */
@@ -76,7 +79,11 @@ public class Scene {
 		this.window = window;
 		return true;
 	}
-	
+	/**
+	 * Check that window {@code X1 < X2}, {@code Y1 < Y2} and minimum width/height is 10.
+	 * @param window Window to check.
+	 * @return True if window is valid, false otherwise.
+	 */
 	public static boolean validWindow(Segment window) {
 		int width = window.getX2()-window.getX1();
 		int height = window.getY2()-window.getY1();
@@ -98,11 +105,17 @@ public class Scene {
 		segments.add(s);
 		return true;
 	}
-	
+	/**
+	 * Get window.
+	 * @return View window.
+	 */
 	public Segment getWindow() {
 		return window;
 	}
-	
+	/**
+	 * Get Segments.
+	 * @return Segments list.
+	 */
 	public ArrayList<Segment> getSegments() {
 		return segments;
 	}

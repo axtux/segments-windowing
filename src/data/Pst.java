@@ -3,8 +3,7 @@ package data;
 import java.util.ArrayList;
 
 /**
- * Created by marco on 1/04/17.
- * this class represents the priority search tree
+ * This class represents a priority search tree.
  */
 public class Pst {
 
