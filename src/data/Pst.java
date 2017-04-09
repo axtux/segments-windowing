@@ -21,7 +21,7 @@ public class Pst {
 	private Node<Segment> construct(ArrayList<Segment> list) {
 		//for the method list.sublist() , the first index is inclusive and the second exclusive
 		Node<Segment> temp = null;
-		while (list.size()>=3) {
+		if (list.size()>=3) {
 			temp=new Node<Segment>(list.remove(firstx(list)), (list.get((list.size()-1)/2).getY1()) );
 			temp.setLeft(construct(new ArrayList<Segment>(list.subList(0,(list.size())/2))));
 			temp.setRight(construct(new ArrayList<Segment>(list.subList((list.size())/2,list.size()))));
@@ -83,13 +83,13 @@ public class Pst {
 	}
 
 	/**
-	 * This method apply the windowing method on the Pst and return an ArrayList with the Segment in it where the segment have one end-point in it,
+	 * This method apply the subWindowing method on the Pst and return an ArrayList with the Segment in it where the segment have one end-point in it,
 	 * or an empty ArrayList if there is no Segment in the window.
 	 * The window have to be in that form : [x:x']X[y:y'] where x<=x' and y<=y'(prerequisite)
 	 * @param window a Segment object representing the window to apply
 	 * @return an ArrayList of the Segment, or an empty ArrayList
 	 */
-	public ArrayList<Segment> windowing(Segment window, Node<Segment> root){//window is like that : [x:x']X[y:y']
+	public ArrayList<Segment> subWindowing(Segment window, Node<Segment> root){//window is like that : [x:x']X[y:y']
 		ArrayList<Segment> rep=new ArrayList<>();
 		if (root!=null) {
 			if (window.getX1() == Integer.MAX_VALUE) {//the window is without min in x : [-infinity;x2]X[y1,y2]
@@ -97,24 +97,24 @@ public class Pst {
 					//we can continue because all the element in the subtree aren't greater than the window in x
 					report(root, window, rep);
 					if (window.getY1() < root.getMedian() && window.getY2() < root.getMedian())
-						windowing(window, root.getLeft());
+						subWindowing(window, root.getLeft());
 					if (window.getY1() > root.getMedian() && window.getX2() > root.getMedian())
-						windowing(window, root.getRight());
+						subWindowing(window, root.getRight());
 					if (window.getY1() <= root.getMedian() && window.getY2() >= root.getMedian()) {
-						windowing(window, root.getLeft());
-						windowing(window, root.getRight());
+						subWindowing(window, root.getLeft());
+						subWindowing(window, root.getRight());
 					}
 				}
 			}
 			if (window.getX2() == Integer.MAX_VALUE ) {//the window is without min in x : [x1;+infinity]X[y1,y2]
 				report(root, window, rep);//it will do nothing if the node is not in the x window
 				if (window.getY1() < root.getMedian() && window.getY2() < root.getMedian())
-					windowing(window, root.getLeft());
+					subWindowing(window, root.getLeft());
 				if (window.getY1() > root.getMedian() && window.getX2() > root.getMedian())
-					windowing(window, root.getRight());
+					subWindowing(window, root.getRight());
 				if (window.getY1() <= root.getMedian() && window.getY2() >= root.getMedian()) {
-					windowing(window, root.getLeft());
-					windowing(window, root.getRight());
+					subWindowing(window, root.getLeft());
+					subWindowing(window, root.getRight());
 				}
 			}
 			if (window.getY1() == Integer.MAX_VALUE) {//the window is without min in y : [x1;x2]X[-infinity,y2]
@@ -122,10 +122,10 @@ public class Pst {
 					//we can continue because all the element in the subtree aren't greater than the window in x
 					report(root, window, rep);
 					if (window.getY2() < root.getMedian())
-						windowing(window, root.getLeft());
+						subWindowing(window, root.getLeft());
 					if (window.getY2() >= root.getMedian()) {
-						windowing(window, root.getLeft());
-						windowing(window, root.getRight());
+						subWindowing(window, root.getLeft());
+						subWindowing(window, root.getRight());
 					}
 				}
 			}
@@ -134,22 +134,22 @@ public class Pst {
 					//we can continue because all the element in the subtree aren't greater than the window in x
 					report(root, window, rep);
 					if (window.getY1() <= root.getMedian())
-						windowing(window, root.getLeft());
-						windowing(window, root.getRight());
+						subWindowing(window, root.getLeft());
+						subWindowing(window, root.getRight());
 					if (window.getY1() > root.getMedian())
-						windowing(window, root.getRight());
+						subWindowing(window, root.getRight());
 				}
 			}
 			else {
 				if (Math.min(root.getData().getX1(), root.getData().getX2()) <= window.getX2()) {
 					report(root, window, rep);//it will do nothing if the node is not in the x window
 					if (window.getY1() < root.getMedian() && window.getY2() < root.getMedian())
-						windowing(window, root.getLeft());
+						subWindowing(window, root.getLeft());
 					if (window.getY1() > root.getMedian() && window.getX2() > root.getMedian())
-						windowing(window, root.getRight());
+						subWindowing(window, root.getRight());
 					if (window.getY1() <= root.getMedian() && window.getY2() >= root.getMedian()) {
-						windowing(window, root.getLeft());
-						windowing(window, root.getRight());
+						subWindowing(window, root.getLeft());
+						subWindowing(window, root.getRight());
 					}
 				}
 			}
