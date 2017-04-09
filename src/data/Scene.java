@@ -69,13 +69,20 @@ public class Scene {
 	}
 	
 	private boolean setWindow(Segment window) {
+		if(!validWindow(window)) {
+			return false;
+		}
+		
+		this.window = window;
+		return true;
+	}
+	
+	public static boolean validWindow(Segment window) {
 		int width = window.getX2()-window.getX1();
 		int height = window.getY2()-window.getY1();
 		if(width < 10 || height < 10) {
 			return false;
 		}
-		
-		this.window = window;
 		return true;
 	}
 	/**
@@ -101,14 +108,16 @@ public class Scene {
 	}
 	/**
 	 * Filter scene using priority search tree.
-	 * @param window Only segments visible on this window will be kept.
-	 * @return Filtered scene.
+	 * @param window Only segments visible on this window will be kept. Window width/height must be >= 10.
+	 * @return Filtered scene or null if window is not valid.
 	 */
 	public Scene filter(Segment window) {
+		if(!validWindow(window)) {
+			return null;
+		}
 		
-		// TODO implement, for now only display window is changed
-		this.window = window;
-		
+		// TODO implement, for now only display changed window
+		setWindow(window);
 		return this;
 	}
 }
