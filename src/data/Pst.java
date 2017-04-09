@@ -68,8 +68,7 @@ public class Pst {
 	 */
 	public void printPst(Node<Segment> temp, String acc) {
 
-		System.out.print(acc);
-		temp.getData().printSeg();
+		System.out.print(acc + temp.getData());
 		if (temp.getLeft() != null) {
 			System.out.println();
 			System.out.print("l-son:");
