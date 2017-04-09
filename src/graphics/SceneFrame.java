@@ -129,7 +129,10 @@ public class SceneFrame extends JFrame {
 			
 			// ratio 0.9 or 1.1 depending on rotation, zoom in on wheel up zoom out on wheel down
 			double ratio = 1-0.1*e.getWheelRotation();
-			panel.setScale(panel.getScale()*ratio);
+			if(! panel.setScale(panel.getScale()*ratio) ) {
+				// minimum or maximum scale has been reached
+				return;
+			}
 			
 			// Update scroll bars and repaint
 			self.update();
