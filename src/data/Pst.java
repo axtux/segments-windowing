@@ -112,7 +112,7 @@ public class Pst {
 			answer.addAll(answer2);
 		}
 		else {
-			Segment window2=new Segment(window.getX2(),Integer.MAX_VALUE,window.getY1(),window.getY2());
+			Segment window2=new Segment(Integer.MIN_VALUE,window.getX1(),window.getY1(),window.getY2());
 			Segment window3=new Segment(window.getX1(),window.getX1(),window.getY2(),Integer.MAX_VALUE);
 			ArrayList<Segment> answer2=subWindowing(window2,root);
 			answer.addAll(answer2);
@@ -135,72 +135,88 @@ public class Pst {
 			if (window.getX1() == Integer.MIN_VALUE) {//the window is without min in x : [-infinity;x2]X[y1,y2]
 				if (Math.min(root.getData().getX1(), root.getData().getX2()) <= window.getX2()) {
 					//we can continue because all the element in the subtree aren't greater than the window in x
-					report(root, window, rep);
+					Segment s =report(root,window);
+					if (s!=null)
+						rep.add(s);
 					if (window.getY1() < root.getMedian() && window.getY2() < root.getMedian())
-						subWindowing(window, root.getLeft());
-					if (window.getY1() > root.getMedian() && window.getX2() > root.getMedian())
-						subWindowing(window, root.getRight());
+						rep.addAll(subWindowing(window, root.getLeft()));
+					if (window.getY1() > root.getMedian() && window.getY2() > root.getMedian())
+						rep.addAll(subWindowing(window, root.getRight()));
 					if (window.getY1() <= root.getMedian() && window.getY2() >= root.getMedian()) {
-						subWindowing(window, root.getLeft());
-						subWindowing(window, root.getRight());
+						rep.addAll(subWindowing(window, root.getLeft()));
+						rep.addAll(subWindowing(window, root.getRight()));
 					}
 				}
 			}
 			if (window.getX2() == Integer.MAX_VALUE && window.getY2() != Integer.MAX_VALUE) {//the window is without min in x : [x1;+infinity]X[y1,y2]
-				report(root, window, rep);//it will do nothing if the node is not in the x window
+				Segment s =report(root,window);
+				if (s!=null)
+					rep.add(s);
+				//it will do nothing if the node is not in the x window
 				if (window.getY1() < root.getMedian() && window.getY2() < root.getMedian())
-					subWindowing(window, root.getLeft());
-				if (window.getY1() > root.getMedian() && window.getX2() > root.getMedian())
-					subWindowing(window, root.getRight());
+					rep.addAll(subWindowing(window, root.getLeft()));
+				if (window.getY1() > root.getMedian() && window.getY2() > root.getMedian())
+					rep.addAll(subWindowing(window, root.getRight()));
 				if (window.getY1() <= root.getMedian() && window.getY2() >= root.getMedian()) {
-					subWindowing(window, root.getLeft());
-					subWindowing(window, root.getRight());
+					rep.addAll(subWindowing(window, root.getLeft()));
+					rep.addAll(subWindowing(window, root.getRight()));
 				}
 			}
 			if (window.getY1() == Integer.MIN_VALUE) {
 				//the window is without min in y : [x1;x2]X[-infinity,y2] ,or special case : [-infinity;x2]X[-infinity, y2]
 				if (Math.min(root.getData().getX1(), root.getData().getX2()) <= window.getX2()) {
 					//we can continue because all the element in the subtree aren't greater than the window in x
-					report(root, window, rep);
+					Segment s =report(root,window);
+					if (s!=null)
+						rep.add(s);
 					if (window.getY2() < root.getMedian())
-						subWindowing(window, root.getLeft());
+						rep.addAll(subWindowing(window, root.getLeft()));
 					if (window.getY2() >= root.getMedian()) {
-						subWindowing(window, root.getLeft());
-						subWindowing(window, root.getRight());
+						rep.addAll(subWindowing(window, root.getLeft()));
+						rep.addAll(subWindowing(window, root.getRight()));
 					}
 				}
 			}
 			if (window.getY2() == Integer.MAX_VALUE && window.getX2()!=Integer.MAX_VALUE) {//the window is without max in y : [x1;x2]X[y1,+infinity]
 				if (Math.min(root.getData().getX1(), root.getData().getX2()) <= window.getX2()) {
 					//we can continue because all the element in the subtree aren't greater than the window in x
-					report(root, window, rep);
-					if (window.getY1() <= root.getMedian())
-						subWindowing(window, root.getLeft());
-						subWindowing(window, root.getRight());
+					Segment s =report(root,window);
+					if (s!=null)
+						rep.add(s);
+					if (window.getY1() <= root.getMedian()) {
+						rep.addAll(subWindowing(window, root.getLeft()));
+						rep.addAll(subWindowing(window, root.getRight()));
+					}
 					if (window.getY1() > root.getMedian())
-						subWindowing(window, root.getRight());
+						rep.addAll(subWindowing(window, root.getRight()));
 				}
 			}
 			if (window.getY2() == Integer.MAX_VALUE && window.getX2()==Integer.MAX_VALUE) {// special case : [x1;+infinity]X[y1,+infinity]
 
-				report(root, window, rep);
-				if (window.getY1() <= root.getMedian())
-					subWindowing(window, root.getLeft());
-				subWindowing(window, root.getRight());
+				Segment s =report(root,window);
+				if (s!=null)
+					rep.add(s);
+				if (window.getY1() <= root.getMedian()) {
+					rep.addAll(subWindowing(window, root.getLeft()));
+					rep.addAll(subWindowing(window, root.getRight()));
+				}
 				if (window.getY1() > root.getMedian())
-					subWindowing(window, root.getRight());
+					rep.addAll(subWindowing(window, root.getRight()));
 			}
 
 			else {//case of a limited window
 				if (Math.min(root.getData().getX1(), root.getData().getX2()) <= window.getX2()) {
-					report(root, window, rep);//it will do nothing if the node is not in the x window
+					Segment s =report(root,window);
+					if (s!=null)
+						rep.add(s);
+					//it will do nothing if the node is not in the x window
 					if (window.getY1() < root.getMedian() && window.getY2() < root.getMedian())
-						subWindowing(window, root.getLeft());
-					if (window.getY1() > root.getMedian() && window.getX2() > root.getMedian())
-						subWindowing(window, root.getRight());
+						rep.addAll(subWindowing(window, root.getLeft()));
+					if (window.getY1() > root.getMedian() && window.getY2() > root.getMedian())
+						rep.addAll(subWindowing(window, root.getRight()));
 					if (window.getY1() <= root.getMedian() && window.getY2() >= root.getMedian()) {
-						subWindowing(window, root.getLeft());
-						subWindowing(window, root.getRight());
+						rep.addAll(subWindowing(window, root.getLeft()));
+						rep.addAll(subWindowing(window, root.getRight()));
 					}
 				}
 			}
@@ -209,18 +225,21 @@ public class Pst {
 	}
 
 	/**
-	 * Add the segment (Node data) to rep if one of its end points is in the window and it hasn't been visited, otherwise do nothing
+	 * return the segment (Node data) to rep if one of its end points is in the window
+	 * and it hasn't been visited
+	 * ,otherwise do nothing
 	 * @param n a node<Segment> to report
 	 * @param window a Segment wich represents the window
-	 * @param rep The ArrayList<Segment> in wich whe add the segment
 	 */
-	public void report(Node<Segment> n,Segment window,ArrayList<Segment> rep){
+	public Segment report(Node<Segment> n,Segment window){
 		if (n.notmarqued()
 			&& ( (window.getY1()<=root.getData().getY1() && window.getX1()<=Math.min(n.getData().getX1(),n.getData().getX2()))
 						|| (window.getY2()>=root.getData().getY2() && window.getX2()>=Math.max(n.getData().getX1(),n.getData().getX2())) )
-						)
-
-			rep.add(root.getData());
+						) {
+			root.putflag();
+			return root.getData();
+		}
+		return null;
 	}
 
 

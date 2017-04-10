@@ -24,7 +24,7 @@ public class PstTests {
 	@Before
 	public void  initList(){
 		int i=0;
-		while (i<30) {
+		while (i<100000) {
 			int x1= i+1;
 			int x2= i+2;
 			int y1= i+1;
@@ -115,6 +115,18 @@ public class PstTests {
 		for (Node n:nodes) {
 			//System.out.println(n.getData().toString()); //to verify that all the nodes are present
 			submedianTest(n);
+		}
+	}
+
+	@Test
+	public void windowingTest1(){
+		list.sort(Segment::compareTo);
+		Pst abr = new Pst(list);
+		ArrayList<Segment> segs = abr.windowing(new Segment(0,78,1,89));
+		//abr.printPst(abr.getRoot(),"");//used to see the Pst in terminal
+		System.out.println(segs.size());
+		for (Segment s:segs) {
+			System.out.println(s.toString());
 		}
 	}
 
