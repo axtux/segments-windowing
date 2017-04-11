@@ -128,8 +128,9 @@ public class BasicPst {
 	/**
 	 * This method apply the subWindowing method on the BasicPst and return an ArrayList with the Segment in it where the segment have one end-point in it,
 	 * or an empty ArrayList if there is no Segment in the window.
-	 * The window have to be in that form : [x:x']X[y:y'] where x<=x' and y<=y'(prerequisite)
+	 * The window have to be in that form : [x:x']X[y:y'] where {@code x<=x'} and {@code y<=y'}(prerequisite)
 	 * @param window a Segment object representing the window to apply
+	 * @param temp Temporary node.
 	 * @param reporting the reporting type to do
 	 * @return an ArrayList of the Segment, or an empty ArrayList
 	 */
@@ -238,9 +239,10 @@ public class BasicPst {
 	/**
 	 * return the segment (Node data) if it's in the window that we choose
 	 * and it hasn't been visited, or null otherwise
-	 * @param n a node<Segment> to report
+	 * @param n Node to report
 	 * @param window a Segment wich represents the window
 	 * @param type a ReportType enumeration to know wich type of report to do
+	 * @return Reported segment if reported or null.
 	 */
 	public Segment report(PstNode n, Segment window, ReportType type){
 
