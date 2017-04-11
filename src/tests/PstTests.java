@@ -101,19 +101,19 @@ public class PstTests {
 	 */
 
 	public void  submedianTest(PstNode root) {
-
-		float median = root.getMedian();
-		ArrayList<Segment> sons = listofSonsData(root);//it contains the root too
-		List<Segment> sonsleft = sons.subList(0, sons.size() / 2);
-		List<Segment> sonsright = sons.subList(sons.size() / 2, sons.size());
-		System.out.println("sons left");
-		for (Segment s : sonsleft) {
-			System.out.println(s.toString());
+		int median = root.getMedian();
+		
+		List<Segment> leftSegments = listofSonsData(root.getLeft());
+		List<Segment> rightSegments = listofSonsData(root.getRight());
+		
+		System.out.println("sons left "+leftSegments.size());
+		for (Segment s : leftSegments) {
+			//System.out.println(s.toString());
 			assertTrue(s.getY1() <= median);
 		}
-		System.out.println("Sons right");
-		for (Segment s : sonsright) {
-			System.out.println(s.toString());
+		System.out.println("Sons right "+rightSegments.size());
+		for (Segment s : rightSegments) {
+			//System.out.println(s.toString());
 			assertTrue(s.getY1() >= median);
 		}
 	}
