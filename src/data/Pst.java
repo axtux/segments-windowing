@@ -108,4 +108,8 @@ public class Pst {
 			segments.set(i, segments.get(i).exchange());
 		}
 	}
+
+	public BasicPst getOriginal() {
+		return original;
+	}
 }
