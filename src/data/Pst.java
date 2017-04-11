@@ -15,31 +15,32 @@ public class Pst {
 	BasicPst original;
 	BasicPst opposed;
 	BasicPst exchanged;
-	BasicPst both;
+	BasicPst opposed_exchanged;
 	
 	public Pst(ArrayList<Segment> segments) {
-		// create 4 arrays
+		// make 4 copies
 		ArrayList<Segment> original_segments = new ArrayList<Segment>(segments);
-		ArrayList<Segment> opposed_segments = new ArrayList<Segment>(segments.size());
-		ArrayList<Segment> exchanged_segments = new ArrayList<Segment>(segments.size());
-		ArrayList<Segment> both_segments = new ArrayList<Segment>(segments.size());
+		ArrayList<Segment> opposed_segments = new ArrayList<Segment>(segments);
+		ArrayList<Segment> exchanged_segments = new ArrayList<Segment>(segments);
+		ArrayList<Segment> opposed_exchanged_segments = new ArrayList<Segment>(segments);
 		
-		for(Segment s : segments) {
-			opposed_segments.add(s.oppose());
-			exchanged_segments.add(s.exchange());
-			both_segments.add(s.oppose().exchange());
-		}
+		// make them what they say they are
+		opposeArray(opposed_segments);
+		exchangeArray(exchanged_segments);
+		opposeArray(opposed_exchanged_segments);
+		exchangeArray(opposed_exchanged_segments);
 		
 		// sort arrays
 		Heap.sortArray(original_segments);
 		Heap.sortArray(opposed_segments);
 		Heap.sortArray(exchanged_segments);
-		Heap.sortArray(both_segments);
+		Heap.sortArray(opposed_exchanged_segments);
 		
+		// create a BasicPst for each array
 		original = new BasicPst(original_segments);
 		opposed = new BasicPst(opposed_segments);
 		exchanged = new BasicPst(exchanged_segments);
-		both = new BasicPst(both_segments);
+		opposed_exchanged = new BasicPst(opposed_exchanged_segments);
 	}
 	
 	public ArrayList<Segment> getWindow(Segment window) {
@@ -75,27 +76,33 @@ public class Pst {
 	public ArrayList<Segment> getRightWindow(Segment window) {
 		// oppose coordinates to be able to use efficient windowing
 		ArrayList<Segment> segments = opposed.windowing(window.oppose().getWindow());
-		for(int i = 0; i < segments.size(); ++i) {
-			segments.set(i, segments.get(i).oppose());
-		}
+		opposeArray(segments);
 		return segments;
 	}
 	
 	public ArrayList<Segment> getDownWindow(Segment window) {
 		// exchange coordinates to be able to use efficient windowing
 		ArrayList<Segment> segments = exchanged.windowing(window.exchange().getWindow());
-		for(int i = 0; i < segments.size(); ++i) {
-			segments.set(i, segments.get(i).exchange());
-		}
+		exchangeArray(segments);
 		return segments;
 	}
 	
 	public ArrayList<Segment> getUpWindow(Segment window) {
 		// oppose and exchange coordinates to be able to use efficient windowing
-		ArrayList<Segment> segments = both.windowing(window.oppose().exchange().getWindow());
-		for(int i = 0; i < segments.size(); ++i) {
-			segments.set(i, segments.get(i).oppose().exchange());
-		}
+		ArrayList<Segment> segments = opposed_exchanged.windowing(window.oppose().exchange().getWindow());
+		opposeArray(segments);
+		exchangeArray(segments);
 		return segments;
+	}
+	
+	private void opposeArray(ArrayList<Segment> segments) {
+		for(int i = 0; i < segments.size(); ++i) {
+			segments.set(i, segments.get(i).oppose());
+		}
+	}
+	private void exchangeArray(ArrayList<Segment> segments) {
+		for(int i = 0; i < segments.size(); ++i) {
+			segments.set(i, segments.get(i).exchange());
+		}
 	}
 }
