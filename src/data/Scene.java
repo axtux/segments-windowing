@@ -12,8 +12,9 @@ import java.util.Scanner;
  * Scene containing a window and a list of segments.
  */
 public class Scene {
-	private Segment window;
+	private Segment window, subWindow;
 	private ArrayList<Segment> segments;
+	private Pst pst;
 	/**
 	 * Get Scene from file.
 	 * @param filename File from which to read Scene.
@@ -69,6 +70,8 @@ public class Scene {
 		}
 		
 		lecteur.close();
+		
+		pst = new Pst(segments);
 	}
 	
 	private boolean setWindow(Segment window) {
@@ -76,7 +79,7 @@ public class Scene {
 			return false;
 		}
 		
-		this.window = window;
+		this.subWindow = this.window = window;
 		return true;
 	}
 	/**
@@ -113,6 +116,13 @@ public class Scene {
 		return window;
 	}
 	/**
+	 * Get sub window.
+	 * @return Sub window is used to test windowing.
+	 */
+	public Segment getSubWindow() {
+		return subWindow;
+	}
+	/**
 	 * Get Segments.
 	 * @return Segments list.
 	 */
@@ -129,8 +139,8 @@ public class Scene {
 			return null;
 		}
 		
-		// TODO implement, for now only display changed window
-		setWindow(window);
+		this.subWindow = window;
+		segments = pst.getWindow(window);
 		return this;
 	}
 }
