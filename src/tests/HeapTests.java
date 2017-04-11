@@ -3,6 +3,7 @@ package tests;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -12,6 +13,7 @@ import data.Heap;
 public class HeapTests {
 	ArrayList<Integer> ordered_asc;
 	ArrayList<Integer> ordered_desc;
+	Comparator<Integer> comparator;
 	
 	@Before
 	public void initArrays() {
@@ -40,74 +42,24 @@ public class HeapTests {
 		ordered_desc.add(new Integer(2));
 		ordered_desc.add(new Integer(1));
 		ordered_desc.add(new Integer(0));
+		
+		comparator = Integer::compare;
 	}
 	
 	@Test
 	public void reversedTest() {
-		ArrayList<Integer> array = new ArrayList<Integer>();
-		array.add(new Integer(10));
-		array.add(new Integer(9));
-		array.add(new Integer(8));
-		array.add(new Integer(7));
-		array.add(new Integer(6));
-		array.add(new Integer(5));
-		array.add(new Integer(4));
-		array.add(new Integer(3));
-		array.add(new Integer(2));
-		array.add(new Integer(1));
-		array.add(new Integer(0));
-		
-		ArrayList<Integer> heapMax = new ArrayList<Integer>(array);
-		Heap.heapify(heapMax);
-		assertEquals("Max on top", 10, heapMax.get(0).intValue());
-		
-		ArrayList<Integer> heapMin = new ArrayList<Integer>(array);
-		Heap.heapify(heapMin, false);
-		assertEquals("Min on top", 0, heapMin.get(0).intValue());
-		
-		ArrayList<Integer> asc = new ArrayList<Integer>(array);
-		Heap.sortArray(asc);
-		assertEquals("Sorted array (ascending)", ordered_asc, asc);
-		
-		ArrayList<Integer> desc = new ArrayList<Integer>(array);
-		Heap.sortArray(desc, false);
-		assertEquals("Sorted array (descending)", ordered_desc, desc);
+		ArrayList<Integer> array = new ArrayList<Integer>(ordered_desc);
+		testArray(array);
 	}
 	
 	@Test
 	public void orderedTest() {
-		ArrayList<Integer> array = new ArrayList<Integer>();
-		array.add(new Integer(0));
-		array.add(new Integer(1));
-		array.add(new Integer(2));
-		array.add(new Integer(3));
-		array.add(new Integer(4));
-		array.add(new Integer(5));
-		array.add(new Integer(6));
-		array.add(new Integer(7));
-		array.add(new Integer(8));
-		array.add(new Integer(9));
-		array.add(new Integer(10));
-		
-		ArrayList<Integer> heapMax = new ArrayList<Integer>(array);
-		Heap.heapify(heapMax);
-		assertEquals("Max on top", 10, heapMax.get(0).intValue());
-		
-		ArrayList<Integer> heapMin = new ArrayList<Integer>(array);
-		Heap.heapify(heapMin, false);
-		assertEquals("Min on top", 0, heapMin.get(0).intValue());
-		
-		ArrayList<Integer> asc = new ArrayList<Integer>(array);
-		Heap.sortArray(asc);
-		assertEquals("Sorted array (ascending)", ordered_asc, asc);
-		
-		ArrayList<Integer> desc = new ArrayList<Integer>(array);
-		Heap.sortArray(desc, false);
-		assertEquals("Sorted array (descending)", ordered_desc, desc);
+		ArrayList<Integer> array = new ArrayList<Integer>(ordered_asc);
+		testArray(array);
 	}
 	
 	@Test
-	public void randomTest() {
+	public void unorderedTest() {
 		ArrayList<Integer> array = new ArrayList<Integer>();
 		array.add(new Integer(2));
 		array.add(new Integer(4));
@@ -121,20 +73,36 @@ public class HeapTests {
 		array.add(new Integer(1));
 		array.add(new Integer(9));
 		
-		ArrayList<Integer> heapMax = new ArrayList<Integer>(array);
-		Heap.heapify(heapMax);
-		assertEquals("Max on top", 10, heapMax.get(0).intValue());
-		
-		ArrayList<Integer> heapMin = new ArrayList<Integer>(array);
-		Heap.heapify(heapMin, false);
-		assertEquals("Min on top", 0, heapMin.get(0).intValue());
-		
-		ArrayList<Integer> asc = new ArrayList<Integer>(array);
-		Heap.sortArray(asc);
-		assertEquals("Sorted array (ascending)", ordered_asc, asc);
-		
-		ArrayList<Integer> desc = new ArrayList<Integer>(array);
-		Heap.sortArray(desc, false);
-		assertEquals("Sorted array (descending)", ordered_desc, desc);
+		testArray(array);
 	}
+	
+	public void testArray(ArrayList<Integer> original) {
+		ArrayList<Integer> copy;
+		
+		copy = new ArrayList<Integer>(original);
+		Heap.heapify(copy, comparator);
+		assertEquals("Max on top of heap", 10, copy.get(0).intValue());
+		
+		copy = new ArrayList<Integer>(original);
+		Heap.heapify(copy, comparator.reversed());
+		assertEquals("Min on top of reversed heap", 0, copy.get(0).intValue());
+		
+		copy = new ArrayList<Integer>(original);
+		Heap.sortArray(copy);
+		assertEquals("Sorted array (ascending)", ordered_asc, copy);
+		
+		copy = new ArrayList<Integer>(original);
+		Heap.sortArray(copy, true);
+		assertEquals("Sorted array (descending)", ordered_desc, copy);
+		
+		copy = new ArrayList<Integer>(original);
+		Heap.sortArray(copy, comparator);
+		assertEquals("Sorted array (ascending)", ordered_asc, copy);
+		
+		copy = new ArrayList<Integer>(original);
+		Heap.sortArray(copy, comparator.reversed());
+		assertEquals("Sorted array (descending)", ordered_desc, copy);
+	}
+	
+	
 }
