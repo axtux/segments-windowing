@@ -10,27 +10,25 @@ public class BasicPst {
 	private Node<Segment> root;
 
 	public BasicPst(ArrayList<Segment> list) {
-		this.root=construct(list);
+		this.root=construct(new Array<Segment>(list));
 	}
 
 	/***
 	 * This method is used by the constructor to create step by step the priority search tree.
 	 * @param list a list of element sorted in y
 	 */
-	private Node<Segment> construct(ArrayList<Segment> list) {
+	private Node<Segment> construct(Array<Segment> list) {
 		//for the method list.sublist() , the first index is inclusive and the second exclusive
 		Node<Segment> temp = null;
 		if (list.size()>=3) {
-			temp=new Node<Segment>(list.remove(firstx(list)), (list.get((list.size()-1)/2).getY1()) );
-			temp.setLeft(construct(new ArrayList<Segment>(list.subList(0,(list.size())/2))));
-			temp.setRight(construct(new ArrayList<Segment>(list.subList((list.size())/2,list.size()))));
-			return temp;
-		}
-		if (list.size()==1) //base case where the sub tree containt one element
-			temp=new Node<Segment>(list.remove(firstx(list)));//median is null ( it's a leaf)
-
-		else if (list.size()==2){ //base case where subtree containt two element
-			temp=new Node<Segment>(list.remove(firstx(list)), (list.get(0).getY1()));//the median is the y1 of the unique son
+			temp=new Node<Segment>(list.remove(getMinX(list)), (list.get((list.size()-1)/2).getY1()) );
+			temp.setLeft(construct(list.subArray(0,(list.size())/2)));
+			temp.setRight(construct(list.subArray((list.size())/2,list.size())));
+		} else if (list.size()==1) {
+			//base case where the sub tree containt one element
+			temp=new Node<Segment>(list.remove(getMinX(list)));//median is null ( it's a leaf)
+		} else if (list.size()==2){ //base case where subtree containt two element
+			temp=new Node<Segment>(list.remove(getMinX(list)), (list.get(0).getY1()));//the median is the y1 of the unique son
 			temp.setLeft(new Node<Segment>(list.remove(0)));
 		}
 		//case size == 0 , do nothing
@@ -42,21 +40,19 @@ public class BasicPst {
 	}
 
 
-	/***
-	 * this method is used to have the minimum in x in a list of Segment sorted in y,
-	 * note that there is no duplicate value in x (prerequisite).
-	 * @param list An ArrayList<Segment> of Segment
-	 * @return the INDICE of the minimum Segment in x
+	/**
+	 * Get index of the Segment owning the minimum X value.
+	 * @param list A list of segments.
+	 * @return Index of the Segment owning the minimum X value or -1 if list is null or if its size is 0.
 	 */
-	public int firstx(ArrayList<Segment> list) {
-		int min = 0;//indice of the minimum,init with 0 (the first indice)
-		Segment val, mini;
-		for (int i=1;i<list.size();i++){
-			val=list.get(i);
-			mini=list.get(min);
-			//There is no order in the segment between x1 and x2
-			if (Math.min(val.getX1(),val.getX2()) < Math.min(mini.getX1(),mini.getX2()) )
+	public static int getMinX(ArrayList<Segment> list) {
+		if(list == null || list.size() == 0) return -1;
+		
+		int min = 0;
+		for (int i = 1; i < list.size(); ++i){
+			if(list.get(i).getMinX() < list.get(min).getMinX()) {
 				min=i;
+			}
 		}
 		return min;
 	}
