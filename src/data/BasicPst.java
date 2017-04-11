@@ -9,7 +9,10 @@ public class BasicPst {
 	private PstNode root;
 
 	public BasicPst(ArrayList<Segment> list) {
-		this.root=construct(new Array<Segment>(list));
+		Array<Segment> segments = new Array<Segment>(list);
+		// sort Segments by Y coordinate
+		segments.sort(Segment::compareTo);
+		this.root=construct(segments);
 	}
 
 	/***
