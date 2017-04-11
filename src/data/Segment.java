@@ -42,6 +42,21 @@ public class Segment implements Comparable<Segment> {
 	public int getY2(){
 		return y2;
 	}
+	
+	public int getMinX() {
+		return Math.min(x1, x2);
+	}
+	public int getMaxX() {
+		return Math.max(x1, x2);
+	}
+	public int getMinY() {
+		// already ordered in constructor
+		return y1;
+	}
+	public int getMaxY() {
+		// already ordered in constructor
+		return y2;
+	}
 	/**
 	 * Create new segment with opposed coordinates. All coordinates are opposed. Segment(1, 1, 1, 1) becomes (-1, -1, -1, -1).
 	 * @return New segment with opposed coordinates build from constructor to get coordinates ordered.
