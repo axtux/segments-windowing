@@ -3,44 +3,50 @@ package data;
 import java.util.ArrayList;
 
 /**
- * This class represents a priority search tree.
+ * Priority Search Tree making easy to get segments within a window.
+ * Implemented windows :
+ * - [X, X']x[Y, Y'] ;
+ * - [-∞, X']x[Y, Y'].
+ * Other windows can be gotten efficiently using {@link Pst}.
  */
 public class BasicPst {
 	private PstNode root;
-
+	/**
+	 * Create Priority Search Tree from unsorted Segment list.
+	 * @param list Segment list from which to create PST.
+	 */
 	public BasicPst(ArrayList<Segment> list) {
 		Array<Segment> segments = new Array<Segment>(list);
 		// sort Segments by Y coordinate
 		segments.sort(Segment::compareTo);
-		this.root=construct(segments);
+		this.root = makePstNode(segments);
 	}
-
-	/***
-	 * This method is used by the constructor to create step by step the priority search tree.
-	 * @param list a list of element sorted in y
+	/**
+	 * Create PstNode and sub nodes from Segment list. Used by constructor to create priority search tree root.
+	 * @param list Segment list, sorted by Y coordinate.
 	 */
-	private PstNode construct(Array<Segment> list) {
+	private PstNode makePstNode(Array<Segment> list) {
 		if(list == null || list.size() == 0) return null;
 		
 		// attribute Segment containing minimum X to this node
 		PstNode temp = new PstNode(list.remove(getMinX(list)));
 		
-		if(list.size() == 0) {
-			return temp;
+		if(list.size() > 0) {
+			int median = (list.size()-1)/2;
+			temp.setMedian(list.get(median).getY1());
+			temp.setLeft(makePstNode(list.subArray(0, median)));
+			temp.setRight(makePstNode(list.subArray(median, list.size())));
 		}
 		
-		int median = (list.size()-1)/2;
-		temp.setMedian(list.get(median).getY1());
-		temp.setLeft(construct(list.subArray(0, median)));
-		temp.setRight(construct(list.subArray(median, list.size())));
 		return temp;
 	}
-
+	/**
+	 * Get root node.
+	 * @return Root node.
+	 */
 	public PstNode getRoot(){
 		return root;
 	}
-
-
 	/**
 	 * Get index of the Segment owning the minimum X value.
 	 * @param list A list of segments.
@@ -57,7 +63,6 @@ public class BasicPst {
 		}
 		return min;
 	}
-
 	/**
 	 * This method print a BasicPst wich the root is given in parameter using the printSeg() method in Segment.
 	 * @param temp the root of the tree to be print
