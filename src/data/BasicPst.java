@@ -32,7 +32,7 @@ public class BasicPst {
 		PstNode temp = new PstNode(list.remove(getMinX(list)));
 		
 		if(list.size() > 0) {
-			int median = (list.size()-1)/2;
+			int median = list.size()/2;
 			temp.setMedian(list.get(median).getY1());
 			temp.setLeft(makePstNode(list.subArray(0, median)));
 			temp.setRight(makePstNode(list.subArray(median, list.size())));
