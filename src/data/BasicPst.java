@@ -28,6 +28,7 @@ public class BasicPst {
 		}
 		if (list.size()==1) //base case where the sub tree containt one element
 			temp=new Node<Segment>(list.remove(firstx(list)));//median is null ( it's a leaf)
+
 		else if (list.size()==2){ //base case where subtree containt two element
 			temp=new Node<Segment>(list.remove(firstx(list)), (list.get(0).getY1()));//the median is the y1 of the unique son
 			temp.setLeft(new Node<Segment>(list.remove(0)));
@@ -86,14 +87,16 @@ public class BasicPst {
 	 * @return An ArrayList with all the segment in the window, or otherwise an empty Arrraylist
 	 */
 	public ArrayList<Segment> windowing(Segment window){
-		ArrayList<Segment> answer = subWindowing(window,root);
+
+		ArrayList<Segment> answer = subWindowing(window,root, ReportType.NormalWindow);
+
 		if (window.getX1() == Integer.MIN_VALUE) {
 			Segment window2=new Segment(window.getX1(),window.getX2(),Integer.MIN_VALUE,window.getY1());
 			//case : two -infinity in x1 and y1
-			ArrayList<Segment> answer2=subWindowing(window2,root);
+			ArrayList<Segment> answer2=subWindowing(window2,root, ReportType.DownWindow);
 			answer.addAll(answer2);
 		}
-		if (window.getX2() == Integer.MAX_VALUE) {
+		/*if (window.getX2() == Integer.MAX_VALUE) {
 			Segment window2=new Segment(window.getX1(),window.getX2(),window.getY2(),Integer.MAX_VALUE);
 			//case to add too with infinity in x2,y2
 			ArrayList<Segment> answer2=subWindowing(window2,root);
@@ -110,14 +113,12 @@ public class BasicPst {
 			//""""  x2,y2
 			ArrayList<Segment> answer2=subWindowing(window2,root);
 			answer.addAll(answer2);
-		}
+		}*/
 		else {
 			Segment window2=new Segment(Integer.MIN_VALUE,window.getX1(),window.getY1(),window.getY2());
-			Segment window3=new Segment(window.getX1(),window.getX1(),window.getY2(),Integer.MAX_VALUE);
-			ArrayList<Segment> answer2=subWindowing(window2,root);
-			answer.addAll(answer2);
-			ArrayList<Segment> answer3=subWindowing(window3,root);
-			answer.addAll(answer3);
+			Segment window3=new Segment(window.getX1(),window.getX1(),Integer.MIN_VALUE,window.getY1());
+			answer.addAll(subWindowing(window2,root, ReportType.LeftWindow));
+			answer.addAll(subWindowing(window3,root, ReportType.DownWindow));
 		}
 		return answer;
 	}
@@ -127,28 +128,33 @@ public class BasicPst {
 	 * or an empty ArrayList if there is no Segment in the window.
 	 * The window have to be in that form : [x:x']X[y:y'] where x<=x' and y<=y'(prerequisite)
 	 * @param window a Segment object representing the window to apply
+	 * @param reporting the reporting type to do
 	 * @return an ArrayList of the Segment, or an empty ArrayList
 	 */
-	public ArrayList<Segment> subWindowing(Segment window, Node<Segment> root){//window is like that : [x:x']X[y:y']
+	public ArrayList<Segment> subWindowing(Segment window, Node<Segment> root, ReportType reporting){
+
 		ArrayList<Segment> rep=new ArrayList<>();
+
 		if (root!=null) {
+
 			if (window.getX1() == Integer.MIN_VALUE) {//the window is without min in x : [-infinity;x2]X[y1,y2]
+
 				if (Math.min(root.getData().getX1(), root.getData().getX2()) <= window.getX2()) {
 					//we can continue because all the element in the subtree aren't greater than the window in x
-					Segment s =report(root,window);
+					Segment s =report(root,window,reporting);
 					if (s!=null)
 						rep.add(s);
 					if (window.getY1() < root.getMedian() && window.getY2() < root.getMedian())
-						rep.addAll(subWindowing(window, root.getLeft()));
+						rep.addAll(subWindowing(window, root.getLeft(), reporting));
 					if (window.getY1() > root.getMedian() && window.getY2() > root.getMedian())
-						rep.addAll(subWindowing(window, root.getRight()));
+						rep.addAll(subWindowing(window, root.getRight(), reporting));
 					if (window.getY1() <= root.getMedian() && window.getY2() >= root.getMedian()) {
-						rep.addAll(subWindowing(window, root.getLeft()));
-						rep.addAll(subWindowing(window, root.getRight()));
+						rep.addAll(subWindowing(window, root.getLeft(), reporting));
+						rep.addAll(subWindowing(window, root.getRight(), reporting));
 					}
 				}
 			}
-			if (window.getX2() == Integer.MAX_VALUE && window.getY2() != Integer.MAX_VALUE) {//the window is without min in x : [x1;+infinity]X[y1,y2]
+			/*if (window.getX2() == Integer.MAX_VALUE && window.getY2() != Integer.MAX_VALUE) {//the window is without min in x : [x1;+infinity]X[y1,y2]
 				Segment s =report(root,window);
 				if (s!=null)
 					rep.add(s);
@@ -161,22 +167,24 @@ public class BasicPst {
 					rep.addAll(subWindowing(window, root.getLeft()));
 					rep.addAll(subWindowing(window, root.getRight()));
 				}
-			}
+			}*/
 			if (window.getY1() == Integer.MIN_VALUE) {
 				//the window is without min in y : [x1;x2]X[-infinity,y2] ,or special case : [-infinity;x2]X[-infinity, y2]
+
 				if (Math.min(root.getData().getX1(), root.getData().getX2()) <= window.getX2()) {
 					//we can continue because all the element in the subtree aren't greater than the window in x
-					Segment s =report(root,window);
+					Segment s =report(root,window,reporting);
 					if (s!=null)
 						rep.add(s);
 					if (window.getY2() < root.getMedian())
-						rep.addAll(subWindowing(window, root.getLeft()));
+						rep.addAll(subWindowing(window, root.getLeft(), reporting));
 					if (window.getY2() >= root.getMedian()) {
-						rep.addAll(subWindowing(window, root.getLeft()));
-						rep.addAll(subWindowing(window, root.getRight()));
+						rep.addAll(subWindowing(window, root.getLeft(), reporting));
+						rep.addAll(subWindowing(window, root.getRight(), reporting));
 					}
 				}
 			}
+			/*
 			if (window.getY2() == Integer.MAX_VALUE && window.getX2()!=Integer.MAX_VALUE) {//the window is without max in y : [x1;x2]X[y1,+infinity]
 				if (Math.min(root.getData().getX1(), root.getData().getX2()) <= window.getX2()) {
 					//we can continue because all the element in the subtree aren't greater than the window in x
@@ -202,21 +210,22 @@ public class BasicPst {
 				}
 				if (window.getY1() > root.getMedian())
 					rep.addAll(subWindowing(window, root.getRight()));
-			}
+			}*/
 
 			else {//case of a limited window
+
 				if (Math.min(root.getData().getX1(), root.getData().getX2()) <= window.getX2()) {
-					Segment s =report(root,window);
+					Segment s =report(root,window,reporting);
 					if (s!=null)
 						rep.add(s);
 					//it will do nothing if the node is not in the x window
 					if (window.getY1() < root.getMedian() && window.getY2() < root.getMedian())
-						rep.addAll(subWindowing(window, root.getLeft()));
+						rep.addAll(subWindowing(window, root.getLeft(), reporting));
 					if (window.getY1() > root.getMedian() && window.getY2() > root.getMedian())
-						rep.addAll(subWindowing(window, root.getRight()));
+						rep.addAll(subWindowing(window, root.getRight(), reporting));
 					if (window.getY1() <= root.getMedian() && window.getY2() >= root.getMedian()) {
-						rep.addAll(subWindowing(window, root.getLeft()));
-						rep.addAll(subWindowing(window, root.getRight()));
+						rep.addAll(subWindowing(window, root.getLeft(), reporting));
+						rep.addAll(subWindowing(window, root.getRight(), reporting));
 					}
 				}
 			}
@@ -225,19 +234,48 @@ public class BasicPst {
 	}
 
 	/**
-	 * return the segment (Node data) to rep if one of its end points is in the window
-	 * and it hasn't been visited
-	 * ,otherwise do nothing
+	 * return the segment (Node data) if it's in the window that we choose
+	 * and it hasn't been visited, or null otherwise
 	 * @param n a node<Segment> to report
 	 * @param window a Segment wich represents the window
+	 * @param type a ReportType enumeration to know wich type of report to do
 	 */
-	public Segment report(Node<Segment> n,Segment window){
-		if (n.notmarqued()
-			&& ( (window.getY1()<=root.getData().getY1() && window.getX1()<=Math.min(n.getData().getX1(),n.getData().getX2()))
-						|| (window.getY2()>=root.getData().getY2() && window.getX2()>=Math.max(n.getData().getX1(),n.getData().getX2())) )
-						) {
-			root.putflag();
-			return root.getData();
+	public Segment report(Node<Segment> n, Segment window, ReportType type){
+
+		if (ReportType.NormalWindow.equals(type)) {
+			if (n.notmarqued()
+							&& ((window.getY1() <= root.getData().getY1() && window.getX1() <= Math.min(n.getData().getX1(), n.getData().getX2()))
+							|| (window.getY2() >= root.getData().getY2() && window.getX2() >= Math.max(n.getData().getX1(), n.getData().getX2())))
+							){
+
+				root.putflag();
+				return root.getData();
+			}
+		}
+
+		if (ReportType.DownWindow.equals(type)) {
+			if (n.notmarqued()
+							&& n.getData().getX1()==n.getData().getX2()//vertical segment
+							&& window.getX1()<= n.getData().getX1() && n.getData().getX1() <=window.getX2()//in the window
+							&& n.getData().getY2()>=window.getY1()//goes throught the true window
+							){
+
+				root.putflag();
+				return root.getData();
+
+			}
+		}
+		if (ReportType.LeftWindow.equals(type)) {
+			if (n.notmarqued()
+							&& n.getData().getY1()==n.getData().getY2()//horyzontal segment
+							&& window.getY1()<= n.getData().getY1() && n.getData().getY1() <=window.getY2()//in the window
+							&& n.getData().getX2()>=window.getX1()//goes throught the true window
+							){
+
+				root.putflag();
+				return root.getData();
+
+			}
 		}
 		return null;
 	}
