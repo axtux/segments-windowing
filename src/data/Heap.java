@@ -14,7 +14,7 @@ public class Heap {
 	 * @param comparator Comparator used to define elements order.
 	 * @param <E> Class contained into array and comparable using comparator.
 	 */
-	public static <E> void heapify(ArrayList<E> array, Comparator<E> comparator) {
+	public static <E> void heapify(ArrayList<E> array, Comparator<? super E> comparator) {
 		int size = array.size();
 		for(int i = father(size-1); i >= 0; --i) {
 			heapify(array, comparator, i, size);
@@ -28,7 +28,7 @@ public class Heap {
 	 * @param size Size of the heap (array size won't be used here).
 	 * @param <E> Class contained into array and comparable using comparator.
 	 */
-	private static <E> void heapify(ArrayList<E> array, Comparator<E> comparator, int i, int size) {
+	private static <E> void heapify(ArrayList<E> array, Comparator<? super E> comparator, int i, int size) {
 		int max = i;
 		int left = left(i);
 		int right = right(i);
@@ -74,7 +74,7 @@ public class Heap {
 	 * @param comparator Comparator used to define elements order.
 	 * @param <E> Class contained into array and comparable using comparator.
 	 */
-	public static <E> void sortArray(ArrayList<E> array, Comparator<E> comparator) {
+	public static <E> void sortArray(ArrayList<E> array, Comparator<? super E> comparator) {
 		heapify(array, comparator);
 		
 		E last;
