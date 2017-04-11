@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import data.BasicPst;
-import data.Node;
+import data.PstNode;
 import data.Pst;
 import data.Segment;
 import org.junit.Before;
@@ -40,10 +40,12 @@ public class PstTests {
 	 * @param root the root of the Priority Search Tree
 	 * @return a list containing all {@link Segment}s in the tree
 	 */
-	private ArrayList<Segment> listofSonsData(Node<Segment> root){
+
+	public ArrayList<Segment> listofSonsData(PstNode root){
+
 		ArrayList<Segment> rep=new ArrayList<Segment>();
 		if (root!= null){
-			rep.add(root.getData());
+			rep.add(root.getSegment());
 			if (root.getLeft()!=null)
 				rep.addAll(listofSonsData(root.getLeft()));
 			if(root.getRight()!=null)
@@ -55,10 +57,13 @@ public class PstTests {
 	/**
 	 * This function is used to have all the nodes of a Priority search tree
 	 * @param root the root of the BasicPst
-	 * @return a list containing all {@link Node}s in the tree
+	 * @return a list containing all {@link PstNode}s in the tree
 	 */
-	private ArrayList<Node> listofNodes(Node<Segment> root){
-		ArrayList<Node> rep=new ArrayList<>();
+
+	public ArrayList<PstNode> listofNodes(PstNode root){
+
+		ArrayList<PstNode> rep=new ArrayList<>();
+
 		if (root!= null){
 			rep.add(root);
 			if (root.getLeft()!=null)
@@ -78,15 +83,39 @@ public class PstTests {
 		list.add(seg);
 		Pst abrs = new Pst(list);
 		BasicPst abr=abrs.getOriginal();
-		ArrayList<Node> nodes=listofNodes(abr.getRoot());
-		for (Node<Segment> n1:nodes) {
-			ArrayList<Node> descendent=listofNodes(n1);
-			for (Node<Segment> n2:descendent) {
-				assertTrue(Math.min(n1.getData().getX1(),n1.getData().getX2())<=Math.min(n2.getData().getX1(),n2.getData().getX2()));
+		ArrayList<PstNode> nodes=listofNodes(abr.getRoot());
+		for (PstNode n1:nodes) {
+			ArrayList<PstNode> descendent=listofNodes(n1);
+			for (PstNode n2:descendent) {
+				assertTrue(Math.min(n1.getSegment().getX1(),n1.getSegment().getX2())<=Math.min(n2.getSegment().getX1(),n2.getSegment().getX2()));
 			}
 		}
 		//abr.printPst(abr.getRoot(),"");//used to see the BasicPst in terminal
 
+	}
+
+
+	/**
+	 * This function is used in medianTest to test if a median is respected for a node
+	 * @param root The node to verify
+	 */
+
+	public void  submedianTest(PstNode root) {
+
+		float median = root.getMedian();
+		ArrayList<Segment> sons = listofSonsData(root);//it contains the root too
+		List<Segment> sonsleft = sons.subList(0, sons.size() / 2);
+		List<Segment> sonsright = sons.subList(sons.size() / 2, sons.size());
+		System.out.println("sons left");
+		for (Segment s : sonsleft) {
+			System.out.println(s.toString());
+			assertTrue(s.getY1() <= median);
+		}
+		System.out.println("Sons right");
+		for (Segment s : sonsright) {
+			System.out.println(s.toString());
+			assertTrue(s.getY1() >= median);
+		}
 	}
 
 	/**
@@ -97,38 +126,15 @@ public class PstTests {
 
 		Pst abrs = new Pst(list);
 		BasicPst abr=abrs.getOriginal();
-		ArrayList<Node> nodes = listofNodes(abr.getRoot());
+		ArrayList<PstNode> nodes = listofNodes(abr.getRoot());
 		//System.out.println(nodes.size());
-		for (Node n:nodes) {
-			//System.out.println(n.getData().toString()); //to verify that all the nodes are present
+		for (PstNode n:nodes) {
+			System.out.println(n.getSegment().toString()); //to verify that all the nodes are present
 			submedianTest(n);
 		}
 	}
 
-	/**
-	 * This function is used in medianTest to test if a median is respected for a node
-	 * @param root The node to verify
-	 */
-	private void  submedianTest(Node<Segment> root) {
-		float median = root.getMedian();
-		ArrayList<Segment> sons = listofSonsData(root);//it contains the root too
-		List<Segment> sonsleft = sons.subList(0, sons.size() / 2);
-		List<Segment> sonsright = sons.subList(sons.size() / 2, sons.size());
-		//System.out.println("sons left");
-		for (Segment s : sonsleft) {
-			//System.out.println(s.toString());
-			assertTrue(s.getY1() <= median);
-		}
-		//System.out.println("Sons right");
-		for (Segment s : sonsright) {
-			//System.out.println(s.toString());
-			assertTrue(s.getY1() >= median);
-		}
-	}
 
-	/**
-	 * We test herre the windowing on a bordered window
-	 */
 	@Test
 	public void windowingTest1(){
 		ArrayList<Segment> list = new ArrayList<Segment>();
@@ -147,10 +153,10 @@ public class PstTests {
 		Pst abr = new Pst(list);
 		ArrayList<Segment> segs = abr.getWindow(new Segment(0,1,0,1));
 		//abr.getOriginal().printPst(abr.getOriginal().getRoot(),"");//used to see the BasicPst in terminal
-		System.out.println(segs.size());
+		/*System.out.println(segs.size());
 		for (Segment s:segs) {
 			System.out.println(s.toString());
-		}
+		}*/
 	}
 
 }

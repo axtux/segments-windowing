@@ -80,9 +80,9 @@ public class Heap {
 		E last;
 		for(int i = array.size()-1; i > 0; --i) {
 			last = array.get(i);
-			// set maximum (minimum if asc_order is false) at the end of array
+			// set maximum at the end of array
 			array.set(i, array.get(0));
-			// replace first by last and heapify
+			// replace first by last and make heap again
 			array.set(0, last);
 			heapify(array, comparator, 0, i);
 		}

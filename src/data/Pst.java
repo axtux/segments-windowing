@@ -18,23 +18,17 @@ public class Pst {
 	BasicPst opposed_exchanged;
 	
 	public Pst(ArrayList<Segment> segments) {
-		// make 4 copies
-		ArrayList<Segment> original_segments = new ArrayList<Segment>(segments);
-		ArrayList<Segment> opposed_segments = new ArrayList<Segment>(segments);
-		ArrayList<Segment> exchanged_segments = new ArrayList<Segment>(segments);
-		ArrayList<Segment> opposed_exchanged_segments = new ArrayList<Segment>(segments);
+		// make 4 arrays from segments
+		Array<Segment> original_segments = new Array<Segment>(segments);
+		Array<Segment> opposed_segments = new Array<Segment>(segments);
+		Array<Segment> exchanged_segments = new Array<Segment>(segments);
+		Array<Segment> opposed_exchanged_segments = new Array<Segment>(segments);
 		
 		// make them what they say they are
 		opposeArray(opposed_segments);
 		exchangeArray(exchanged_segments);
 		opposeArray(opposed_exchanged_segments);
 		exchangeArray(opposed_exchanged_segments);
-		
-		// sort arrays
-		Heap.sortArray(original_segments);
-		Heap.sortArray(opposed_segments);
-		Heap.sortArray(exchanged_segments);
-		Heap.sortArray(opposed_exchanged_segments);
 		
 		// create a BasicPst for each array
 		original = new BasicPst(original_segments);

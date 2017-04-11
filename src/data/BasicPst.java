@@ -3,43 +3,50 @@ package data;
 import java.util.ArrayList;
 
 /**
- * This class represents a priority search tree.
+ * Priority Search Tree making easy to get segments within a window.
+ * Implemented windows :
+ * - [X, X']x[Y, Y'] ;
+ * - [-∞, X']x[Y, Y'].
+ * Other windows can be gotten efficiently using {@link Pst}.
  */
 public class BasicPst {
-
-	private Node<Segment> root;
-
-	public BasicPst(ArrayList<Segment> list) {
-		this.root=construct(new Array<Segment>(list));
-	}
-
-	/***
-	 * This method is used by the constructor to create step by step the priority search tree.
-	 * @param list a list of element sorted in y
+	private PstNode root;
+	/**
+	 * Create Priority Search Tree from unsorted Segment list.
+	 * @param list Segment list from which to create PST.
 	 */
-	private Node<Segment> construct(Array<Segment> list) {
-		//for the method list.sublist() , the first index is inclusive and the second exclusive
-		Node<Segment> temp = null;
-		if (list.size()>=3) {
-			temp=new Node<Segment>(list.remove(getMinX(list)), (list.get((list.size()-1)/2).getY1()) );
-			temp.setLeft(construct(list.subArray(0,(list.size())/2)));
-			temp.setRight(construct(list.subArray((list.size())/2,list.size())));
-		} else if (list.size()==1) {
-			//base case where the sub tree containt one element
-			temp=new Node<Segment>(list.remove(getMinX(list)));//median is null ( it's a leaf)
-		} else if (list.size()==2){ //base case where subtree containt two element
-			temp=new Node<Segment>(list.remove(getMinX(list)), (list.get(0).getY1()));//the median is the y1 of the unique son
-			temp.setLeft(new Node<Segment>(list.remove(0)));
+	public BasicPst(ArrayList<Segment> list) {
+		Array<Segment> segments = new Array<Segment>(list);
+		// sort Segments by Y coordinate
+		segments.sort(Segment::compareTo);
+		this.root = makePstNode(segments);
+	}
+	/**
+	 * Create PstNode and sub nodes from Segment list. Used by constructor to create priority search tree root.
+	 * @param list Segment list, sorted by Y coordinate.
+	 */
+	private PstNode makePstNode(Array<Segment> list) {
+		if(list == null || list.size() == 0) return null;
+		
+		// attribute Segment containing minimum X to this node
+		PstNode temp = new PstNode(list.remove(getMinX(list)));
+		
+		if(list.size() > 0) {
+			int median = list.size()/2;
+			temp.setMedian(list.get(median).getY1());
+			temp.setLeft(makePstNode(list.subArray(0, median)));
+			temp.setRight(makePstNode(list.subArray(median, list.size())));
 		}
-		//case size == 0 , do nothing
+		
 		return temp;
 	}
-
-	public Node<Segment> getRoot(){
+	/**
+	 * Get root node.
+	 * @return Root node.
+	 */
+	public PstNode getRoot(){
 		return root;
 	}
-
-
 	/**
 	 * Get index of the Segment owning the minimum X value.
 	 * @param list A list of segments.
@@ -56,15 +63,14 @@ public class BasicPst {
 		}
 		return min;
 	}
-
 	/**
 	 * This method print a BasicPst wich the root is given in parameter using the printSeg() method in Segment.
 	 * @param temp the root of the tree to be print
 	 * @param acc the Symbol of a node ( examples : @,|,(), ...)
 	 */
-	public void printPst(Node<Segment> temp, String acc) {
+	public void printPst(PstNode temp, String acc) {
 
-		System.out.print(acc + temp.getData());
+		System.out.print(acc + temp.getSegment());
 		if (temp.getLeft() != null) {
 			System.out.println();
 			System.out.print("l-son:");
@@ -127,7 +133,7 @@ public class BasicPst {
 	 * @param reporting the reporting type to do
 	 * @return an ArrayList of the Segment, or an empty ArrayList
 	 */
-	public ArrayList<Segment> subWindowing(Segment window, Node<Segment> temp, ReportType reporting){
+	public ArrayList<Segment> subWindowing(Segment window, PstNode temp, ReportType reporting){
 
 		ArrayList<Segment> rep=new ArrayList<Segment>();
 
@@ -135,7 +141,7 @@ public class BasicPst {
 
 			if (window.getX1() == Integer.MIN_VALUE) {//the window is without min in x : [-infinity;x2]X[y1,y2]
 
-				if (Math.min(temp.getData().getX1(), temp.getData().getX2()) <= window.getX2()) {
+				if (Math.min(temp.getSegment().getX1(), temp.getSegment().getX2()) <= window.getX2()) {
 					//we can continue because all the element in the subtree aren't greater than the window in x
 					Segment s =report(temp,window,reporting);
 					if (s!=null)
@@ -167,7 +173,7 @@ public class BasicPst {
 			if (window.getY1() == Integer.MIN_VALUE) {
 				//the window is without min in y : [x1;x2]X[-infinity,y2] ,or special case : [-infinity;x2]X[-infinity, y2]
 
-				if (Math.min(temp.getData().getX1(), temp.getData().getX2()) <= window.getX2()) {
+				if (Math.min(temp.getSegment().getX1(), temp.getSegment().getX2()) <= window.getX2()) {
 					//we can continue because all the element in the subtree aren't greater than the window in x
 					Segment s =report(temp,window,reporting);
 					if (s!=null)
@@ -210,7 +216,7 @@ public class BasicPst {
 
 			else {//case of a limited window
 
-				if (Math.min(temp.getData().getX1(), temp.getData().getX2()) <= window.getX2()) {
+				if (Math.min(temp.getSegment().getX1(), temp.getSegment().getX2()) <= window.getX2()) {
 					Segment s =report(temp,window,reporting);
 					if (s!=null)
 						rep.add(s);
@@ -236,40 +242,40 @@ public class BasicPst {
 	 * @param window a Segment wich represents the window
 	 * @param type a ReportType enumeration to know wich type of report to do
 	 */
-	public Segment report(Node<Segment> n, Segment window, ReportType type){
+	public Segment report(PstNode n, Segment window, ReportType type){
 
 		if (ReportType.NormalWindow.equals(type)) {
-			if (n.notmarqued()
-							&& ((window.getY1() <= root.getData().getY1() && window.getX1() <= Math.min(n.getData().getX1(), n.getData().getX2()))
-							|| (window.getY2() >= root.getData().getY2() && window.getX2() >= Math.max(n.getData().getX1(), n.getData().getX2())))
+			if (!n.getFlag()
+							&& ((window.getY1() <= root.getSegment().getY1() && window.getX1() <= Math.min(n.getSegment().getX1(), n.getSegment().getX2()))
+							|| (window.getY2() >= root.getSegment().getY2() && window.getX2() >= Math.max(n.getSegment().getX1(), n.getSegment().getX2())))
 							){
 
-				n.putflag();
-				return n.getData();
+				n.setFlag(true);
+				return n.getSegment();
 			}
 		}
 
 		if (ReportType.DownWindow.equals(type)) {
-			if (n.notmarqued()
-							&& n.getData().getX1()==n.getData().getX2()//vertical segment
-							&& window.getX1()<= n.getData().getX1() && n.getData().getX1() <=window.getX2()//in the window
-							&& n.getData().getY2()>=window.getY1()//goes throught the true window
+			if (!n.getFlag()
+							&& n.getSegment().getX1()==n.getSegment().getX2()//vertical segment
+							&& window.getX1()<= n.getSegment().getX1() && n.getSegment().getX1() <=window.getX2()//in the window
+							&& n.getSegment().getY2()>=window.getY1()//goes throught the true window
 							){
 
-				n.putflag();
-				return n.getData();
+				n.setFlag(true);
+				return n.getSegment();
 
 			}
 		}
 		if (ReportType.LeftWindow.equals(type)) {
-			if (n.notmarqued()
-							&& n.getData().getY1()==n.getData().getY2()//horyzontal segment
-							&& window.getY1()<= n.getData().getY1() && n.getData().getY1() <=window.getY2()//in the window
-							&& n.getData().getX2()>=window.getX1()//goes throught the true window
+			if (!n.getFlag()
+							&& n.getSegment().getY1()==n.getSegment().getY2()//horyzontal segment
+							&& window.getY1()<= n.getSegment().getY1() && n.getSegment().getY1() <=window.getY2()//in the window
+							&& n.getSegment().getX2()>=window.getX1()//goes throught the true window
 							){
 
-				n.putflag();
-				return n.getData();
+				n.setFlag(true);
+				return n.getSegment();
 
 			}
 		}
