@@ -61,7 +61,7 @@ public class BasicPst {
 	}
 
 	/**
-	 * This method print a Pst wich the root is given in parameter using the printSeg() method in Segment.
+	 * This method print a BasicPst wich the root is given in parameter using the printSeg() method in Segment.
 	 * @param temp the root of the tree to be print
 	 * @param acc the Symbol of a node ( examples : @,|,(), ...)
 	 */
@@ -81,7 +81,7 @@ public class BasicPst {
 	}
 
 	/**
-	 * this method apply the windowing on the Pst
+	 * this method apply the windowing on the BasicPst
 	 * @param window The window to apply ( has to e ordered )
 	 * @return An ArrayList with all the segment in the window, or otherwise an empty Arrraylist
 	 */
@@ -123,7 +123,7 @@ public class BasicPst {
 	}
 
 	/**
-	 * This method apply the subWindowing method on the Pst and return an ArrayList with the Segment in it where the segment have one end-point in it,
+	 * This method apply the subWindowing method on the BasicPst and return an ArrayList with the Segment in it where the segment have one end-point in it,
 	 * or an empty ArrayList if there is no Segment in the window.
 	 * The window have to be in that form : [x:x']X[y:y'] where x<=x' and y<=y'(prerequisite)
 	 * @param window a Segment object representing the window to apply

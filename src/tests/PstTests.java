@@ -24,7 +24,7 @@ public class PstTests {
 	@Before
 	public void  initList(){
 		int i=0;
-		while (i<100000) {
+		while (i<10) {
 			int x1= i+1;
 			int x2= i+2;
 			int y1= i+1;
@@ -53,7 +53,7 @@ public class PstTests {
 
 	/**
 	 * This function is used to have all the nodes of a Priority search tree
-	 * @param root the root of the Pst
+	 * @param root the root of the BasicPst
 	 * @return a list containing all {@link Node}s in the tree
 	 */
 	public ArrayList<Node> listofNodes(Node<Segment> root){
@@ -99,7 +99,7 @@ public class PstTests {
 		BasicPst abr = new BasicPst(list);
 		//the first segment is the min in x
 		assertTrue(abr.getRoot().getData().equals(seg));
-		//abr.printPst(abr.getRoot(),"");//used to see the Pst in terminal
+		//abr.printPst(abr.getRoot(),"");//used to see the BasicPst in terminal
 
 	}
 
@@ -123,7 +123,7 @@ public class PstTests {
 		list.sort(Segment::compareTo);
 		BasicPst abr = new BasicPst(list);
 		ArrayList<Segment> segs = abr.windowing(new Segment(0,78,1,89));
-		//abr.printPst(abr.getRoot(),"");//used to see the Pst in terminal
+		//abr.printPst(abr.getRoot(),"");//used to see the BasicPst in terminal
 		System.out.println(segs.size());
 		for (Segment s:segs) {
 			System.out.println(s.toString());
