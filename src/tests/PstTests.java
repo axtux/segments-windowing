@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import data.BasicPst;
-import data.Node;
+import data.PstNode;
 import data.Pst;
 import data.Segment;
 import org.junit.Before;
@@ -40,10 +40,10 @@ public class PstTests {
 	 * @param root the root of the Priority Search Tree
 	 * @return a list containing all {@link Segment}s in the tree
 	 */
-	public ArrayList<Segment> listofSonsData(Node<Segment> root){
+	public ArrayList<Segment> listofSonsData(PstNode root){
 		ArrayList<Segment> rep=new ArrayList<Segment>();
 		if (root!= null){
-			rep.add(root.getData());
+			rep.add(root.getSegment());
 			if (root.getLeft()!=null)
 				rep.addAll(listofSonsData(root.getLeft()));
 			if(root.getRight()!=null)
@@ -55,10 +55,10 @@ public class PstTests {
 	/**
 	 * This function is used to have all the nodes of a Priority search tree
 	 * @param root the root of the BasicPst
-	 * @return a list containing all {@link Node}s in the tree
+	 * @return a list containing all {@link PstNode}s in the tree
 	 */
-	public ArrayList<Node> listofNodes(Node<Segment> root){
-		ArrayList<Node> rep=new ArrayList<>();
+	public ArrayList<PstNode> listofNodes(PstNode root){
+		ArrayList<PstNode> rep=new ArrayList<>();
 		if (root!= null){
 			rep.add(root);
 			if (root.getLeft()!=null)
@@ -73,7 +73,7 @@ public class PstTests {
 	 * This function is used in medianTest to test if a median is respected for a node
 	 * @param root The node to verify
 	 */
-	public void  submedianTest(Node<Segment> root) {
+	public void  submedianTest(PstNode root) {
 		float median = root.getMedian();
 		ArrayList<Segment> sons = listofSonsData(root);//it contains the root too
 		List<Segment> sonsleft = sons.subList(0, sons.size() / 2);
@@ -99,7 +99,7 @@ public class PstTests {
 		list.sort(Segment::compareTo);
 		BasicPst abr = new BasicPst(list);
 		//the first segment is the min in x
-		assertTrue(abr.getRoot().getData().equals(seg));
+		assertTrue(abr.getRoot().getSegment().equals(seg));
 		//abr.printPst(abr.getRoot(),"");//used to see the BasicPst in terminal
 
 	}
@@ -111,9 +111,9 @@ public class PstTests {
 	public void medianTest(){
 		list.sort(Segment::compareTo);
 		BasicPst abr = new BasicPst(list);
-		Node<Segment> root=abr.getRoot();
-		ArrayList<Node> nodes = listofNodes(root);
-		for (Node n:nodes) {
+		PstNode root=abr.getRoot();
+		ArrayList<PstNode> nodes = listofNodes(root);
+		for (PstNode n:nodes) {
 			//System.out.println(n.getData().toString()); //to verify that all the nodes are present
 			submedianTest(n);
 		}
