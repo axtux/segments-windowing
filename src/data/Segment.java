@@ -58,6 +58,13 @@ public class Segment implements Comparable<Segment> {
 		return y2;
 	}
 	/**
+	 * Get ordered window intervals ({@code X1 <= X2} and {@code Y1 <= Y2}).
+	 * @return Ordered window.
+	 */
+	public Segment getWindow() {
+		return new Segment(getMinX(), getMaxX(), getMinY(), getMaxY());
+	}
+	/**
 	 * Oppose i maintaining extreme value.
 	 * @param i Integer to oppose.
 	 * @return Opposed i.
