@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import data.Node;
-import data.Pst;
+import data.BasicPst;
 import data.Segment;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,7 +24,7 @@ public class PstTests {
 	@Before
 	public void  initList(){
 		int i=0;
-		while (i<100000) {
+		while (i<10) {
 			int x1= i+1;
 			int x2= i+2;
 			int y1= i+1;
@@ -53,7 +53,7 @@ public class PstTests {
 
 	/**
 	 * This function is used to have all the nodes of a Priority search tree
-	 * @param root the root of the Pst
+	 * @param root the root of the BasicPst
 	 * @return a list containing all {@link Node}s in the tree
 	 */
 	public ArrayList<Node> listofNodes(Node<Segment> root){
@@ -96,10 +96,10 @@ public class PstTests {
 		Segment seg=new Segment(-42,-42,-42,-42);
 		list.add(seg);
 		list.sort(Segment::compareTo);
-		Pst abr = new Pst(list);
+		BasicPst abr = new BasicPst(list);
 		//the first segment is the min in x
 		assertTrue(abr.getRoot().getData().equals(seg));
-		//abr.printPst(abr.getRoot(),"");//used to see the Pst in terminal
+		//abr.printPst(abr.getRoot(),"");//used to see the BasicPst in terminal
 
 	}
 
@@ -109,7 +109,7 @@ public class PstTests {
 	@Test
 	public void medianTest(){
 		list.sort(Segment::compareTo);
-		Pst abr = new Pst(list);
+		BasicPst abr = new BasicPst(list);
 		Node<Segment> root=abr.getRoot();
 		ArrayList<Node> nodes = listofNodes(root);
 		for (Node n:nodes) {
@@ -121,9 +121,9 @@ public class PstTests {
 	@Test
 	public void windowingTest1(){
 		list.sort(Segment::compareTo);
-		Pst abr = new Pst(list);
+		BasicPst abr = new BasicPst(list);
 		ArrayList<Segment> segs = abr.windowing(new Segment(0,78,1,89));
-		//abr.printPst(abr.getRoot(),"");//used to see the Pst in terminal
+		//abr.printPst(abr.getRoot(),"");//used to see the BasicPst in terminal
 		System.out.println(segs.size());
 		for (Segment s:segs) {
 			System.out.println(s.toString());
