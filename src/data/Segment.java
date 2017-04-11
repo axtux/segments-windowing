@@ -58,11 +58,23 @@ public class Segment implements Comparable<Segment> {
 		return y2;
 	}
 	/**
+	 * Oppose i maintaining extreme value.
+	 * @param i Integer to oppose.
+	 * @return Opposed i.
+	 */
+	private int oppose(int i) {
+		switch(i) {
+		case Integer.MAX_VALUE: return Integer.MIN_VALUE;
+		case Integer.MIN_VALUE: return Integer.MAX_VALUE;
+		default: return -i;
+		}
+	}
+	/**
 	 * Create new segment with opposed coordinates. All coordinates are opposed. Segment(1, 1, 1, 1) becomes (-1, -1, -1, -1).
 	 * @return New segment with opposed coordinates build from constructor to get coordinates ordered.
 	 */
 	public Segment oppose() {
-		return new Segment(-x1, -x2, -y1, -y2);
+		return new Segment(oppose(x1), oppose(x2), oppose(y1), oppose(y2));
 	}
 	/**
 	 * Create new segment with exchanged coordinates. X coordinates become Y coordinates and inversely. Segment(1, 1, 2, 2) becomes (2, 2, 1, 1).
