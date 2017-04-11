@@ -5,11 +5,11 @@ import java.util.ArrayList;
 /**
  * This class represents a priority search tree.
  */
-public class Pst {
+public class BasicPst {
 
 	private Node<Segment> root;
 
-	public Pst(ArrayList<Segment> list) {
+	public BasicPst(ArrayList<Segment> list) {
 		this.root=construct(list);
 	}
 

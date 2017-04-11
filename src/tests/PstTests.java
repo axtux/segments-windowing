@@ -5,8 +5,8 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import data.BasicPst;
 import data.Node;
-import data.Pst;
 import data.Segment;
 import org.junit.Before;
 import org.junit.Test;
@@ -96,7 +96,7 @@ public class PstTests {
 		Segment seg=new Segment(-42,-42,-42,-42);
 		list.add(seg);
 		list.sort(Segment::compareTo);
-		Pst abr = new Pst(list);
+		BasicPst abr = new BasicPst(list);
 		//the first segment is the min in x
 		assertTrue(abr.getRoot().getData().equals(seg));
 		//abr.printPst(abr.getRoot(),"");//used to see the Pst in terminal
@@ -109,7 +109,7 @@ public class PstTests {
 	@Test
 	public void medianTest(){
 		list.sort(Segment::compareTo);
-		Pst abr = new Pst(list);
+		BasicPst abr = new BasicPst(list);
 		Node<Segment> root=abr.getRoot();
 		ArrayList<Node> nodes = listofNodes(root);
 		for (Node n:nodes) {
@@ -121,7 +121,7 @@ public class PstTests {
 	@Test
 	public void windowingTest1(){
 		list.sort(Segment::compareTo);
-		Pst abr = new Pst(list);
+		BasicPst abr = new BasicPst(list);
 		ArrayList<Segment> segs = abr.windowing(new Segment(0,78,1,89));
 		//abr.printPst(abr.getRoot(),"");//used to see the Pst in terminal
 		System.out.println(segs.size());
