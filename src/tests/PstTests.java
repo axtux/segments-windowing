@@ -7,6 +7,7 @@ import java.util.List;
 
 import data.BasicPst;
 import data.Node;
+import data.Pst;
 import data.Segment;
 import org.junit.Before;
 import org.junit.Test;
@@ -121,8 +122,8 @@ public class PstTests {
 	@Test
 	public void windowingTest1(){
 		list.sort(Segment::compareTo);
-		BasicPst abr = new BasicPst(list);
-		ArrayList<Segment> segs = abr.windowing(new Segment(0,78,1,89));
+		Pst abr = new Pst(list);
+		ArrayList<Segment> segs = abr.getWindow(new Segment(0,3,1,89));
 		//abr.printPst(abr.getRoot(),"");//used to see the BasicPst in terminal
 		System.out.println(segs.size());
 		for (Segment s:segs) {
