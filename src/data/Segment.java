@@ -43,6 +43,20 @@ public class Segment implements Comparable<Segment> {
 		return y2;
 	}
 	/**
+	 * Create new segment with opposed coordinates. All coordinates are opposed. Segment(1, 1, 1, 1) becomes (-1, -1, -1, -1).
+	 * @return New segment with opposed coordinates build from constructor to get coordinates ordered.
+	 */
+	public Segment oppose() {
+		return new Segment(-x1, -x2, -y1, -y2);
+	}
+	/**
+	 * Create new segment with exchanged coordinates. X coordinates become Y coordinates and inversely. Segment(1, 1, 2, 2) becomes (2, 2, 1, 1).
+	 * @return New segment with exchanged coordinates build from constructor to get coordinates ordered.
+	 */
+	public Segment exchange() {
+		return new Segment(y1, y2, x1, x2);
+	}
+	/**
 	 * Compare y1 then y2 if y1 is equal.
 	 */
 	public int compareTo(Segment o) {
