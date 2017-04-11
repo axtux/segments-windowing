@@ -17,20 +17,19 @@ public class BasicPst {
 	 * @param list a list of element sorted in y
 	 */
 	private PstNode construct(Array<Segment> list) {
-		//for the method list.sublist() , the first index is inclusive and the second exclusive
-		PstNode temp = null;
-		if (list.size()>=3) {
-			temp=new PstNode(list.remove(getMinX(list)), (list.get((list.size()-1)/2).getY1()) );
-			temp.setLeft(construct(list.subArray(0,(list.size())/2)));
-			temp.setRight(construct(list.subArray((list.size())/2,list.size())));
-		} else if (list.size()==1) {
-			//base case where the sub tree containt one element
-			temp=new PstNode(list.remove(getMinX(list)));//median is null ( it's a leaf)
-		} else if (list.size()==2){ //base case where subtree containt two element
-			temp=new PstNode(list.remove(getMinX(list)), (list.get(0).getY1()));//the median is the y1 of the unique son
-			temp.setLeft(new PstNode(list.remove(0)));
+		if(list == null || list.size() == 0) return null;
+		
+		// attribute Segment containing minimum X to this node
+		PstNode temp = new PstNode(list.remove(getMinX(list)));
+		
+		if(list.size() == 0) {
+			return temp;
 		}
-		//case size == 0 , do nothing
+		
+		int median = (list.size()-1)/2;
+		temp.setMedian(list.get(median).getY1());
+		temp.setLeft(construct(list.subArray(0, median)));
+		temp.setRight(construct(list.subArray(median, list.size())));
 		return temp;
 	}
 
