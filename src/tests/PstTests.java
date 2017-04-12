@@ -1,5 +1,6 @@
 package tests;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
@@ -163,7 +164,7 @@ public class PstTests {
 		Pst abr = new Pst(list);
 		ArrayList<Segment> segs = abr.getWindow(new Segment(0,5,0,5));
 		//abr.getOriginal().printPst();//used to see the BasicPst in terminal
-		System.out.println(abr.getOriginal().getRoot().toString());
+		//System.out.println(abr.getOriginal().getRoot().toString());
 		/*System.out.println(segs.size());
 		for (Segment s:segs) {
 			System.out.println(s.toString());
@@ -195,20 +196,52 @@ public class PstTests {
 		ArrayList<Segment> segs = abr.getWindow(new Segment(0,5,0,5));
 		assertTrue(segs.contains(new Segment(20,-20,2,2)));
 		assertTrue(segs.contains(new Segment(2,2,20,-20)));
-		System.out.println(segs.size());
+		/*System.out.println(segs.size());
 		for (Segment s:segs) {
 			System.out.println(s.toString());
-		}
+		}*/
 	}
 
 	@Test
 	public void windowingTest4(){
-
+		ArrayList<Segment> segments=new ArrayList<Segment>();
+		segments.add(new Segment(-42,0,2,2));//in and horyzontal
+		segments.add(new Segment(5,45,1,1));//in and at the border
+		segments.add(new Segment(-42,10,0,0));//in the border and beyond
+		segments.add(new Segment(2,2,0,2));//in and vertical
+		segments.add(new Segment(1,1,-5,2));// in and behind
+		segments.add(new Segment(0,0,10,2));// in and beyond
+		segments.add(new Segment(3,3,-42,42));//goes throught
+		ArrayList<Segment> verification=new ArrayList<>();
+		verification.addAll(segments);
+		segments.add(new Segment(6,28,2,2));
+		segments.add(new Segment(2,2,6,8));
+		segments.add(new Segment(2,2,-4,-7));
+		segments.add(new Segment(41,43,42,42));
+		Pst abr = new Pst(segments);
+		ArrayList<Segment> segs = abr.getWindow(new Segment(Integer.MIN_VALUE,5,0,5));
+		/*System.out.println(segs.size());
+		for (Segment s:segs) {
+			System.out.println(s.toString());
+		}*/
+		for (Segment s:segs) {
+			assertTrue(verification.contains(s));
+		}
 	}
 
 	@Test
 	public void windowingTest5(){
-
+		Pst abr = new Pst(list);
+		ArrayList<Segment> window1 = abr.getWindow(new Segment(Integer.MIN_VALUE,5,0,5));
+		ArrayList<Segment> window2 = abr.getWindow(new Segment(3,Integer.MAX_VALUE,0,5));
+		ArrayList<Segment> window3 = abr.getWindow(new Segment(0,5,Integer.MIN_VALUE,5));
+		ArrayList<Segment> window4 = abr.getWindow(new Segment(5,0,5,Integer.MAX_VALUE));
+		ArrayList<Segment> window5 = abr.getWindow(new Segment(0,5,0,5));
+		assertFalse(window1.isEmpty());
+		assertFalse(window2.isEmpty());
+		assertFalse(window3.isEmpty());
+		assertFalse(window4.isEmpty());
+		assertFalse(window5.isEmpty());
 	}
 
 }
