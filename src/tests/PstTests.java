@@ -91,7 +91,7 @@ public class PstTests {
 				assertTrue(Math.min(n1.getSegment().getX1(),n1.getSegment().getX2())<=Math.min(n2.getSegment().getX1(),n2.getSegment().getX2()));
 			}
 		}
-		//abr.printPst(abr.getRoot(),"");//used to see the BasicPst in terminal
+		//abr.printPst();//used to see the BasicPst in terminal
 
 	}
 
@@ -162,7 +162,8 @@ public class PstTests {
 		verification.add(new Segment(4,4,4,15));//in hory
 		Pst abr = new Pst(list);
 		ArrayList<Segment> segs = abr.getWindow(new Segment(0,5,0,5));
-		//abr.getOriginal().printPst(abr.getOriginal().getRoot(),"");//used to see the BasicPst in terminal
+		//abr.getOriginal().printPst();//used to see the BasicPst in terminal
+		System.out.println(abr.getOriginal().getRoot().toString());
 		/*System.out.println(segs.size());
 		for (Segment s:segs) {
 			System.out.println(s.toString());
