@@ -89,4 +89,27 @@ public class PstNode {
 		this.segment = segment;
 		this.median = median;
 	}
+	/**
+	 * String representation of this node and sub nodes.
+	 */
+	public String toString() {
+		return toString("")+"\n";
+	}
+	/**
+	 * This method print a BasicPst wich the root is given in parameter using the printSeg() method in Segment.
+	 * @param temp the root of the tree to be print
+	 * @param acc the Symbol of a node ( examples : @,|,(), ...)
+	 */
+	private String toString(String prefix) {
+		String s = prefix + segment;
+		
+		if(left != null) {
+			s += "\nl-son:"+left.toString(prefix+"|-----");
+		}
+		if(right != null) {
+			s += "\nr-son:"+right.toString(prefix+"|-----");
+		}
+		
+		return s;
+	}
 }
