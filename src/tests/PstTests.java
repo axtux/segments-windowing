@@ -1,16 +1,17 @@
 package tests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import data.BasicPst;
-import data.PstNode;
-import data.Pst;
-import data.Segment;
 import org.junit.Before;
 import org.junit.Test;
+
+import data.BasicPst;
+import data.Pst;
+import data.PstNode;
+import data.Segment;
 
 /**
  * Created by marco on 5/04/17.
