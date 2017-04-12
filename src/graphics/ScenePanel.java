@@ -64,10 +64,10 @@ public class ScenePanel extends JPanel {
 		window = window.getWindow();
 		
 		ArrayList<Segment> tmp = new ArrayList<Segment>(4);
-		tmp.add(new Segment(window.getX1(), window.getY1(), window.getX1(), window.getY2()));
-		tmp.add(new Segment(window.getX1(), window.getY2(), window.getX2(), window.getY2()));
-		tmp.add(new Segment(window.getX2(), window.getY2(), window.getX2(), window.getY1()));
-		tmp.add(new Segment(window.getX2(), window.getY1(), window.getX1(), window.getY1()));
+		tmp.add(new Segment(window.getX1(), window.getX1(), window.getY1(), window.getY2()));
+		tmp.add(new Segment(window.getX1(), window.getX2(), window.getY2(), window.getY2()));
+		tmp.add(new Segment(window.getX2(), window.getX2(), window.getY2(), window.getY1()));
+		tmp.add(new Segment(window.getX2(), window.getX1(), window.getY1(), window.getY1()));
 		
 		// compute segments relative to graphics axis
 		for(Segment s : tmp) {
