@@ -80,10 +80,18 @@ public class BasicPst {
 	 * @return Reported segments (can be viewed through window).
 	 */
 	public Array<Segment> windowing(Segment window){
+		return windowing(window, true, true);
+	}
+	/**
+	 * Apply windowing algorithm using root node, reporting viewed segments through window.
+	 * @param window Only segments viewed through this window will be reported.
+	 * @return Reported segments (can be viewed through window).
+	 */
+	public Array<Segment> windowing(Segment window, boolean down, boolean center) {
 		window = window.getWindow();
 		
 		Array<PstNode> reported = new Array<PstNode>();
-		subWindowing(root, window, reported);
+		subWindowing(root, window, reported, down, center);
 		
 		Array<Segment> response = new Array<Segment>(reported.size());
 		// get segments and reset flag
@@ -100,22 +108,28 @@ public class BasicPst {
 	 * @param window Only nodes with a segment viewed through this window will be reported.
 	 * @param reported Array into which reported node will be added.
 	 */
-	public void subWindowing(PstNode node, Segment window, Array<PstNode> reported) {
+	private void subWindowing(PstNode node, Segment window, Array<PstNode> reported, boolean down, boolean center) {
 		if(node == null) return;
 		
 		Segment s = node.getSegment();
+		
+		// if we don't need center, we can cut earlier
+		if(center && s.getMinX() > window.getX1()) return;
+		
 		// segment and all child nodes are below window
 		if(s.getMinX() > window.getX2()) return;
 		
 		// check if this node has to be reported
-		report(node, window, reported);
+		report(node, window, reported, down, center);
 		
-		// we can't avoid this as we need segments starting down the window
-		subWindowing(node.getLeft(), window, reported);
+		// we can avoid this if we don't look for segments under window
+		if(!down && node.getMedian() >= window.getY1()) {
+			subWindowing(node.getLeft(), window, reported, down, center);
+		}
 		
 		// only go to right when needed
 		if(node.getMedian() <= window.getY2()) {
-			subWindowing(node.getRight(), window, reported);
+			subWindowing(node.getRight(), window, reported, down, center);
 		}
 	}
 	/**
@@ -124,7 +138,7 @@ public class BasicPst {
 	 * @param window Node is only reported if its segment can be viewed through that window.
 	 * @param reported Array to add reported node.
 	 */
-	public void report(PstNode node, Segment window, Array<PstNode> reported) {
+	public void report(PstNode node, Segment window, Array<PstNode> reported, boolean down, boolean center) {
 		if(node.getFlag()) {
 			// already reported
 			return;
@@ -133,8 +147,12 @@ public class BasicPst {
 		boolean report  = false;
 		Segment s = node.getSegment();
 		
-		report = report || reportCenter(s, window);
-		report = report || reportDown(s, window);
+		if(center) {
+			report = report || reportCenter(s, window);
+		}
+		if(down) {
+			report = report || reportDown(s, window);
+		}
 		report = report || reportLeft(s, window);
 		
 		if(report) {
