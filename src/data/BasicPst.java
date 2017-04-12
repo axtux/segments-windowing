@@ -248,8 +248,13 @@ public class BasicPst {
 
 		if (ReportType.NormalWindow.equals(type)) {
 			if (!n.getFlag()
-							&& ((window.getY1() <= root.getSegment().getY1() && window.getX1() <= Math.min(n.getSegment().getX1(), n.getSegment().getX2()))
-							|| (window.getY2() >= root.getSegment().getY2() && window.getX2() >= Math.max(n.getSegment().getX1(), n.getSegment().getX2())))
+							&& ((window.getY1() <= n.getSegment().getY1() && window.getY2()>=n.getSegment().getY1()
+							&& window.getX1() <= Math.min(n.getSegment().getX1(), n.getSegment().getX2())
+							&& window.getX2() >= Math.min(n.getSegment().getX1(), n.getSegment().getX2()))//first end point
+							||
+							(window.getY1() <= n.getSegment().getY2() && window.getY2()>=n.getSegment().getY2()
+							&& window.getX1() <= Math.max(n.getSegment().getX1(), n.getSegment().getX2())
+							&& window.getX2() >= Math.max(n.getSegment().getX1(), n.getSegment().getX2())))//second end point
 							){
 
 				n.setFlag(true);
