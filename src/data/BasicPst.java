@@ -195,30 +195,29 @@ public class BasicPst {
 		}
 		
 		boolean report  = false;
+		Segment s = n.getSegment();
 		
 		if (ReportType.NormalWindow.equals(type)) {
-			report = reportCenter(n, window);
+			report = reportCenter(s, window);
 		}
 		
 		if (ReportType.DownWindow.equals(type)) {
-			report = reportDown(n, window);
+			report = reportDown(s, window);
 		}
 		
 		if (ReportType.LeftWindow.equals(type)) {
-			report = reportLeft(n, window);
+			report = reportLeft(s, window);
 		}
 		
 		if(report) {
 			n.setFlag(true);
-			return n.getSegment();
+			return s;
 		}
 		
 		return null;
 	}
 	
-	private boolean reportCenter(PstNode n, Segment window) {
-		Segment s = n.getSegment();
-		
+	private boolean reportCenter(Segment s, Segment window) {
 		// minimum Y in window center
 		if(window.getY1() <= s.getY1() && window.getY2() >= s.getY1()) {
 			// minimum X in window center
@@ -236,9 +235,7 @@ public class BasicPst {
 		
 		return false;
 	}
-	private boolean reportDown(PstNode n, Segment window) {
-		Segment s = n.getSegment();
-		
+	private boolean reportDown(Segment s, Segment window) {
 		// vertical segment
 		if (s.getX1() == s.getX2()) {
 			// X1 in window (and X2 because X1==X2)
@@ -252,9 +249,7 @@ public class BasicPst {
 		
 		return false;
 	}
-	private boolean reportLeft(PstNode n, Segment window) {
-		Segment s = n.getSegment();
-		
+	private boolean reportLeft(Segment s, Segment window) {
 		// horizontal segment
 		if (s.getY1() == s.getY2()) {
 			// Y1 in window (and Y2 because Y1==Y2)
