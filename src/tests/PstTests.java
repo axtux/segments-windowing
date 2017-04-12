@@ -107,12 +107,12 @@ public class PstTests {
 		List<Segment> leftSegments = listofSonsData(root.getLeft());
 		List<Segment> rightSegments = listofSonsData(root.getRight());
 		
-		System.out.println("sons left "+leftSegments.size());
+		//System.out.println("sons left "+leftSegments.size());
 		for (Segment s : leftSegments) {
 			//System.out.println(s.toString());
 			assertTrue(s.getY1() <= median);
 		}
-		System.out.println("Sons right "+rightSegments.size());
+		//System.out.println("Sons right "+rightSegments.size());
 		for (Segment s : rightSegments) {
 			//System.out.println(s.toString());
 			assertTrue(s.getY1() >= median);
@@ -130,7 +130,7 @@ public class PstTests {
 		ArrayList<PstNode> nodes = listofNodes(abr.getRoot());
 		//System.out.println(nodes.size());
 		for (PstNode n:nodes) {
-			System.out.println(n.getSegment().toString()); //to verify that all the nodes are present
+			//System.out.println(n.getSegment().toString()); //to verify that all the nodes are present
 			submedianTest(n);
 		}
 	}
@@ -152,12 +152,12 @@ public class PstTests {
 		list.add(new Segment(0,0,-5,-4));//not in , y down
 		list.add(new Segment(5,5,6,8));//not in , y up
 		Pst abr = new Pst(list);
-		ArrayList<Segment> segs = abr.getWindow(new Segment(0,1,0,1));
+		ArrayList<Segment> segs = abr.getWindow(new Segment(0,5,0,5));
 		//abr.getOriginal().printPst(abr.getOriginal().getRoot(),"");//used to see the BasicPst in terminal
-		/*System.out.println(segs.size());
+		System.out.println(segs.size());
 		for (Segment s:segs) {
 			System.out.println(s.toString());
-		}*/
+		}
 	}
 
 }
