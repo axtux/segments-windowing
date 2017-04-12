@@ -98,24 +98,6 @@ public class BasicPst {
 			ArrayList<Segment> answer2=subWindowing(window2,root, ReportType.DownWindow);
 			answer.addAll(answer2);
 		}
-		/*if (window.getX2() == Integer.MAX_VALUE) {
-			Segment window2=new Segment(window.getX1(),window.getX2(),window.getY2(),Integer.MAX_VALUE);
-			//case to add too with infinity in x2,y2
-			ArrayList<Segment> answer2=subWindowing(window2,root);
-			answer.addAll(answer2);
-		}
-		if (window.getY1() == Integer.MIN_VALUE) {
-			Segment window2=new Segment(Integer.MIN_VALUE,window.getX1(),window.getY1(),window.getY2());
-			// """ """"  x1,y1
-			ArrayList<Segment> answer2=subWindowing(window2,root);
-			answer.addAll(answer2);
-		}
-		if (window.getY2() == Integer.MAX_VALUE) {
-			Segment window2=new Segment(window.getX2(),Integer.MAX_VALUE,window.getY1(),window.getY2());
-			//""""  x2,y2
-			ArrayList<Segment> answer2=subWindowing(window2,root);
-			answer.addAll(answer2);
-		}*/
 		else {
 			Segment window2=new Segment(Integer.MIN_VALUE,window.getX1(),window.getY1(),window.getY2());
 			Segment window3=new Segment(window.getX1(),window.getX1(),Integer.MIN_VALUE,window.getY1());
@@ -157,20 +139,7 @@ public class BasicPst {
 					}
 				}
 			}
-			/*if (window.getX2() == Integer.MAX_VALUE && window.getY2() != Integer.MAX_VALUE) {//the window is without min in x : [x1;+infinity]X[y1,y2]
-				Segment s =report(root,window);
-				if (s!=null)
-					rep.add(s);
-				//it will do nothing if the node is not in the x window
-				if (window.getY1() < root.getMedian() && window.getY2() < root.getMedian())
-					rep.addAll(subWindowing(window, root.getLeft()));
-				if (window.getY1() > root.getMedian() && window.getY2() > root.getMedian())
-					rep.addAll(subWindowing(window, root.getRight()));
-				if (window.getY1() <= root.getMedian() && window.getY2() >= root.getMedian()) {
-					rep.addAll(subWindowing(window, root.getLeft()));
-					rep.addAll(subWindowing(window, root.getRight()));
-				}
-			}*/
+
 			if (window.getY1() == Integer.MIN_VALUE) {
 				//the window is without min in y : [x1;x2]X[-infinity,y2] ,or special case : [-infinity;x2]X[-infinity, y2]
 
@@ -187,33 +156,6 @@ public class BasicPst {
 					}
 				}
 			}
-			/*
-			if (window.getY2() == Integer.MAX_VALUE && window.getX2()!=Integer.MAX_VALUE) {//the window is without max in y : [x1;x2]X[y1,+infinity]
-				if (Math.min(root.getData().getX1(), root.getData().getX2()) <= window.getX2()) {
-					//we can continue because all the element in the subtree aren't greater than the window in x
-					Segment s =report(root,window);
-					if (s!=null)
-						rep.add(s);
-					if (window.getY1() <= root.getMedian()) {
-						rep.addAll(subWindowing(window, root.getLeft()));
-						rep.addAll(subWindowing(window, root.getRight()));
-					}
-					if (window.getY1() > root.getMedian())
-						rep.addAll(subWindowing(window, root.getRight()));
-				}
-			}
-			if (window.getY2() == Integer.MAX_VALUE && window.getX2()==Integer.MAX_VALUE) {// special case : [x1;+infinity]X[y1,+infinity]
-
-				Segment s =report(root,window);
-				if (s!=null)
-					rep.add(s);
-				if (window.getY1() <= root.getMedian()) {
-					rep.addAll(subWindowing(window, root.getLeft()));
-					rep.addAll(subWindowing(window, root.getRight()));
-				}
-				if (window.getY1() > root.getMedian())
-					rep.addAll(subWindowing(window, root.getRight()));
-			}*/
 
 			else {//case of a limited window
 
@@ -266,7 +208,7 @@ public class BasicPst {
 			if (!n.getFlag()
 							&& n.getSegment().getX1()==n.getSegment().getX2()//vertical segment
 							&& window.getX1()<= n.getSegment().getX1() && n.getSegment().getX1() <=window.getX2()//in the window
-							&& n.getSegment().getY2()>=window.getY1()//goes throught the true window
+							&& n.getSegment().getY2()>=window.getY2()//goes throught the true window
 							){
 
 				n.setFlag(true);
@@ -278,7 +220,7 @@ public class BasicPst {
 			if (!n.getFlag()
 							&& n.getSegment().getY1()==n.getSegment().getY2()//horyzontal segment
 							&& window.getY1()<= n.getSegment().getY1() && n.getSegment().getY1() <=window.getY2()//in the window
-							&& n.getSegment().getX2()>=window.getX1()//goes throught the true window
+							&& Math.max(n.getSegment().getX1(),n.getSegment().getX2())>=window.getX2()//goes throught the true window
 							){
 
 				n.setFlag(true);

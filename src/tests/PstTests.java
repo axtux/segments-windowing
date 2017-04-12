@@ -143,7 +143,7 @@ public class PstTests {
 		list.add(new Segment(0,5,1,1));//in vert
 		list.add(new Segment(-4,1,2,2));//in vert
 		list.add(new Segment(4,15,3,3));//in vert
-		/*list.add(new Segment(1,1,1,2));//in horyzontal
+		list.add(new Segment(1,1,1,2));//in horyzontal
 		list.add(new Segment(2,2,0,5));//in hory
 		list.add(new Segment(3,3,-4,1));//in hory
 		list.add(new Segment(4,4,4,15));//in hory*/
