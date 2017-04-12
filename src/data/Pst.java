@@ -39,6 +39,7 @@ public class Pst {
 	
 	public ArrayList<Segment> getWindow(Segment window) {
 		window = window.getWindow();
+		System.out.println("selected window "+window);
 		
 		if(window.getMinX() == Integer.MIN_VALUE) {
 			System.out.println("case [-∞, X']x[Y, Y']");
@@ -71,12 +72,12 @@ public class Pst {
 	
 	public ArrayList<Segment> getLeftWindow(Segment window) {
 		// this one is always efficient using windowing
-		return original.windowing(window.getWindow());
+		return original.windowing(window);
 	}
 	
 	public ArrayList<Segment> getRightWindow(Segment window) {
 		// oppose coordinates to be able to use efficient windowing
-		ArrayList<Segment> segments = opposed.windowing(window.oppose().getWindow());
+		ArrayList<Segment> segments = opposed.windowing(window.oppose());
 		// recover coordinates to original state
 		opposeArray(segments);
 		return segments;
@@ -84,7 +85,7 @@ public class Pst {
 	
 	public ArrayList<Segment> getDownWindow(Segment window) {
 		// exchange coordinates to be able to use efficient windowing
-		ArrayList<Segment> segments = exchanged.windowing(window.exchange().getWindow());
+		ArrayList<Segment> segments = exchanged.windowing(window.exchange());
 		// recover coordinates to original state
 		exchangeArray(segments);
 		return segments;
@@ -92,7 +93,7 @@ public class Pst {
 	
 	public ArrayList<Segment> getUpWindow(Segment window) {
 		// oppose and exchange coordinates to be able to use efficient windowing
-		ArrayList<Segment> segments = opposed_exchanged.windowing(window.oppose().exchange().getWindow());
+		ArrayList<Segment> segments = opposed_exchanged.windowing(window.oppose().exchange());
 		// recover coordinates to original state
 		opposeArray(segments);
 		exchangeArray(segments);
