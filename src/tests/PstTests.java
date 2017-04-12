@@ -146,18 +146,69 @@ public class PstTests {
 		list.add(new Segment(1,1,1,2));//in horyzontal
 		list.add(new Segment(2,2,0,5));//in hory
 		list.add(new Segment(3,3,-4,1));//in hory
-		list.add(new Segment(4,4,4,15));//in hory*/
+		list.add(new Segment(4,4,4,15));//in hory
 		list.add(new Segment(-5,-4,4,4));//not in ,x left
 		list.add(new Segment(8,9,5,5));//not in ,x right
 		list.add(new Segment(0,0,-5,-4));//not in , y down
 		list.add(new Segment(5,5,6,8));//not in , y up
+		ArrayList<Segment> verification=new ArrayList<Segment>();
+		verification.add(new Segment(1,2,0,0));//in vertical
+		verification.add(new Segment(0,5,1,1));//in vert
+		verification.add(new Segment(-4,1,2,2));//in vert
+		verification.add(new Segment(4,15,3,3));//in vert
+		verification.add(new Segment(1,1,1,2));//in horyzontal
+		verification.add(new Segment(2,2,0,5));//in hory
+		verification.add(new Segment(3,3,-4,1));//in hory
+		verification.add(new Segment(4,4,4,15));//in hory
 		Pst abr = new Pst(list);
 		ArrayList<Segment> segs = abr.getWindow(new Segment(0,5,0,5));
 		//abr.getOriginal().printPst(abr.getOriginal().getRoot(),"");//used to see the BasicPst in terminal
+		/*System.out.println(segs.size());
+		for (Segment s:segs) {
+			System.out.println(s.toString());
+		}*/
+		for (Segment s :segs) {
+			assertTrue(verification.contains(s));
+		}
+	}
+
+	/**
+	 * test if the vertical segment problem is fixed
+	 */
+	@Test
+	public void windowingTest2(){
+		list.add(new Segment(2,2,-1,2));
+		Pst abr = new Pst(list);
+		ArrayList<Segment> segs = abr.getWindow(new Segment(0,5,0,5));
+		assertTrue(segs.contains(new Segment(2,2,-1,2)));
+	}
+
+	/**
+	 * test if the segment throught the window are taken
+	 */
+	@Test
+	public void windowingTest3(){
+		list.add(new Segment(20,-20,2,2));
+		list.add(new Segment(2,2,20,-20));
+		Pst abr = new Pst(list);
+		ArrayList<Segment> segs = abr.getWindow(new Segment(0,5,0,5));
+		assertTrue(segs.contains(new Segment(20,-20,2,2)));
+		//assertTrue(segs.contains(new Segment(2,2,20,-20)));
+
 		System.out.println(segs.size());
 		for (Segment s:segs) {
 			System.out.println(s.toString());
 		}
+	}
+
+	@Test
+	public void windowingTest4(){
+
+	}
+
+	@Test
+	public void windowingTest5(){
+
 	}
 
 }
