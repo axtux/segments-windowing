@@ -59,7 +59,7 @@ public class Pst {
 			return getDownWindow(window);
 		}
 		
-		if(window.getMaxX() == Integer.MAX_VALUE) {
+		if(window.getMaxY() == Integer.MAX_VALUE) {
 			System.out.println("case [X, X']x[Y, +∞]");
 			// case [X, X']x[Y, +∞]
 			return getUpWindow(window);
