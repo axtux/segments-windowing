@@ -236,28 +236,32 @@ public class BasicPst {
 		return false;
 	}
 	private boolean reportDown(Segment s, Segment window) {
-		// vertical segment
-		if (s.getX1() == s.getX2()) {
-			// X1 in window (and X2 because X1==X2)
-			if(window.getX1() <= s.getX1() && s.getX1() <= window.getX2()) {
-				// crossing window Y2
-				if(s.getY1() <= window.getY2() && s.getY2() >= window.getY2()) {
-					return true;
-				}
+		// only report vertical segment
+		if (s.getX1() != s.getX2()) {
+			return false;
+		}
+		
+		// X1 in window (and X2 because X1==X2)
+		if(window.getX1() <= s.getX1() && s.getX1() <= window.getX2()) {
+			// crossing window Y2
+			if(s.getY1() <= window.getY2() && s.getY2() >= window.getY2()) {
+				return true;
 			}
 		}
 		
 		return false;
 	}
 	private boolean reportLeft(Segment s, Segment window) {
-		// horizontal segment
-		if (s.getY1() == s.getY2()) {
-			// Y1 in window (and Y2 because Y1==Y2)
-			if(window.getY1() <= s.getY1() && s.getY1() <= window.getY2()) {
-				// crossing window X2
-				if(s.getMaxX() >= window.getX2() && s.getMinX() <= window.getX2()) {
-					return true;
-				}
+		// only report horizontal segment
+		if (s.getY1() != s.getY2()) {
+			return false;
+		}
+		
+		// Y1 in window (and Y2 because Y1==Y2)
+		if(window.getY1() <= s.getY1() && s.getY1() <= window.getY2()) {
+			// crossing window X2
+			if(s.getMaxX() >= window.getX2() && s.getMinX() <= window.getX2()) {
+				return true;
 			}
 		}
 		
