@@ -115,60 +115,51 @@ public class BasicPst {
 	 * or an empty ArrayList if there is no Segment in the window.
 	 * The window have to be in that form : [x:x']X[y:y'] where {@code x<=x'} and {@code y<=y'}(prerequisite)
 	 * @param window a Segment object representing the window to apply
-	 * @param temp Temporary node.
+	 * @param node Temporary node.
 	 * @param reporting the reporting type to do
 	 * @return an ArrayList of the Segment, or an empty ArrayList
 	 */
-	public void subWindowing(Segment window, PstNode temp, Array<Segment> reported, ReportType reporting){
+	public void subWindowing(Segment window, PstNode node, Array<Segment> reported, ReportType reporting){
+		if(node == null) return;
 		
-		if (temp!=null) {
-
-			if (window.getX1() == Integer.MIN_VALUE) {//the window is without min in x : [-infinity;x2]X[y1,y2]
-
-				if (Math.min(temp.getSegment().getX1(), temp.getSegment().getX2()) <= window.getX2()) {
-					//we can continue because all the element in the subtree aren't greater than the window in x
-					report(temp,window,reported,reporting);
-					if (window.getY1() < temp.getMedian() && window.getY2() < temp.getMedian())
-						subWindowing(window, temp.getLeft(), reported, reporting);
-					if (window.getY1() > temp.getMedian() && window.getY2() > temp.getMedian())
-						subWindowing(window, temp.getRight(), reported, reporting);
-					if (window.getY1() <= temp.getMedian() && window.getY2() >= temp.getMedian()) {
-						subWindowing(window, temp.getLeft(), reported, reporting);
-						subWindowing(window, temp.getRight(), reported, reporting);
-					}
-				}
+		Segment s = node.getSegment();
+		// segment and all child nodes are below window
+		if(s.getMinX() > window.getX2()) return;
+		
+		if (window.getX1() == Integer.MIN_VALUE) {//the window is without min in x : [-infinity;x2]X[y1,y2]
+			report(node,window,reported,reporting);
+			if (window.getY1() < node.getMedian() && window.getY2() < node.getMedian())
+				subWindowing(window, node.getLeft(), reported, reporting);
+			if (window.getY1() > node.getMedian() && window.getY2() > node.getMedian())
+				subWindowing(window, node.getRight(), reported, reporting);
+			if (window.getY1() <= node.getMedian() && window.getY2() >= node.getMedian()) {
+				subWindowing(window, node.getLeft(), reported, reporting);
+				subWindowing(window, node.getRight(), reported, reporting);
 			}
+		}
 
-			if (window.getY1() == Integer.MIN_VALUE) {
-				//the window is without min in y : [x1;x2]X[-infinity,y2] ,or special case : [-infinity;x2]X[-infinity, y2]
-
-				if (Math.min(temp.getSegment().getX1(), temp.getSegment().getX2()) <= window.getX2()) {
-					//we can continue because all the element in the subtree aren't greater than the window in x
-					report(temp,window,reported,reporting);
-					if (window.getY2() < temp.getMedian())
-						subWindowing(window, temp.getLeft(), reported, reporting);
-					if (window.getY2() >= temp.getMedian()) {
-						subWindowing(window, temp.getLeft(), reported, reporting);
-						subWindowing(window, temp.getRight(), reported, reporting);
-					}
-				}
+		if (window.getY1() == Integer.MIN_VALUE) {
+			//the window is without min in y : [x1;x2]X[-infinity,y2] ,or special case : [-infinity;x2]X[-infinity, y2]
+			report(node,window,reported,reporting);
+			if (window.getY2() < node.getMedian())
+				subWindowing(window, node.getLeft(), reported, reporting);
+			if (window.getY2() >= node.getMedian()) {
+				subWindowing(window, node.getLeft(), reported, reporting);
+				subWindowing(window, node.getRight(), reported, reporting);
 			}
+		}
 
-			else {//case of a limited window
-
-				if (Math.min(temp.getSegment().getX1(), temp.getSegment().getX2()) <= window.getX2()) {
-					report(temp,window,reported,reporting);
-					//it will do nothing if the node is not in the x window
-					if (window.getY1() < temp.getMedian() && window.getY2() < temp.getMedian())
-						subWindowing(window, temp.getLeft(), reported, reporting);
-					if (window.getY1() > temp.getMedian() && window.getY2() > temp.getMedian())
-						subWindowing(window, temp.getRight(), reported, reporting);
-						//rep.addAll(subWindowing(window, temp.getLeft(), reporting));
-					if (window.getY1() <= temp.getMedian() && window.getY2() >= temp.getMedian()) {
-						subWindowing(window, temp.getLeft(), reported, reporting);
-						subWindowing(window, temp.getRight(), reported, reporting);
-					}
-				}
+		else {//case of a limited window
+			report(node,window,reported,reporting);
+			//it will do nothing if the node is not in the x window
+			if (window.getY1() < node.getMedian() && window.getY2() < node.getMedian())
+				subWindowing(window, node.getLeft(), reported, reporting);
+			if (window.getY1() > node.getMedian() && window.getY2() > node.getMedian())
+				subWindowing(window, node.getRight(), reported, reporting);
+				//rep.addAll(subWindowing(window, temp.getLeft(), reporting));
+			if (window.getY1() <= node.getMedian() && window.getY2() >= node.getMedian()) {
+				subWindowing(window, node.getLeft(), reported, reporting);
+				subWindowing(window, node.getRight(), reported, reporting);
 			}
 		}
 	}
