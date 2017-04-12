@@ -79,7 +79,7 @@ public class Scene {
 			return false;
 		}
 		
-		this.subWindow = this.window = window;
+		this.window = window;
 		return true;
 	}
 	/**
