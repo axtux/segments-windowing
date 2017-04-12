@@ -53,8 +53,9 @@ public class BasicPst {
 	 * @return Index of the Segment owning the minimum X value or -1 if list is null or if its size is 0.
 	 */
 	private static int getMinX(ArrayList<Segment> list) {
+
 		if(list == null || list.size() == 0) return -1;
-		
+
 		int min = 0;
 		for (int i = 1; i < list.size(); ++i){
 			if(list.get(i).getMinX() < list.get(min).getMinX()) {
@@ -221,14 +222,14 @@ public class BasicPst {
 		// minimum Y in window center
 		if(window.getY1() <= s.getY1() && window.getY2() >= s.getY1()) {
 			// minimum X in window center
-			if(window.getX1() <= s.getMinX() && window.getX2() >= s.getMinX()) {
+			if(window.getX1() <= s.getX1() && window.getX2() >= s.getX1()) {
 				return true;
 			}
 		}
 		// maximum Y in window center
 		if(window.getY1() <= s.getY2() && window.getY2() >= s.getY2()) {
 			// maximum X in window center
-			if(window.getX1() <= s.getMaxX() && window.getX2() >= s.getMaxX()) {
+			if(window.getX1() <= s.getX2() && window.getX2() >= s.getX2()) {
 				return true;
 			}
 		}

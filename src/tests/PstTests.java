@@ -193,8 +193,7 @@ public class PstTests {
 		Pst abr = new Pst(list);
 		ArrayList<Segment> segs = abr.getWindow(new Segment(0,5,0,5));
 		assertTrue(segs.contains(new Segment(20,-20,2,2)));
-		//assertTrue(segs.contains(new Segment(2,2,20,-20)));
-
+		assertTrue(segs.contains(new Segment(2,2,20,-20)));
 		System.out.println(segs.size());
 		for (Segment s:segs) {
 			System.out.println(s.toString());
