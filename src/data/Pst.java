@@ -67,7 +67,7 @@ public class Pst {
 		
 		System.out.println("case [X, X']x[Y, Y']");
 		// case [X, X']x[Y, Y']
-		return getLeftWindow(window);
+		return getClosedWindow(window);
 	}
 	
 	public ArrayList<Segment> getLeftWindow(Segment window) {
@@ -98,6 +98,19 @@ public class Pst {
 		opposeArray(segments);
 		exchangeArray(segments);
 		return segments;
+	}
+	
+	public ArrayList<Segment> getClosedWindow(Segment window) {
+		// get original left and center but not down to remove left children
+		Array<Segment> response = original.windowing(window, false, true);
+		
+		// get down with left of exchanged window
+		Array<Segment> down = exchanged.windowing(window.exchange(), false, false);
+		// recover coordinates to original state
+		exchangeArray(down);
+		response.addAll(down);
+		
+		return response;
 	}
 	
 	private void opposeArray(ArrayList<Segment> segments) {
