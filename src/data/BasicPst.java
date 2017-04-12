@@ -89,12 +89,20 @@ public class BasicPst {
 	 * @param window The window to apply ( has to e ordered )
 	 * @return An ArrayList with all the segment in the window, or otherwise an empty Arrraylist
 	 */
-	public ArrayList<Segment> windowing(Segment window){
+	public Array<Segment> windowing(Segment window){
 		window = window.getWindow();
 		
-		Array<Segment> reported = new Array<Segment>();
+		Array<PstNode> reported = new Array<PstNode>();
 		subWindowing(root, window, reported);
-		return reported;
+		
+		Array<Segment> response = new Array<Segment>(reported.size());
+		// get segments and reset flag
+		for(PstNode n : reported) {
+			response.add(n.getSegment());
+			n.setFlag(false);
+		}
+		
+		return response;
 	}
 
 	/**
@@ -106,7 +114,7 @@ public class BasicPst {
 	 * @param reporting the reporting type to do
 	 * @return an ArrayList of the Segment, or an empty ArrayList
 	 */
-	public void subWindowing(PstNode node, Segment window, Array<Segment> reported) {
+	public void subWindowing(PstNode node, Segment window, Array<PstNode> reported) {
 		if(node == null) return;
 		
 		Segment s = node.getSegment();
@@ -135,22 +143,22 @@ public class BasicPst {
 	 * @param type a ReportType enumeration to know wich type of report to do
 	 * @return Reported segment if reported or null.
 	 */
-	public void report(PstNode n, Segment window, Array<Segment> reported) {
-		if(n.getFlag()) {
+	public void report(PstNode node, Segment window, Array<PstNode> reported) {
+		if(node.getFlag()) {
 			// already reported
 			return;
 		}
 		
 		boolean report  = false;
-		Segment s = n.getSegment();
+		Segment s = node.getSegment();
 		
 		report = report || reportCenter(s, window);
 		report = report || reportDown(s, window);
 		report = report || reportLeft(s, window);
 		
 		if(report) {
-			n.setFlag(true);
-			reported.add(s);
+			node.setFlag(true);
+			reported.add(node);
 		}
 	}
 	
