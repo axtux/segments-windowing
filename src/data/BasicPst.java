@@ -65,22 +65,13 @@ public class BasicPst {
 		return min;
 	}
 	/**
-	 * This method print a BasicPst wich the root is given in parameter using the printSeg() method in Segment.
-	 * @param temp the root of the tree to be print
-	 * @param acc the Symbol of a node ( examples : @,|,(), ...)
+	 * Print root node.
 	 */
-	public void printPst(PstNode temp, String acc) {
-
-		System.out.print(acc + temp.getSegment());
-		if (temp.getLeft() != null) {
-			System.out.println();
-			System.out.print("l-son:");
-			printPst(temp.getLeft(), acc+"|-----");
-		}
-		if (temp.getRight() != null) {
-			System.out.println();
-			System.out.print("r-son:");
-			printPst(temp.getRight(), acc+"|-----");
+	public void printPst() {
+		if(root == null) {
+			System.out.println("null");
+		} else {
+			System.out.println(root.toString());
 		}
 	}
 	/**
