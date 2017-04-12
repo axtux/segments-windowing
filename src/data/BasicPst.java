@@ -114,7 +114,7 @@ public class BasicPst {
 		Segment s = node.getSegment();
 		
 		// if we don't need center, we can cut earlier
-		if(center && s.getMinX() > window.getX1()) return;
+		if(!center && s.getMinX() > window.getX1()) return;
 		
 		// segment and all child nodes are below window
 		if(s.getMinX() > window.getX2()) return;
@@ -123,7 +123,7 @@ public class BasicPst {
 		report(node, window, reported, down, center);
 		
 		// we can avoid this if we don't look for segments under window
-		if(!down && node.getMedian() >= window.getY1()) {
+		if(down || node.getMedian() >= window.getY1()) {
 			subWindowing(node.getLeft(), window, reported, down, center);
 		}
 		
@@ -174,6 +174,7 @@ public class BasicPst {
 				return true;
 			}
 		}
+		/* this one will be reported by another report
 		// maximum Y in window center
 		if(window.getY1() <= s.getY2() && window.getY2() >= s.getY2()) {
 			// corresponding X in window center
@@ -181,7 +182,7 @@ public class BasicPst {
 				return true;
 			}
 		}
-		
+		//*/
 		return false;
 	}
 	/**
