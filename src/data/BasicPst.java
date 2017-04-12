@@ -83,11 +83,10 @@ public class BasicPst {
 			printPst(temp.getRight(), acc+"|-----");
 		}
 	}
-
 	/**
-	 * this method apply the windowing on the BasicPst
-	 * @param window The window to apply ( has to e ordered )
-	 * @return An ArrayList with all the segment in the window, or otherwise an empty Arrraylist
+	 * Apply windowing algorithm using root node, reporting viewed segments through window.
+	 * @param window Only segments viewed through this window will be reported.
+	 * @return Reported segments (can be viewed through window).
 	 */
 	public Array<Segment> windowing(Segment window){
 		window = window.getWindow();
@@ -104,15 +103,11 @@ public class BasicPst {
 		
 		return response;
 	}
-
 	/**
-	 * This method apply the subWindowing method on the BasicPst and return an ArrayList with the Segment in it where the segment have one end-point in it,
-	 * or an empty ArrayList if there is no Segment in the window.
-	 * The window have to be in that form : [x:x']X[y:y'] where {@code x<=x'} and {@code y<=y'}(prerequisite)
-	 * @param window a Segment object representing the window to apply
-	 * @param node Temporary node.
-	 * @param reporting the reporting type to do
-	 * @return an ArrayList of the Segment, or an empty ArrayList
+	 * Apply windowing algorithm using node as Pst root node, reporting viewed nodes through window into reported.
+	 * @param node Root node to use to make windowing.
+	 * @param window Only nodes with a segment viewed through this window will be reported.
+	 * @param reported Array into which reported node will be added.
 	 */
 	public void subWindowing(PstNode node, Segment window, Array<PstNode> reported) {
 		if(node == null) return;
@@ -132,14 +127,11 @@ public class BasicPst {
 			subWindowing(node.getRight(), window, reported);
 		}
 	}
-	
 	/**
-	 * return the segment (Node data) if it's in the window that we choose
-	 * and it hasn't been visited, or null otherwise
-	 * @param n Node to report
-	 * @param window a Segment wich represents the window
-	 * @param type a ReportType enumeration to know wich type of report to do
-	 * @return Reported segment if reported or null.
+	 * Add node to reported if node segment can be viewed through window.
+	 * @param node Node to check.
+	 * @param window Node is only reported if its segment can be viewed through that window.
+	 * @param reported Array to add reported node.
 	 */
 	public void report(PstNode node, Segment window, Array<PstNode> reported) {
 		if(node.getFlag()) {
@@ -159,7 +151,12 @@ public class BasicPst {
 			reported.add(node);
 		}
 	}
-	
+	/**
+	 * Check that segment has at least one point into window.
+	 * @param s Segment to check.
+	 * @param window Window into which segment may be.
+	 * @return True if segment has at least one point into window. False otherwise.
+	 */
 	private boolean reportCenter(Segment s, Segment window) {
 		// minimum Y in window center
 		if(window.getY1() <= s.getY1() && window.getY2() >= s.getY1()) {
@@ -178,6 +175,12 @@ public class BasicPst {
 		
 		return false;
 	}
+	/**
+	 * Check that segment is crossing window down border.
+	 * @param s Segment to check.
+	 * @param window Window that segment may cross.
+	 * @return True if segment is crossing window down border. False otherwise.
+	 */
 	private boolean reportDown(Segment s, Segment window) {
 		// only report vertical segment
 		if (s.getX1() != s.getX2()) {
@@ -194,6 +197,12 @@ public class BasicPst {
 		
 		return false;
 	}
+	/**
+	 * Check that segment is crossing window left border.
+	 * @param s Segment to check.
+	 * @param window Window that segment may cross.
+	 * @return True if segment is crossing window left border. False otherwise.
+	 */
 	private boolean reportLeft(Segment s, Segment window) {
 		// only report horizontal segment
 		if (s.getY1() != s.getY2()) {
