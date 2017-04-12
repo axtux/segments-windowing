@@ -84,24 +84,11 @@ public class Scene {
 	}
 	
 	private boolean setSubWindow(Segment subWindow) {
-		int x1 = subWindow.getMinX();
-		int x2 = subWindow.getMaxX();
-		int y1 = subWindow.getMinY();
-		int y2 = subWindow.getMaxY();
-		
-		// restrict subWindow to window
-		if(x1 < window.getX1()) {
-			x1 = window.getX1();
-		}
-		if(x2 > window.getX2()) {
-			x2 = window.getX2();
-		}
-		if(y1 < window.getY1()) {
-			y1 = window.getY1();
-		}
-		if(y2 > window.getY2()) {
-			y2 = window.getY2();
-		}
+		// restrict sub window to window
+		int x1 = Math.max(subWindow.getMinX(), window.getMinX());
+		int x2 = Math.min(subWindow.getMaxX(), window.getMaxX());
+		int y1 = Math.max(subWindow.getMinY(), window.getMinY());
+		int y2 = Math.min(subWindow.getMaxY(), window.getMaxY());
 		
 		this.subWindow = new Segment(x1, x2, y1, y2);
 		return true;
