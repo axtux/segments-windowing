@@ -221,14 +221,14 @@ public class BasicPst {
 	private boolean reportCenter(Segment s, Segment window) {
 		// minimum Y in window center
 		if(window.getY1() <= s.getY1() && window.getY2() >= s.getY1()) {
-			// minimum X in window center
+			// corresponding X in window center
 			if(window.getX1() <= s.getX1() && window.getX2() >= s.getX1()) {
 				return true;
 			}
 		}
 		// maximum Y in window center
 		if(window.getY1() <= s.getY2() && window.getY2() >= s.getY2()) {
-			// maximum X in window center
+			// corresponding X in window center
 			if(window.getX1() <= s.getX2() && window.getX2() >= s.getX2()) {
 				return true;
 			}
