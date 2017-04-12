@@ -194,45 +194,63 @@ public class BasicPst {
 			return null;
 		}
 		
+		boolean report  = false;
+		
 		if (ReportType.NormalWindow.equals(type)) {
-			if(
-				(window.getY1() <= n.getSegment().getY1() && window.getY2()>=n.getSegment().getY1()
-				&& window.getX1() <= Math.min(n.getSegment().getX1(), n.getSegment().getX2())
-				&& window.getX2() >= Math.min(n.getSegment().getX1(), n.getSegment().getX2()))//first end point
-				||
-				(window.getY1() <= n.getSegment().getY2() && window.getY2()>=n.getSegment().getY2()
-				&& window.getX1() <= Math.max(n.getSegment().getX1(), n.getSegment().getX2())
-				&& window.getX2() >= Math.max(n.getSegment().getX1(), n.getSegment().getX2()))//second end point
-			){
-				n.setFlag(true);
-				return n.getSegment();
-			}
+			report = reportCenter(n, window);
 		}
 		
 		if (ReportType.DownWindow.equals(type)) {
-			if (
-				n.getSegment().getX1()==n.getSegment().getX2()//vertical segment
-				&& window.getX1()<= n.getSegment().getX1() && n.getSegment().getX1() <=window.getX2()//in the window
-				&& n.getSegment().getY1()<=window.getY2()
-				&& n.getSegment().getY2()>=window.getY2()//goes throught or in the true window
-			){
-				n.setFlag(true);
-				return n.getSegment();
-			}
+			report = reportDown(n, window);
 		}
 		
 		if (ReportType.LeftWindow.equals(type)) {
-			if (
-				n.getSegment().getY1()==n.getSegment().getY2()//horyzontal segment
-				&& window.getY1()<= n.getSegment().getY1() && n.getSegment().getY1() <=window.getY2()//in the window
-				&& Math.max(n.getSegment().getX1(),n.getSegment().getX2())>=window.getX2()//goes throught or in the true window
-				&& Math.min(n.getSegment().getX1(),n.getSegment().getX2())<=window.getX2()
-			){
-				n.setFlag(true);
-				return n.getSegment();
-			}
+			report = reportLeft(n, window);
 		}
+		
+		if(report) {
+			n.setFlag(true);
+			return n.getSegment();
+		}
+		
 		return null;
+	}
+	
+	private boolean reportCenter(PstNode n, Segment window) {
+		if(
+			(window.getY1() <= n.getSegment().getY1() && window.getY2()>=n.getSegment().getY1()
+			&& window.getX1() <= Math.min(n.getSegment().getX1(), n.getSegment().getX2())
+			&& window.getX2() >= Math.min(n.getSegment().getX1(), n.getSegment().getX2()))//first end point
+			||
+			(window.getY1() <= n.getSegment().getY2() && window.getY2()>=n.getSegment().getY2()
+			&& window.getX1() <= Math.max(n.getSegment().getX1(), n.getSegment().getX2())
+			&& window.getX2() >= Math.max(n.getSegment().getX1(), n.getSegment().getX2()))//second end point
+		){
+			return true;
+		}
+		return false;
+	}
+	private boolean reportDown(PstNode n, Segment window) {
+		if (
+			n.getSegment().getX1()==n.getSegment().getX2()//vertical segment
+			&& window.getX1()<= n.getSegment().getX1() && n.getSegment().getX1() <=window.getX2()//in the window
+			&& n.getSegment().getY1()<=window.getY2()
+			&& n.getSegment().getY2()>=window.getY2()//goes throught or in the true window
+		){
+			return true;
+		}
+		return false;
+	}
+	private boolean reportLeft(PstNode n, Segment window) {
+		if (
+			n.getSegment().getY1()==n.getSegment().getY2()//horyzontal segment
+			&& window.getY1()<= n.getSegment().getY1() && n.getSegment().getY1() <=window.getY2()//in the window
+			&& Math.max(n.getSegment().getX1(),n.getSegment().getX2())>=window.getX2()//goes throught or in the true window
+			&& Math.min(n.getSegment().getX1(),n.getSegment().getX2())<=window.getX2()
+		){
+			return true;
+		}
+		return false;
 	}
 
 }
