@@ -124,13 +124,11 @@ public class BasicPst {
 		// check if this node has to be reported
 		report(node, window, reported);
 		
-		int median = node.getMedian();
-		
 		// we can't avoid this as we need segments starting down the window
 		subWindowing(node.getLeft(), window, reported);
 		
 		// only go to right when needed
-		if(median <= window.getY2()) {
+		if(node.getMedian() <= window.getY2()) {
 			subWindowing(node.getRight(), window, reported);
 		}
 	}
