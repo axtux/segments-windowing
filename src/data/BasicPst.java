@@ -127,9 +127,7 @@ public class BasicPst {
 
 				if (Math.min(temp.getSegment().getX1(), temp.getSegment().getX2()) <= window.getX2()) {
 					//we can continue because all the element in the subtree aren't greater than the window in x
-					Segment s =report(temp,window,reporting);
-					if (s!=null)
-						reported.add(s);
+					report(temp,window,reported,reporting);
 					if (window.getY1() < temp.getMedian() && window.getY2() < temp.getMedian())
 						subWindowing(window, temp.getLeft(), reported, reporting);
 					if (window.getY1() > temp.getMedian() && window.getY2() > temp.getMedian())
@@ -146,9 +144,7 @@ public class BasicPst {
 
 				if (Math.min(temp.getSegment().getX1(), temp.getSegment().getX2()) <= window.getX2()) {
 					//we can continue because all the element in the subtree aren't greater than the window in x
-					Segment s =report(temp,window,reporting);
-					if (s!=null)
-						reported.add(s);
+					report(temp,window,reported,reporting);
 					if (window.getY2() < temp.getMedian())
 						subWindowing(window, temp.getLeft(), reported, reporting);
 					if (window.getY2() >= temp.getMedian()) {
@@ -161,9 +157,7 @@ public class BasicPst {
 			else {//case of a limited window
 
 				if (Math.min(temp.getSegment().getX1(), temp.getSegment().getX2()) <= window.getX2()) {
-					Segment s =report(temp,window,reporting);
-					if (s!=null)
-						reported.add(s);
+					report(temp,window,reported,reporting);
 					//it will do nothing if the node is not in the x window
 					if (window.getY1() < temp.getMedian() && window.getY2() < temp.getMedian())
 						subWindowing(window, temp.getLeft(), reported, reporting);
@@ -187,10 +181,10 @@ public class BasicPst {
 	 * @param type a ReportType enumeration to know wich type of report to do
 	 * @return Reported segment if reported or null.
 	 */
-	public Segment report(PstNode n, Segment window, ReportType type){
+	public void report(PstNode n, Segment window, Array<Segment> reported, ReportType type){
 		if(n.getFlag()) {
 			// already reported
-			return null;
+			return;
 		}
 		
 		boolean report  = false;
@@ -210,10 +204,8 @@ public class BasicPst {
 		
 		if(report) {
 			n.setFlag(true);
-			return s;
+			reported.add(s);
 		}
-		
-		return null;
 	}
 	
 	private boolean reportCenter(Segment s, Segment window) {
