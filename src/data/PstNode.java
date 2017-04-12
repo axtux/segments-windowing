@@ -90,15 +90,16 @@ public class PstNode {
 		this.median = median;
 	}
 	/**
-	 * String representation of this node and sub nodes.
+	 * Print a node and all children.
+	 * @return String representation of this node and all children.
 	 */
 	public String toString() {
 		return toString("")+"\n";
 	}
 	/**
-	 * This method print a BasicPst wich the root is given in parameter using the printSeg() method in Segment.
-	 * @param temp the root of the tree to be print
-	 * @param acc the Symbol of a node ( examples : @,|,(), ...)
+	 * Print a node and all children with prefix before each line.
+	 * @param prefix Prefix to add at the beginning of each line.
+	 * @return String representation of this node and all children.
 	 */
 	private String toString(String prefix) {
 		String s = prefix + segment;
