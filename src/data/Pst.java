@@ -38,26 +38,33 @@ public class Pst {
 	}
 	
 	public ArrayList<Segment> getWindow(Segment window) {
+		window = window.getWindow();
+		
 		if(window.getMinX() == Integer.MIN_VALUE) {
+			System.out.println("case [-∞, X']x[Y, Y']");
 			// case [-∞, X']x[Y, Y']
 			return getLeftWindow(window);
 		}
 		
 		if(window.getMaxX() == Integer.MAX_VALUE) {
+			System.out.println("case case [X, +∞]x[Y, Y']");
 			// case [X, +∞]x[Y, Y']
 			return getRightWindow(window);
 		}
 		
 		if(window.getMinY() == Integer.MIN_VALUE) {
+			System.out.println("case [X, X']x[-∞, Y']");
 			// case [X, X']x[-∞, Y']
 			return getDownWindow(window);
 		}
 		
 		if(window.getMaxX() == Integer.MAX_VALUE) {
+			System.out.println("case [X, X']x[Y, +∞]");
 			// case [X, X']x[Y, +∞]
 			return getUpWindow(window);
 		}
 		
+		System.out.println("case [X, X']x[Y, Y']");
 		// case [X, X']x[Y, Y']
 		return getLeftWindow(window);
 	}
