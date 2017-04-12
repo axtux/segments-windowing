@@ -89,7 +89,8 @@ public class BasicPst {
 	 * @return An ArrayList with all the segment in the window, or otherwise an empty Arrraylist
 	 */
 	public ArrayList<Segment> windowing(Segment window){
-
+		window = window.getWindow();
+		
 		ArrayList<Segment> answer = subWindowing(window,root, ReportType.NormalWindow);
 
 		if (window.getX1() == Integer.MIN_VALUE) {
