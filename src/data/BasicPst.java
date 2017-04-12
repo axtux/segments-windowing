@@ -92,21 +92,22 @@ public class BasicPst {
 	public ArrayList<Segment> windowing(Segment window){
 		window = window.getWindow();
 		
-		ArrayList<Segment> answer = subWindowing(window,root, ReportType.NormalWindow);
+		Array<Segment> reported = new Array<Segment>();
+		subWindowing(window,root, reported, ReportType.NormalWindow);
 
 		if (window.getX1() == Integer.MIN_VALUE) {
 			Segment window2=new Segment(window.getX1(),window.getX2(),Integer.MIN_VALUE,window.getY1());
 			//case : two -infinity in x1 and y1
-			ArrayList<Segment> answer2=subWindowing(window2,root, ReportType.DownWindow);
-			answer.addAll(answer2);
+			subWindowing(window2,root, reported, ReportType.DownWindow);
 		}
 		else {
 			Segment window2=new Segment(Integer.MIN_VALUE,window.getX1(),window.getY1(),window.getY2());
 			Segment window3=new Segment(window.getX1(),window.getX1(),Integer.MIN_VALUE,window.getY1());
-			answer.addAll(subWindowing(window2,root, ReportType.LeftWindow));
-			answer.addAll(subWindowing(window3,root, ReportType.DownWindow));
+			subWindowing(window2,root, reported, ReportType.LeftWindow);
+			subWindowing(window3,root, reported, ReportType.DownWindow);
 		}
-		return answer;
+		
+		return reported;
 	}
 
 	/**
@@ -118,10 +119,8 @@ public class BasicPst {
 	 * @param reporting the reporting type to do
 	 * @return an ArrayList of the Segment, or an empty ArrayList
 	 */
-	public ArrayList<Segment> subWindowing(Segment window, PstNode temp, ReportType reporting){
-
-		ArrayList<Segment> rep=new ArrayList<Segment>();
-
+	public void subWindowing(Segment window, PstNode temp, Array<Segment> reported, ReportType reporting){
+		
 		if (temp!=null) {
 
 			if (window.getX1() == Integer.MIN_VALUE) {//the window is without min in x : [-infinity;x2]X[y1,y2]
@@ -130,14 +129,14 @@ public class BasicPst {
 					//we can continue because all the element in the subtree aren't greater than the window in x
 					Segment s =report(temp,window,reporting);
 					if (s!=null)
-						rep.add(s);
+						reported.add(s);
 					if (window.getY1() < temp.getMedian() && window.getY2() < temp.getMedian())
-						rep.addAll(subWindowing(window, temp.getLeft(), reporting));
+						subWindowing(window, temp.getLeft(), reported, reporting);
 					if (window.getY1() > temp.getMedian() && window.getY2() > temp.getMedian())
-						rep.addAll(subWindowing(window, temp.getRight(), reporting));
+						subWindowing(window, temp.getRight(), reported, reporting);
 					if (window.getY1() <= temp.getMedian() && window.getY2() >= temp.getMedian()) {
-						rep.addAll(subWindowing(window, temp.getLeft(), reporting));
-						rep.addAll(subWindowing(window, temp.getRight(), reporting));
+						subWindowing(window, temp.getLeft(), reported, reporting);
+						subWindowing(window, temp.getRight(), reported, reporting);
 					}
 				}
 			}
@@ -149,12 +148,12 @@ public class BasicPst {
 					//we can continue because all the element in the subtree aren't greater than the window in x
 					Segment s =report(temp,window,reporting);
 					if (s!=null)
-						rep.add(s);
+						reported.add(s);
 					if (window.getY2() < temp.getMedian())
-						rep.addAll(subWindowing(window, temp.getLeft(), reporting));
+						subWindowing(window, temp.getLeft(), reported, reporting);
 					if (window.getY2() >= temp.getMedian()) {
-						rep.addAll(subWindowing(window, temp.getLeft(), reporting));
-						rep.addAll(subWindowing(window, temp.getRight(), reporting));
+						subWindowing(window, temp.getLeft(), reported, reporting);
+						subWindowing(window, temp.getRight(), reported, reporting);
 					}
 				}
 			}
@@ -164,21 +163,20 @@ public class BasicPst {
 				if (Math.min(temp.getSegment().getX1(), temp.getSegment().getX2()) <= window.getX2()) {
 					Segment s =report(temp,window,reporting);
 					if (s!=null)
-						rep.add(s);
+						reported.add(s);
 					//it will do nothing if the node is not in the x window
 					if (window.getY1() < temp.getMedian() && window.getY2() < temp.getMedian())
-						rep.addAll(subWindowing(window, temp.getLeft(), reporting));
+						subWindowing(window, temp.getLeft(), reported, reporting);
 					if (window.getY1() > temp.getMedian() && window.getY2() > temp.getMedian())
-						rep.addAll(subWindowing(window, temp.getRight(), reporting));
+						subWindowing(window, temp.getRight(), reported, reporting);
 						//rep.addAll(subWindowing(window, temp.getLeft(), reporting));
 					if (window.getY1() <= temp.getMedian() && window.getY2() >= temp.getMedian()) {
-						rep.addAll(subWindowing(window, temp.getLeft(), reporting));
-						rep.addAll(subWindowing(window, temp.getRight(), reporting));
+						subWindowing(window, temp.getLeft(), reported, reporting);
+						subWindowing(window, temp.getRight(), reported, reporting);
 					}
 				}
 			}
 		}
-		return rep;
 	}
 
 	/**
