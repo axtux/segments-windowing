@@ -93,20 +93,7 @@ public class BasicPst {
 		window = window.getWindow();
 		
 		Array<Segment> reported = new Array<Segment>();
-		subWindowing(window,root, reported, ReportType.NormalWindow);
-
-		if (window.getX1() == Integer.MIN_VALUE) {
-			Segment window2=new Segment(window.getX1(),window.getX2(),Integer.MIN_VALUE,window.getY1());
-			//case : two -infinity in x1 and y1
-			subWindowing(window2,root, reported, ReportType.DownWindow);
-		}
-		else {
-			Segment window2=new Segment(Integer.MIN_VALUE,window.getX1(),window.getY1(),window.getY2());
-			Segment window3=new Segment(window.getX1(),window.getX1(),Integer.MIN_VALUE,window.getY1());
-			subWindowing(window2,root, reported, ReportType.LeftWindow);
-			subWindowing(window3,root, reported, ReportType.DownWindow);
-		}
-		
+		subWindowing(root, window, reported);
 		return reported;
 	}
 
@@ -119,7 +106,7 @@ public class BasicPst {
 	 * @param reporting the reporting type to do
 	 * @return an ArrayList of the Segment, or an empty ArrayList
 	 */
-	public void subWindowing(Segment window, PstNode node, Array<Segment> reported, ReportType reporting){
+	public void subWindowing(PstNode node, Segment window, Array<Segment> reported) {
 		if(node == null) return;
 		
 		Segment s = node.getSegment();
@@ -127,43 +114,19 @@ public class BasicPst {
 		if(s.getMinX() > window.getX2()) return;
 		
 		// check if this node has to be reported
-		report(node, window, reported, reporting);
+		report(node, window, reported);
 		
-		if (window.getX1() == Integer.MIN_VALUE) {//the window is without min in x : [-infinity;x2]X[y1,y2]
-			if (window.getY1() < node.getMedian() && window.getY2() < node.getMedian())
-				subWindowing(window, node.getLeft(), reported, reporting);
-			if (window.getY1() > node.getMedian() && window.getY2() > node.getMedian())
-				subWindowing(window, node.getRight(), reported, reporting);
-			if (window.getY1() <= node.getMedian() && window.getY2() >= node.getMedian()) {
-				subWindowing(window, node.getLeft(), reported, reporting);
-				subWindowing(window, node.getRight(), reported, reporting);
-			}
-		}
-
-		if (window.getY1() == Integer.MIN_VALUE) {
-			//the window is without min in y : [x1;x2]X[-infinity,y2] ,or special case : [-infinity;x2]X[-infinity, y2]
-			if (window.getY2() < node.getMedian())
-				subWindowing(window, node.getLeft(), reported, reporting);
-			if (window.getY2() >= node.getMedian()) {
-				subWindowing(window, node.getLeft(), reported, reporting);
-				subWindowing(window, node.getRight(), reported, reporting);
-			}
-		}
-
-		else {//case of a limited window
-			//it will do nothing if the node is not in the x window
-			if (window.getY1() < node.getMedian() && window.getY2() < node.getMedian())
-				subWindowing(window, node.getLeft(), reported, reporting);
-			if (window.getY1() > node.getMedian() && window.getY2() > node.getMedian())
-				subWindowing(window, node.getRight(), reported, reporting);
-				//rep.addAll(subWindowing(window, temp.getLeft(), reporting));
-			if (window.getY1() <= node.getMedian() && window.getY2() >= node.getMedian()) {
-				subWindowing(window, node.getLeft(), reported, reporting);
-				subWindowing(window, node.getRight(), reported, reporting);
-			}
+		int median = node.getMedian();
+		
+		// we can't avoid this as we need segments starting down the window
+		subWindowing(node.getLeft(), window, reported);
+		
+		// only go to right when needed
+		if(median <= window.getY2()) {
+			subWindowing(node.getRight(), window, reported);
 		}
 	}
-
+	
 	/**
 	 * return the segment (Node data) if it's in the window that we choose
 	 * and it hasn't been visited, or null otherwise
@@ -172,7 +135,7 @@ public class BasicPst {
 	 * @param type a ReportType enumeration to know wich type of report to do
 	 * @return Reported segment if reported or null.
 	 */
-	public void report(PstNode n, Segment window, Array<Segment> reported, ReportType type){
+	public void report(PstNode n, Segment window, Array<Segment> reported) {
 		if(n.getFlag()) {
 			// already reported
 			return;
@@ -181,17 +144,9 @@ public class BasicPst {
 		boolean report  = false;
 		Segment s = n.getSegment();
 		
-		if (ReportType.NormalWindow.equals(type)) {
-			report = reportCenter(s, window);
-		}
-		
-		if (ReportType.DownWindow.equals(type)) {
-			report = reportDown(s, window);
-		}
-		
-		if (ReportType.LeftWindow.equals(type)) {
-			report = reportLeft(s, window);
-		}
+		report = report || reportCenter(s, window);
+		report = report || reportDown(s, window);
+		report = report || reportLeft(s, window);
 		
 		if(report) {
 			n.setFlag(true);
@@ -225,8 +180,8 @@ public class BasicPst {
 		
 		// X1 in window (and X2 because X1==X2)
 		if(window.getX1() <= s.getX1() && s.getX1() <= window.getX2()) {
-			// crossing window Y2
-			if(s.getY1() <= window.getY2() && s.getY2() >= window.getY2()) {
+			// crossing window Y1
+			if(s.getY1() <= window.getY1() && s.getY2() >= window.getY1()) {
 				return true;
 			}
 		}
@@ -241,8 +196,8 @@ public class BasicPst {
 		
 		// Y1 in window (and Y2 because Y1==Y2)
 		if(window.getY1() <= s.getY1() && s.getY1() <= window.getY2()) {
-			// crossing window X2
-			if(s.getMaxX() >= window.getX2() && s.getMinX() <= window.getX2()) {
+			// crossing window X1
+			if(s.getMaxX() >= window.getX1() && s.getMinX() <= window.getX1()) {
 				return true;
 			}
 		}
