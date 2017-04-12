@@ -217,17 +217,23 @@ public class BasicPst {
 	}
 	
 	private boolean reportCenter(PstNode n, Segment window) {
-		if(
-			(window.getY1() <= n.getSegment().getY1() && window.getY2()>=n.getSegment().getY1()
-			&& window.getX1() <= Math.min(n.getSegment().getX1(), n.getSegment().getX2())
-			&& window.getX2() >= Math.min(n.getSegment().getX1(), n.getSegment().getX2()))//first end point
-			||
-			(window.getY1() <= n.getSegment().getY2() && window.getY2()>=n.getSegment().getY2()
-			&& window.getX1() <= Math.max(n.getSegment().getX1(), n.getSegment().getX2())
-			&& window.getX2() >= Math.max(n.getSegment().getX1(), n.getSegment().getX2()))//second end point
-		){
-			return true;
+		Segment s = n.getSegment();
+		
+		// minimum Y in window center
+		if(window.getY1() <= s.getY1() && window.getY2() >= s.getY1()) {
+			// minimum X in window center
+			if(window.getX1() <= s.getMinX() && window.getX2() >= s.getMinX()) {
+				return true;
+			}
 		}
+		// maximum Y in window center
+		if(window.getY1() <= s.getY2() && window.getY2() >= s.getY2()) {
+			// maximum X in window center
+			if(window.getX1() <= s.getMaxX() && window.getX2() >= s.getMaxX()) {
+				return true;
+			}
+		}
+		
 		return false;
 	}
 	private boolean reportDown(PstNode n, Segment window) {
