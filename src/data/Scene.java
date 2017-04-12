@@ -73,13 +73,37 @@ public class Scene {
 		
 		pst = new Pst(segments);
 	}
-	
+
 	private boolean setWindow(Segment window) {
 		if(!validWindow(window)) {
 			return false;
 		}
 		
-		this.subWindow = this.window = window;
+		this.window = window.getWindow();
+		return true;
+	}
+	
+	private boolean setSubWindow(Segment subWindow) {
+		int x1 = subWindow.getMinX();
+		int x2 = subWindow.getMaxX();
+		int y1 = subWindow.getMinY();
+		int y2 = subWindow.getMaxY();
+		
+		// restrict subWindow to window
+		if(x1 < window.getX1()) {
+			x1 = window.getX1();
+		}
+		if(x2 > window.getX2()) {
+			x2 = window.getX2();
+		}
+		if(y1 < window.getY1()) {
+			y1 = window.getY1();
+		}
+		if(y2 > window.getY2()) {
+			y2 = window.getY2();
+		}
+		
+		this.subWindow = new Segment(x1, x2, y1, y2);
 		return true;
 	}
 	/**
@@ -135,11 +159,9 @@ public class Scene {
 	 * @return Filtered scene or null if window is not valid.
 	 */
 	public Scene filter(Segment window) {
-		if(!validWindow(window)) {
-			return null;
-		}
+		if(window == null) return null;
 		
-		this.subWindow = window;
+		setSubWindow(window);
 		segments = pst.getWindow(window);
 		return this;
 	}

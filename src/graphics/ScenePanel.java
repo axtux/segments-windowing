@@ -20,8 +20,11 @@ public class ScenePanel extends JPanel {
 	private Point origin;
 	private int width, height;
 	private ArrayList<Segment> relative_segments;
+	private ArrayList<Segment> subwindow;
+	
 	private double scale;
 	private ArrayList<Segment> scaled_segments;
+	private ArrayList<Segment> scaled_subwindow;
 	/**
 	 * Create panel.
 	 * @param scene Scene with window width/height {@code >= 10}
@@ -31,6 +34,7 @@ public class ScenePanel extends JPanel {
 		if(scene == null) throw new NullPointerException();
 		
 		setWindow(scene.getWindow());
+		setSubWindow(scene.getSubWindow());
 		setSegments(scene.getSegments());
 		setBackground(Color.WHITE);
 		if(!setScale(1)) {
@@ -42,13 +46,33 @@ public class ScenePanel extends JPanel {
 	 * @param window The window limits.
 	 */
 	private void setWindow(Segment window) {
-		if(window == null) {
-			throw new NullPointerException();
-		}
+		if(window == null) throw new NullPointerException();
+		window = window.getWindow();
 		
 		width = window.getX2()-window.getX1();
 		height = window.getY2()-window.getY1();
 		origin = new Point(-window.getX1(), -window.getY1());
+	}
+	/**
+	 * Set sub window
+	 * @param window The sub window.
+	 */
+	private void setSubWindow(Segment window) {
+		subwindow = new ArrayList<Segment>(4);
+		// sub window is optional
+		if(window == null) return;
+		window = window.getWindow();
+		
+		ArrayList<Segment> tmp = new ArrayList<Segment>(4);
+		tmp.add(new Segment(window.getX1(), window.getX1(), window.getY1(), window.getY2()));
+		tmp.add(new Segment(window.getX1(), window.getX2(), window.getY2(), window.getY2()));
+		tmp.add(new Segment(window.getX2(), window.getX2(), window.getY2(), window.getY1()));
+		tmp.add(new Segment(window.getX2(), window.getX1(), window.getY1(), window.getY1()));
+		
+		// compute segments relative to graphics axis
+		for(Segment s : tmp) {
+			subwindow.add(relativise(s));
+		}
 	}
 	/**
 	 * Make segments relative to graphics axes and save them
@@ -108,6 +132,17 @@ public class ScenePanel extends JPanel {
 			
 			scaled_segments.add(new Segment(x1, x2, y1, y2));
 		}
+		
+		scaled_subwindow = new ArrayList<Segment>(subwindow.size());
+		for(Segment s : subwindow) {
+			x1 = (int) (s.getX1()*scale);
+			y1 = (int) (s.getY1()*scale);
+			x2 = (int) (s.getX2()*scale);
+			y2 = (int) (s.getY2()*scale);
+			
+			scaled_subwindow.add(new Segment(x1, x2, y1, y2));
+		}
+		
 		return true;
 	}
 	/**
@@ -133,11 +168,15 @@ public class ScenePanel extends JPanel {
 	 */
 	public void paint(Graphics g) {
 		super.paint(g);
-		
 		Color oldColor = g.getColor();
-		g.setColor(Color.BLACK);
 		
+		g.setColor(Color.BLACK);
 		for(Segment s : scaled_segments) {
+			g.drawLine(s.getX1(), s.getY1(), s.getX2(), s.getY2());
+		}
+		
+		g.setColor(Color.RED);
+		for(Segment s : scaled_subwindow) {
 			g.drawLine(s.getX1(), s.getY1(), s.getX2(), s.getY2());
 		}
 		

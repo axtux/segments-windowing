@@ -122,7 +122,7 @@ public class SelectorFrame extends JFrame implements ActionListener, StatusListe
 		}
 		
 		Segment window = windowSelector.getSelectedWindow();
-		if(window == null || !Scene.validWindow(window)) {
+		if(window == null) {
 			updateStatus(false, "Selected window is not valid");
 			return;
 		}
