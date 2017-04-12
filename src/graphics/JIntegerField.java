@@ -55,7 +55,7 @@ public class JIntegerField extends JTextField implements KeyListener, FocusListe
 			setText(value.toString());
 		}
 		
-		System.out.println("Value is now "+(value == null ? "null" : value.toString()));
+		//System.out.println("Value is now "+(value == null ? "null" : value.toString()));
 	}
 	/**
 	 * Update value. Empty field will set value to null, "min" will set value to Integer.MIN_VALUE and "max" will set value to Integer.MAX_VALUE.
