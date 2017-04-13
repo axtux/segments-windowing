@@ -2,10 +2,7 @@ package data;
 
 /**
  * Priority Search Tree making easy to get segments within a window.
- * Implemented windows :
- * - [X, X']x[Y, Y'] ;
- * - [-∞, X']x[Y, Y'].
- * Other windows can be gotten efficiently using {@link Pst}.
+ * The most efficient window is [-∞, X']x[Y, Y']. Other windows can be gotten efficiently using {@link Pst}.
  */
 public class BasicPst {
 	private PstNode root;
