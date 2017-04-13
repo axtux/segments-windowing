@@ -40,7 +40,7 @@ public class Pst {
 	
 	public Array<Segment> getWindow(Segment window) {
 		window = window.getWindow();
-		System.out.println("selected window "+window);
+		//System.out.println("selected window "+window);
 		
 		if(window.getMinX() == Integer.MIN_VALUE) {
 			//System.out.println("case [-∞, X']x[Y, Y']");
