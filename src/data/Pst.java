@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 /**
  * Priority search tree that support any kind of windowing.
- * Windows supported :
+ * Windows best supported (those ones will be very efficient) :
  * - [X, X']x[Y, Y'] ;
  * - [-∞, X']x[Y, Y'] ;
  * - [X, +∞]x[Y, Y'] ;
