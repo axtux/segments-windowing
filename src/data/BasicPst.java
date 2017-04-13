@@ -13,9 +13,8 @@ public class BasicPst {
 	 * Create Priority Search Tree from unsorted Segment list.
 	 * @param list Segment list from which to create PST.
 	 */
-	public BasicPst(Array<Segment> list) {
-		Array<Segment> segments = new Array<Segment>(list);
-		// sort Segments by Y coordinate
+	public BasicPst(Array<Segment> segments) {
+		// sort Segments by Y coordinate using heap sort
 		segments.sort(Segment::compareTo);
 		this.root = makePstNode(segments);
 	}
