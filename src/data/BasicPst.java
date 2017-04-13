@@ -110,15 +110,9 @@ public class BasicPst {
 		if(s.getMinX() > window.getX2()) return;
 		
 		// check if this node has to be reported, only one report can match a segment
-		if(center && reportCenter(s, window)) {
-			reported.add(s);
-		}
-		if(down && reportDown(s, window)) {
-			reported.add(s);
-		}
-		if(reportLeft(s, window)) {
-			reported.add(s);
-		}
+		if(center && reportCenter(s, window)) reported.add(s);
+		if(down && reportDown(s, window)) reported.add(s);
+		if(reportLeft(s, window)) reported.add(s);
 		
 		// we can avoid this if we don't look for segments under window
 		if(down || node.getMedian() >= window.getY1()) {
