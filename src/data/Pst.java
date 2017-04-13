@@ -37,7 +37,7 @@ public class Pst {
 		opposed_exchanged = new BasicPst(opposed_exchanged_segments);
 	}
 	
-	public ArrayList<Segment> getWindow(Segment window) {
+	public Array<Segment> getWindow(Segment window) {
 		window = window.getWindow();
 		System.out.println("selected window "+window);
 		
@@ -70,37 +70,37 @@ public class Pst {
 		return getClosedWindow(window);
 	}
 	
-	public ArrayList<Segment> getLeftWindow(Segment window) {
+	public Array<Segment> getLeftWindow(Segment window) {
 		// this one is always efficient using windowing
 		return original.windowing(window);
 	}
 	
-	public ArrayList<Segment> getRightWindow(Segment window) {
+	public Array<Segment> getRightWindow(Segment window) {
 		// oppose coordinates to be able to use efficient windowing
-		ArrayList<Segment> segments = opposed.windowing(window.oppose());
+		Array<Segment> segments = opposed.windowing(window.oppose());
 		// recover coordinates to original state
 		opposeArray(segments);
 		return segments;
 	}
 	
-	public ArrayList<Segment> getDownWindow(Segment window) {
+	public Array<Segment> getDownWindow(Segment window) {
 		// exchange coordinates to be able to use efficient windowing
-		ArrayList<Segment> segments = exchanged.windowing(window.exchange());
+		Array<Segment> segments = exchanged.windowing(window.exchange());
 		// recover coordinates to original state
 		exchangeArray(segments);
 		return segments;
 	}
 	
-	public ArrayList<Segment> getUpWindow(Segment window) {
+	public Array<Segment> getUpWindow(Segment window) {
 		// oppose and exchange coordinates to be able to use efficient windowing
-		ArrayList<Segment> segments = opposed_exchanged.windowing(window.oppose().exchange());
+		Array<Segment> segments = opposed_exchanged.windowing(window.oppose().exchange());
 		// recover coordinates to original state
 		opposeArray(segments);
 		exchangeArray(segments);
 		return segments;
 	}
 	
-	public ArrayList<Segment> getClosedWindow(Segment window) {
+	public Array<Segment> getClosedWindow(Segment window) {
 		// get original left and center but not down to remove left children
 		Array<Segment> response = original.windowing(window, false, true);
 		
@@ -113,12 +113,12 @@ public class Pst {
 		return response;
 	}
 	
-	private void opposeArray(ArrayList<Segment> segments) {
+	private void opposeArray(Array<Segment> segments) {
 		for(int i = 0; i < segments.size(); ++i) {
 			segments.set(i, segments.get(i).oppose());
 		}
 	}
-	private void exchangeArray(ArrayList<Segment> segments) {
+	private void exchangeArray(Array<Segment> segments) {
 		for(int i = 0; i < segments.size(); ++i) {
 			segments.set(i, segments.get(i).exchange());
 		}

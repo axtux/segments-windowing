@@ -1,7 +1,5 @@
 package data;
 
-import java.util.ArrayList;
-
 /**
  * Priority Search Tree making easy to get segments within a window.
  * Implemented windows :
@@ -15,7 +13,7 @@ public class BasicPst {
 	 * Create Priority Search Tree from unsorted Segment list.
 	 * @param list Segment list from which to create PST.
 	 */
-	public BasicPst(ArrayList<Segment> list) {
+	public BasicPst(Array<Segment> list) {
 		Array<Segment> segments = new Array<Segment>(list);
 		// sort Segments by Y coordinate
 		segments.sort(Segment::compareTo);
@@ -52,7 +50,7 @@ public class BasicPst {
 	 * @param list A list of segments.
 	 * @return Index of the Segment owning the minimum X value or -1 if list is null or if its size is 0.
 	 */
-	private static int getMinX(ArrayList<Segment> list) {
+	private static int getMinX(Array<Segment> list) {
 
 		if(list == null || list.size() == 0) return -1;
 
