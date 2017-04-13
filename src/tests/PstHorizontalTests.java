@@ -8,7 +8,7 @@ import data.Segment;
 
 public class PstHorizontalTests extends PstFileTests {
 	public PstHorizontalTests() {
-		super("scenes/test_horizontal.txt");
+		setFile("scenes/test_horizontal.txt");
 	}
 	
 	@Test
