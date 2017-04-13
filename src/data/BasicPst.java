@@ -22,20 +22,20 @@ public class BasicPst {
 	 * Create PstNode and sub nodes from Segment list. Used by constructor to create priority search tree root.
 	 * @param list Segment list, sorted by Y coordinate.
 	 */
-	private PstNode makePstNode(Array<Segment> list) {
-		if(list == null || list.size() == 0) return null;
+	private PstNode makePstNode(Array<Segment> segments) {
+		if(segments == null || segments.size() == 0) return null;
 		
 		// attribute Segment containing minimum X to this node
-		PstNode temp = new PstNode(list.remove(getMinX(list)));
+		PstNode node = new PstNode(segments.remove(getMinX(segments)));
 		
-		if(list.size() > 0) {
-			int median = list.size()/2;
-			temp.setMedian(list.get(median).getY1());
-			temp.setLeft(makePstNode(list.subArray(0, median)));
-			temp.setRight(makePstNode(list.subArray(median, list.size())));
+		if(segments.size() > 0) {
+			int median = segments.size()/2;
+			node.setMedian(segments.get(median).getY1());
+			node.setLeft(makePstNode(segments.subArray(0, median)));
+			node.setRight(makePstNode(segments.subArray(median, segments.size())));
 		}
 		
-		return temp;
+		return node;
 	}
 	/**
 	 * Get root node.
