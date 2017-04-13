@@ -90,17 +90,10 @@ public class BasicPst {
 	public Array<Segment> windowing(Segment window, boolean down, boolean center) {
 		window = window.getWindow();
 		
-		Array<PstNode> reported = new Array<PstNode>();
+		Array<Segment> reported = new Array<Segment>();
 		subWindowing(root, window, reported, down, center);
 		
-		Array<Segment> response = new Array<Segment>(reported.size());
-		// get segments and reset flag
-		for(PstNode n : reported) {
-			response.add(n.getSegment());
-			n.setFlag(false);
-		}
-		
-		return response;
+		return reported;
 	}
 	/**
 	 * Apply windowing algorithm using node as Pst root node, reporting viewed nodes through window into reported.
@@ -108,7 +101,7 @@ public class BasicPst {
 	 * @param window Only nodes with a segment viewed through this window will be reported.
 	 * @param reported Array into which reported node will be added.
 	 */
-	private void subWindowing(PstNode node, Segment window, Array<PstNode> reported, boolean down, boolean center) {
+	private void subWindowing(PstNode node, Segment window, Array<Segment> reported, boolean down, boolean center) {
 		if(node == null) return;
 		
 		Segment s = node.getSegment();
@@ -119,8 +112,16 @@ public class BasicPst {
 		// segment and all child nodes are below window
 		if(s.getMinX() > window.getX2()) return;
 		
-		// check if this node has to be reported
-		report(node, window, reported, down, center);
+		// check if this node has to be reported, only one report can match a segment
+		if(center && reportCenter(s, window)) {
+			reported.add(s);
+		}
+		if(down && reportDown(s, window)) {
+			reported.add(s);
+		}
+		if(reportLeft(s, window)) {
+			reported.add(s);
+		}
 		
 		// we can avoid this if we don't look for segments under window
 		if(down || node.getMedian() >= window.getY1()) {
@@ -130,34 +131,6 @@ public class BasicPst {
 		// only go to right when needed
 		if(node.getMedian() <= window.getY2()) {
 			subWindowing(node.getRight(), window, reported, down, center);
-		}
-	}
-	/**
-	 * Add node to reported if node segment can be viewed through window.
-	 * @param node Node to check.
-	 * @param window Node is only reported if its segment can be viewed through that window.
-	 * @param reported Array to add reported node.
-	 */
-	public void report(PstNode node, Segment window, Array<PstNode> reported, boolean down, boolean center) {
-		if(node.getFlag()) {
-			// already reported
-			return;
-		}
-		
-		boolean report  = false;
-		Segment s = node.getSegment();
-		
-		if(center) {
-			report = report || reportCenter(s, window);
-		}
-		if(down) {
-			report = report || reportDown(s, window);
-		}
-		report = report || reportLeft(s, window);
-		
-		if(report) {
-			node.setFlag(true);
-			reported.add(node);
 		}
 	}
 	/**
