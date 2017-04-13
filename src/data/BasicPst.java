@@ -8,7 +8,7 @@ public class BasicPst {
 	private PstNode root;
 	/**
 	 * Create Priority Search Tree from unsorted Segment list.
-	 * @param list Segment list from which to create PST.
+	 * @param segments Segment list from which to create PST.
 	 */
 	public BasicPst(Array<Segment> segments) {
 		// sort Segments by Y coordinate using heap sort
@@ -17,7 +17,7 @@ public class BasicPst {
 	}
 	/**
 	 * Create PstNode and sub nodes from Segment list. Used by constructor to create priority search tree root.
-	 * @param list Segment list, sorted by Y coordinate.
+	 * @param segments Segment list, sorted by Y coordinate.
 	 */
 	private PstNode makePstNode(Array<Segment> segments) {
 		if(segments == null || segments.size() == 0) return null;
@@ -79,6 +79,8 @@ public class BasicPst {
 	/**
 	 * Apply windowing algorithm using root node, reporting viewed segments through window.
 	 * @param window Only segments viewed through this window will be reported.
+	 * @param down If true, report segments starting below the window.
+	 * @param center If true, report segments starting in the window.
 	 * @return Reported segments (can be viewed through window).
 	 */
 	public Array<Segment> windowing(Segment window, boolean down, boolean center) {
