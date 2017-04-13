@@ -161,10 +161,10 @@ public class BasicPst {
 		}
 	}
 	/**
-	 * Check that segment has at least one point into window.
+	 * Check that segment first point is into window. First point has lowest Y coordinate.
 	 * @param s Segment to check.
-	 * @param window Window into which segment may be.
-	 * @return True if segment has at least one point into window. False otherwise.
+	 * @param window Window into which point may be.
+	 * @return True if segment first point is into window. False otherwise.
 	 */
 	private boolean reportCenter(Segment s, Segment window) {
 		// minimum Y in window center
@@ -174,33 +174,20 @@ public class BasicPst {
 				return true;
 			}
 		}
-		/* this one will be reported by another report
-		// maximum Y in window center
-		if(window.getY1() <= s.getY2() && window.getY2() >= s.getY2()) {
-			// corresponding X in window center
-			if(window.getX1() <= s.getX2() && window.getX2() >= s.getX2()) {
-				return true;
-			}
-		}
-		//*/
+		
 		return false;
 	}
 	/**
-	 * Check that segment is crossing window down border.
+	 * Check that segment is crossing window down border (Starting before and stopping on border or ending after).
 	 * @param s Segment to check.
 	 * @param window Window that segment may cross.
 	 * @return True if segment is crossing window down border. False otherwise.
 	 */
 	private boolean reportDown(Segment s, Segment window) {
-		// only report vertical segment
-		if (s.getX1() != s.getX2()) {
-			return false;
-		}
-		
-		// X1 in window (and X2 because X1==X2)
+		// X1 in window
 		if(window.getX1() <= s.getX1() && s.getX1() <= window.getX2()) {
-			// crossing window Y1
-			if(s.getY1() <= window.getY1() && s.getY2() >= window.getY1()) {
+			// crossing window Y1 and starting before
+			if(s.getY1() < window.getY1() && s.getY2() >= window.getY1()) {
 				return true;
 			}
 		}
@@ -208,21 +195,16 @@ public class BasicPst {
 		return false;
 	}
 	/**
-	 * Check that segment is crossing window left border.
+	 * Check that segment is crossing window left border (Starting before and stopping on border or ending after).
 	 * @param s Segment to check.
 	 * @param window Window that segment may cross.
 	 * @return True if segment is crossing window left border. False otherwise.
 	 */
 	private boolean reportLeft(Segment s, Segment window) {
-		// only report horizontal segment
-		if (s.getY1() != s.getY2()) {
-			return false;
-		}
-		
-		// Y1 in window (and Y2 because Y1==Y2)
+		// Y1 in window
 		if(window.getY1() <= s.getY1() && s.getY1() <= window.getY2()) {
-			// crossing window X1
-			if(s.getMaxX() >= window.getX1() && s.getMinX() <= window.getX1()) {
+			// crossing window X1 and starting before
+			if(s.getMinX() < window.getX1() && s.getMaxX() >= window.getX1()) {
 				return true;
 			}
 		}
