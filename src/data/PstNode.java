@@ -7,9 +7,7 @@ public class PstNode {
 	private int median;
 	private PstNode left;
 	private PstNode right;
-	private boolean flag;
 	
-
 	/**
 	 * Set left node.
 	 * @param left Left node. Can be null.
@@ -58,20 +56,6 @@ public class PstNode {
 	 */
 	public Segment getSegment() {
 		return segment;
-	}
-	/**
-	 * Set flag.
-	 * @param flag Flag value.
-	 */
-	public void setFlag(boolean flag){
-		this.flag = flag;
-	}
-	/**
-	 * Get flag.
-	 * @return Flag value.
-	 */
-	public boolean getFlag() {
-		return flag;
 	}
 	/**
 	 * Create node containing segment and median set to 0.
