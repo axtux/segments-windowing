@@ -10,6 +10,7 @@ import java.util.ArrayList;
  * - [X, +∞]x[Y, Y'] ;
  * - [X, X']x[-∞, Y'] ;
  * - [X, X']x[Y, +∞].
+ * Efficiency is got by using {@link BasicPst} with transformed segments.
  */
 public class Pst {
 	BasicPst original;
