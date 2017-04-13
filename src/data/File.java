@@ -6,7 +6,6 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 /**
@@ -32,7 +31,7 @@ public class File {
 	 */
 	public static boolean putContent(String filename, String content, boolean append) {
 		Path path = FileSystems.getDefault().getPath(filename);
-		ArrayList<String> lines = new ArrayList<String>(1);
+		Array<String> lines = new Array<String>(1);
 		lines.add(content);
 		
 		try {
@@ -80,7 +79,7 @@ public class File {
 	 * @param pathname Directory to read.
 	 * @return List of entry names relative to pathname.
 	 */
-	public static ArrayList<String> list(String pathname) {
+	public static Array<String> list(String pathname) {
 		Path path = FileSystems.getDefault().getPath(pathname);
 		Iterator<Path> it;
 		
@@ -94,7 +93,7 @@ public class File {
 			return null;
 		}
 		
-		ArrayList<String> paths = new ArrayList<String>();
+		Array<String> paths = new Array<String>();
 		while(it.hasNext()) {
 			paths.add(it.next().getFileName().toString());
 		}
@@ -107,8 +106,8 @@ public class File {
 	 * @param suffix only entries ending with this suffix will be listed.
 	 * @return List of entry names relative to pathname.
 	 */
-	public static ArrayList<String> list(String pathname, String suffix) {
-		ArrayList<String> paths = list(pathname);
+	public static Array<String> list(String pathname, String suffix) {
+		Array<String> paths = list(pathname);
 		if(paths == null) {
 			return null;
 		}
@@ -117,7 +116,7 @@ public class File {
 			return paths;
 		}
 		
-		ArrayList<String> filtered = new ArrayList<String>(paths.size());
+		Array<String> filtered = new Array<String>(paths.size());
 		suffix = suffix.toLowerCase();
 		for(String path : paths) {
 			if(path.toLowerCase().endsWith(suffix)) {
