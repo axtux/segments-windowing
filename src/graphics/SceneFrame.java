@@ -45,10 +45,10 @@ public class SceneFrame extends JFrame implements WindowStateListener {
 		
 		addMouseListeners();
 		
-		// center window
-		setExtendedState(MAXIMIZED_BOTH);
 		// size when user minimizes window
 		addWindowStateListener(this);
+		adaptSize(true);
+		
 		update();
 		setLocationRelativeTo(null);
 		setVisible(true);
@@ -108,7 +108,7 @@ public class SceneFrame extends JFrame implements WindowStateListener {
 			panel.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		}
 		/**
-		 * Set released cusor.
+		 * Set released cursor.
 		 */
 		public void mouseReleased(MouseEvent e) {
 			if(isScrollable(panel)) {
@@ -178,17 +178,28 @@ public class SceneFrame extends JFrame implements WindowStateListener {
 	public void windowStateChanged(WindowEvent e) {
 		// from maximized to minimized
 		if(e.getOldState() == MAXIMIZED_BOTH && e.getNewState() == NORMAL) {
-			Dimension innerSize = getContentPane().getPreferredSize();
-			
-			Dimension maxSize = Toolkit.getDefaultToolkit().getScreenSize();
-			// set maximum size to 80% of screen size
-			maxSize.width *= 0.8;
-			maxSize.height *= 0.8;
-			
-			int width = Math.min((int) innerSize.getWidth(), (int) maxSize.getWidth());
-			int height = Math.min((int) innerSize.getHeight(), (int) maxSize.getHeight());
-			
-			this.setSize(width, height);
+			adaptSize(false);
 		}
+	}
+	
+	private void adaptSize(boolean allowMaximize) {
+		Dimension innerSize = getContentPane().getPreferredSize();
+		Dimension maxSize = Toolkit.getDefaultToolkit().getScreenSize();
+		
+		// set maximum size to 80% of screen size
+		maxSize.width *= 0.8;
+		maxSize.height *= 0.8;
+		
+		if(allowMaximize) {
+			if(innerSize.width > maxSize.width || innerSize.height > maxSize.height) {
+				setExtendedState(MAXIMIZED_BOTH);
+				return;
+			}
+		}
+		
+		int width = Math.min(innerSize.width, maxSize.width);
+		int height = Math.min(innerSize.height, maxSize.height);
+		
+		setSize(width, height);
 	}
 }

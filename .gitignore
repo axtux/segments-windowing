@@ -90,3 +90,9 @@ gradle-app.setting
 /build/
 /doc/
 
+# LaTeX
+*.aux
+*.log
+*.synctex.gz
+*.toc
+

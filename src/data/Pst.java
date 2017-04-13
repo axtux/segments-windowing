@@ -40,34 +40,29 @@ public class Pst {
 	
 	public Array<Segment> getWindow(Segment window) {
 		window = window.getWindow();
-		System.out.println("selected window "+window);
+		//System.out.println("selected window "+window);
 		
 		if(window.getMinX() == Integer.MIN_VALUE) {
-			System.out.println("case [-∞, X']x[Y, Y']");
-			// case [-∞, X']x[Y, Y']
+			//System.out.println("case [-∞, X']x[Y, Y']");
 			return getLeftWindow(window);
 		}
 		
 		if(window.getMaxX() == Integer.MAX_VALUE) {
-			System.out.println("case case [X, +∞]x[Y, Y']");
-			// case [X, +∞]x[Y, Y']
+			//System.out.println("case case [X, +∞]x[Y, Y']");
 			return getRightWindow(window);
 		}
 		
 		if(window.getMinY() == Integer.MIN_VALUE) {
-			System.out.println("case [X, X']x[-∞, Y']");
-			// case [X, X']x[-∞, Y']
+			//System.out.println("case [X, X']x[-∞, Y']");
 			return getDownWindow(window);
 		}
 		
 		if(window.getMaxY() == Integer.MAX_VALUE) {
-			System.out.println("case [X, X']x[Y, +∞]");
-			// case [X, X']x[Y, +∞]
+			//System.out.println("case [X, X']x[Y, +∞]");
 			return getUpWindow(window);
 		}
 		
-		System.out.println("case [X, X']x[Y, Y']");
-		// case [X, X']x[Y, Y']
+		//System.out.println("case [X, X']x[Y, Y']");
 		return getClosedWindow(window);
 	}
 	
