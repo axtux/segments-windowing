@@ -1,10 +1,14 @@
 package graphics;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.Rectangle;
+import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowStateListener;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -15,7 +19,7 @@ import data.Scene;
 /**
  * JFrame to display segments using {@link ScenePanel}, enable mouse scroll and wheel zoom.
  */
-public class SceneFrame extends JFrame {
+public class SceneFrame extends JFrame implements WindowStateListener {
 	private static final long serialVersionUID = 1L;
 	private SceneFrame self;
 	private ScenePanel panel;
@@ -44,7 +48,7 @@ public class SceneFrame extends JFrame {
 		// center window
 		setExtendedState(MAXIMIZED_BOTH);
 		// size when user minimizes window
-		setSize(500, 500);
+		addWindowStateListener(this);
 		update();
 		setLocationRelativeTo(null);
 		setVisible(true);
@@ -166,6 +170,25 @@ public class SceneFrame extends JFrame {
 		 */
 		public void updateCursor() {
 			mouseReleased(null);
+		}
+	}
+	/**
+	 * Set good size on frame minimized
+	 */
+	public void windowStateChanged(WindowEvent e) {
+		// from maximized to minimized
+		if(e.getOldState() == MAXIMIZED_BOTH && e.getNewState() == NORMAL) {
+			Dimension innerSize = getContentPane().getPreferredSize();
+			
+			Dimension maxSize = Toolkit.getDefaultToolkit().getScreenSize();
+			// set maximum size to 80% of screen size
+			maxSize.width *= 0.8;
+			maxSize.height *= 0.8;
+			
+			int width = Math.min((int) innerSize.getWidth(), (int) maxSize.getWidth());
+			int height = Math.min((int) innerSize.getHeight(), (int) maxSize.getHeight());
+			
+			this.setSize(width, height);
 		}
 	}
 }
