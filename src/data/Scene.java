@@ -65,7 +65,7 @@ public class Scene {
 			tmp = new Segment(x1, x2, y1, y2);
 			if(!addSegment(tmp)) {
 				lecteur.close();
-				throw new InputMismatchException("segment must be vertical or horizontal");
+				throw new InputMismatchException("segment must be vertical or horizontal and within window limits");
 			}
 		}
 		
@@ -107,14 +107,21 @@ public class Scene {
 		return true;
 	}
 	/**
-	 * Check that the segment is vertical or horizontal and add it.
+	 * Check that the segment is vertical or horizontal, within window and add it.
 	 * @param s Segment to add.
-	 * @return True on success, false on error. An error occurs if segment is neither vertical neither horizontal.
+	 * @return False if segment is neither vertical neither horizontal or out of window (partially or completely). True otherwise.
 	 */
 	private boolean addSegment(Segment s) {
-		if(s.getX1() != s.getX2() && s.getY1() != s.getY2()) {
-			return false;
-		}
+		// horizontal or vertical check
+		if(s.getX1() != s.getX2() && s.getY1() != s.getY2()) return false;
+		// left border check
+		if(s.getX1() < window.getX1() || s.getX2() < window.getX1()) return false;
+		// right border check
+		if(s.getX1() > window.getX2() || s.getX2() > window.getX2()) return false;
+		// bottom border check
+		if(s.getY1() < window.getY1() || s.getY2() < window.getY1()) return false;
+		// top border check
+		if(s.getY1() > window.getY2() || s.getY2() > window.getY2()) return false;
 		
 		segments.add(s);
 		return true;
