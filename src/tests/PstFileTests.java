@@ -3,6 +3,7 @@ package tests;
 import java.util.ArrayList;
 
 import org.junit.Assert;
+import org.junit.Test;
 
 import data.Scene;
 import data.Segment;
@@ -10,18 +11,17 @@ import data.Segment;
 public class PstFileTests {
 	protected Scene scene;
 	protected ArrayList<Segment> segments;
+	
 	/**
-	 * Create test class with scene from filename.
-	 * @param filename File from which to load scene.
+	 * JUnit requires at least one test method per class.
 	 */
-	public PstFileTests(String filename) {
-		setFile(filename);
-	}
+	@Test
+	public void noTest() {}
 	/**
 	 * Create scene from file and assert that no error occurred.
-	 * @param filename
+	 * @param filename File from which to load scene.
 	 */
-	private void setFile(String filename) {
+	protected void setFile(String filename) {
 		scene = Scene.getScene(filename);
 		Assert.assertNotNull(scene);
 		segments = scene.getSegments();
@@ -34,13 +34,8 @@ public class PstFileTests {
 	protected void assertAllIn(ArrayList<Segment> filtered) {
 		Assert.assertEquals("filtered size", segments.size(), filtered.size());
 		
-		boolean in;
 		for(Segment s : segments) {
-			in = false;
-			for(Segment f : filtered) {
-				if(s.equals(f)) in = true;
-			}
-			Assert.assertTrue("segment "+s+" not in filtered", in);
+			Assert.assertTrue(s+" is not in filtered", filtered.contains(s));
 		}
 	}
 	/**
@@ -54,15 +49,10 @@ public class PstFileTests {
 		
 		Assert.assertEquals("filtered size", indexes.length, filtered.size());
 		
-		boolean in;
 		Segment s;
 		for(int i : indexes) {
-			in = false;
 			s = segments.get(i);
-			for(Segment f : filtered) {
-				if(s.equals(f)) in = true;
-			}
-			Assert.assertTrue("segment "+s+" not in filtered", in);
+			Assert.assertTrue(s+" is not in filtered", filtered.contains(s));
 		}
 	}
 }
