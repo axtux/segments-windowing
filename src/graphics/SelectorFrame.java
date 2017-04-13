@@ -38,7 +38,8 @@ public class SelectorFrame extends JFrame implements ActionListener, StatusListe
 		// refresh when error element exists
 		fileSelector.changeDir(scenesDir);
 		// size and center
-		resize();
+		pack();
+		setLocationRelativeTo(null);
 		setVisible(true);
 	}
 	
@@ -137,13 +138,7 @@ public class SelectorFrame extends JFrame implements ActionListener, StatusListe
 			status.setForeground(noError ? Color.BLACK : Color.RED);
 			status.setText(message);
 		}
-		resize();
+		pack();
 		return noError;
 	}
-	
-	private void resize() {
-		pack();
-		setLocationRelativeTo(null);
-	}
-	
 }
