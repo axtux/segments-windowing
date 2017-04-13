@@ -2,7 +2,6 @@ package graphics;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -11,6 +10,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import data.Array;
 import data.File;
 /**
  * Display a combo box to select a file within a directory and a button to change directory.
@@ -66,7 +66,7 @@ public class FileSelectorPanel extends JPanel implements ActionListener {
 		boxContainer.removeAll();
 		box = null;
 		
-		ArrayList<String> filenames = File.list(newDir, suffix);
+		Array<String> filenames = File.list(newDir, suffix);
 		if(filenames == null) {
 			boxContainer.add(new JLabel("Unable to list files into directory."));
 			updateSize();
