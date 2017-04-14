@@ -17,7 +17,7 @@ public class PstTests {
 	private Array<Segment> list = new Array<Segment>();
 
 	/**
-	 * This initialise a list of Segment and add it to list(variable)
+	 * This initialise a list of Segment and add it to list (variable).
 	 */
 	@Before
 	public void  initList(){
@@ -76,7 +76,7 @@ public class PstTests {
 	 * Test is passed if the root of the each sub-tree in the {@link Pst} is correct (it's the minimum in x)
 	 */
 	@Test
-	public void RootTest(){
+	public void rootTest(){
 
 		Segment seg=new Segment(-42,-42,-42,-42);//the first segment is the min in x
 		list.add(seg);
@@ -100,7 +100,7 @@ public class PstTests {
 	 * @param root The node to verify
 	 */
 
-	private void submedianTest(PstNode root) {
+	private void medianTestNode(PstNode root) {
 
 		int median = root.getMedian();
 		
@@ -127,7 +127,7 @@ public class PstTests {
 
 		for (PstNode n:nodes) {
 			//System.out.println(n.getSegment().toString()); //to verify that all the nodes are present
-			submedianTest(n);
+			medianTestNode(n);
 		}
 	}
 
@@ -172,7 +172,7 @@ public class PstTests {
 	 * The form of the window is like that : [Integer.MIN_VALUE;x2]X[y1;y2]
 	 */
 	@Test
-	public void windowingTest3(){
+	public void windowingTest2(){
 
 		ArrayList<Segment> segments=new ArrayList<Segment>();
 		segments.add(new Segment(-42,0,2,2));//horizontal segment completely in the window
@@ -208,7 +208,7 @@ public class PstTests {
 	 * The form of the window is like that : [x1;Integer.MAX_VALUE]X[y1;y2]
 	 */
 	@Test
-	public void windowingTest4(){
+	public void windowingTest3(){
 
 		new Segment(5,0,5,Integer.MAX_VALUE);
 
@@ -246,7 +246,7 @@ public class PstTests {
 	 * The form of the window is like that : [x1;x2]X[Integer.MIN_VALUE;y2]
 	 */
 	@Test
-	public void windowingTest5(){
+	public void windowingTest4(){
 
 		ArrayList<Segment> segments=new ArrayList<>();
 		segments.add(new Segment(1,2,0,0));//horizontal segment completely in the window
@@ -279,10 +279,10 @@ public class PstTests {
 
 	/**
 	 * This test is passed if all the correct segments are taken by the windowing application on a window not bordered in y (-infinity).
-	 * The form of the window is like that : [x1;x2]X[Integer.MIN_VALUE;y2]
+	 * The form of the window is like that : [x1;x2]X[y1;Integer.MAX_VALUE]
 	 */
 	@Test
-	public void windowingTest6(){
+	public void windowingTest5(){
 
 		ArrayList<Segment> segments=new ArrayList<>();
 		segments.add(new Segment(1,2,0,0));//horizontal segment completely in the window
@@ -292,7 +292,7 @@ public class PstTests {
 
 		segments.add(new Segment(2,2,41,1));//vertical segment completely in the window
 		segments.add(new Segment(0,0,0,-25));//vertical segment not completely in the window, y2 is behind the window in y and y1 is at the border
-		segments.add(new Segment(1,1,-42,25));//vertical segment not completely in the window, y2 is beyond the window in y
+		segments.add(new Segment(1,1,-42,25));//vertical segment not completely in the window, y1 is behind the window in y
 
 		segments.add(new Segment(-42,42,25,25));//horizontal segment that cross over the window
 
