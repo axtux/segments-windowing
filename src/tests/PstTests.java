@@ -55,7 +55,7 @@ public class PstTests {
 
 	/**
 	 * This function is used to have all the nodes of a Priority search tree
-	 * @param root the root of the Pst
+	 * @param root The root of the Pst
 	 * @return An {@link Array} containing all {@link PstNode}s in the tree
 	 */
 
@@ -107,15 +107,11 @@ public class PstTests {
 		
 		List<Segment> leftSegments = getSegments(root.getLeft());
 		List<Segment> rightSegments = getSegments(root.getRight());
-		
-		//System.out.println("sons left "+leftSegments.size());
+
 		for (Segment s : leftSegments) {
-			//System.out.println(s.toString());
 			assertTrue(s.getY1() <= median);
 		}
-		//System.out.println("Sons right "+rightSegments.size());
 		for (Segment s : rightSegments) {
-			//System.out.println(s.toString());
 			assertTrue(s.getY1() >= median);
 		}
 	}
@@ -129,7 +125,7 @@ public class PstTests {
 		Pst abrs = new Pst(list);
 		BasicPst abr=abrs.getOriginal();
 		Array<PstNode> nodes = getNodes(abr.getRoot());
-		//System.out.println(nodes.size());
+
 		for (PstNode n:nodes) {
 			//System.out.println(n.getSegment().toString()); //to verify that all the nodes are present
 			submedianTest(n);
@@ -220,6 +216,9 @@ public class PstTests {
 		}
 	}
 
+	/**
+	 * This test is passed if the segments transformations for the different windows in {@link Pst} are correct
+	 */
 	@Test
 	public void windowingTest4(){
 
@@ -236,6 +235,8 @@ public class PstTests {
 		assertFalse(window3.isEmpty());
 		assertFalse(window4.isEmpty());
 		assertFalse(window5.isEmpty());
+
+
 	}
 
 }
