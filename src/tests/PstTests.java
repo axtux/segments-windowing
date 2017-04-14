@@ -1,6 +1,5 @@
 package tests;
 
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
@@ -133,7 +132,7 @@ public class PstTests {
 	}
 
 	/**
-	 * This test is used to verify all the windowing cases with a segment having an endpoint in a bordered window ([x;x']X[y;y']).
+	 * This test is used to verify all the differents type of segments are taken the windowing in a bordered window ([x;x']X[y;y']).
 	 */
 	@Test
 	public void windowingTest1(){
@@ -149,6 +148,9 @@ public class PstTests {
 		list.add(new Segment(3,3,-4,1));//vertical segment not completely in the window, Y1 is behind the window in y
 		list.add(new Segment(4,4,4,15));//vertical segment not completely in the window, y2 is beyond the window in y
 
+		list.add(new Segment(20,-20,2,2));//horizontal segment that cross over the window
+		list.add(new Segment(2,2,20,-20));//vertical segment that cross over the window
+
 		Array<Segment> verification=new Array<Segment>(list);
 
 		list.add(new Segment(-5,-4,4,4));//horizontal segment not in the window, x1 and x2 are behind the window in x
@@ -163,22 +165,6 @@ public class PstTests {
 		for (Segment s :segs) {
 			assertTrue(verification.contains(s));
 		}
-	}
-
-	/**
-	 * This test is passed if the segment passing through a bordered window are taken
-	 */
-	@Test
-	public void windowingTest2(){
-
-		list.add(new Segment(20,-20,2,2));//horizontal segment
-		list.add(new Segment(2,2,20,-20));//vertical segment
-
-		Pst abr = new Pst(list);
-		ArrayList<Segment> segs = abr.getWindow(new Segment(0,5,0,5));
-
-		assertTrue(segs.contains(new Segment(20,-20,2,2)));
-		assertTrue(segs.contains(new Segment(2,2,20,-20)));
 	}
 
 	/**
@@ -211,32 +197,120 @@ public class PstTests {
 		Pst abr = new Pst(segments);
 		ArrayList<Segment> segs = abr.getWindow(new Segment(Integer.MIN_VALUE,5,0,5));
 
+		assertTrue(segs.size()==verification.size());
 		for (Segment s:segs) {
 			assertTrue(verification.contains(s));
 		}
 	}
 
 	/**
-	 * This test is passed if the segments transformations for the different windows in {@link Pst} are correct
+	 * This test is passed if all the correct segments are taken by the windowing application on a window not bordered in x (+infinity).
+	 * The form of the window is like that : [x1;Integer.MAX_VALUE]X[y1;y2]
 	 */
 	@Test
 	public void windowingTest4(){
 
-		Pst abr = new Pst(list);
+		new Segment(5,0,5,Integer.MAX_VALUE);
 
-		ArrayList<Segment> window1 = abr.getWindow(new Segment(Integer.MIN_VALUE,5,0,5));
-		ArrayList<Segment> window2 = abr.getWindow(new Segment(3,Integer.MAX_VALUE,0,5));
-		ArrayList<Segment> window3 = abr.getWindow(new Segment(0,5,Integer.MIN_VALUE,5));
-		ArrayList<Segment> window4 = abr.getWindow(new Segment(5,0,5,Integer.MAX_VALUE));
-		ArrayList<Segment> window5 = abr.getWindow(new Segment(0,5,0,5));
+		ArrayList<Segment> segments=new ArrayList<>();
+		segments.add(new Segment(42,1,2,2));//horizontal segment completely in the window
+		segments.add(new Segment(0,-45,1,1));//horizontal segment not completely in the window, x2 is behind the window in x and x1 is at the border
+		segments.add(new Segment(-42,10,0,0));//horizontal segment not completely in the window, x1 is behind the window in x
 
-		assertFalse(window1.isEmpty());
-		assertFalse(window2.isEmpty());
-		assertFalse(window3.isEmpty());
-		assertFalse(window4.isEmpty());
-		assertFalse(window5.isEmpty());
+		segments.add(new Segment(1,1,1,2));//vertical segment completely in the window
+		segments.add(new Segment(2,2,0,5));//vertical segment that touches the borders of the window
+		segments.add(new Segment(3,3,-4,1));//vertical segment not completely in the window, Y1 is behind the window in y
+		segments.add(new Segment(4,4,4,15));//vertical segment not completely in the window, y2 is beyond the window in y
 
+		segments.add(new Segment(3,3,-42,42));//vertical segment that cross over the window
 
+		ArrayList<Segment> verification=new ArrayList<>();
+		verification.addAll(segments);
+
+		segments.add(new Segment(-6,-28,2,2));//segments that are not in the window
+		segments.add(new Segment(2,2,6,8));
+		segments.add(new Segment(2,2,-4,-7));
+		segments.add(new Segment(-41,-43,42,42));
+
+		Pst abr = new Pst(segments);
+		ArrayList<Segment> segs = abr.getWindow(new Segment(0,Integer.MAX_VALUE,0,5));
+
+		assertTrue(segs.size()==verification.size());
+		for (Segment s:segs) {
+			assertTrue(verification.contains(s));
+		}
+	}
+
+	/**
+	 * This test is passed if all the correct segments are taken by the windowing application on a window not bordered in y (-infinity).
+	 * The form of the window is like that : [x1;x2]X[Integer.MIN_VALUE;y2]
+	 */
+	@Test
+	public void windowingTest5(){
+
+		ArrayList<Segment> segments=new ArrayList<>();
+		segments.add(new Segment(1,2,0,0));//horizontal segment completely in the window
+		segments.add(new Segment(0,5,1,1));//horizontal segment that touches the borders of the window
+		segments.add(new Segment(-4,1,2,2));//horizontal segment not completely in the window, x1 is behind the window in x
+		segments.add(new Segment(4,15,3,3));//horizontal segment not completely in the window, x2 is beyond the window in x
+
+		segments.add(new Segment(2,2,-41,1));//vertical segment completely in the window
+		segments.add(new Segment(0,0,5,25));//vertical segment not completely in the window, y2 is beyond the window in y and y1 is at the border
+		segments.add(new Segment(1,1,2,25));//vertical segment not completely in the window, y2 is beyond the window in y
+
+		segments.add(new Segment(-42,42,4,4));//horizontal segment that cross over the window
+
+		ArrayList<Segment> verification=new ArrayList<>();
+		verification.addAll(segments);
+
+		segments.add(new Segment(6,28,2,2));//segments that are not in the window
+		segments.add(new Segment(-6,-28,2,2));
+		segments.add(new Segment(2,2,6,8));
+		segments.add(new Segment(41,43,42,42));
+
+		Pst abr = new Pst(segments);
+		ArrayList<Segment> segs = abr.getWindow(new Segment(0,5,Integer.MIN_VALUE,5));
+
+		assertTrue(segs.size()==verification.size());
+		for (Segment s:segs) {
+			assertTrue(verification.contains(s));
+		}
+	}
+
+	/**
+	 * This test is passed if all the correct segments are taken by the windowing application on a window not bordered in y (-infinity).
+	 * The form of the window is like that : [x1;x2]X[Integer.MIN_VALUE;y2]
+	 */
+	@Test
+	public void windowingTest6(){
+
+		ArrayList<Segment> segments=new ArrayList<>();
+		segments.add(new Segment(1,2,0,0));//horizontal segment completely in the window
+		segments.add(new Segment(0,5,1,1));//horizontal segment that touches the borders of the window
+		segments.add(new Segment(-4,1,2,2));//horizontal segment not completely in the window, x1 is behind the window in x
+		segments.add(new Segment(4,15,3,3));//horizontal segment not completely in the window, x2 is beyond the window in x
+
+		segments.add(new Segment(2,2,41,1));//vertical segment completely in the window
+		segments.add(new Segment(0,0,0,-25));//vertical segment not completely in the window, y2 is behind the window in y and y1 is at the border
+		segments.add(new Segment(1,1,-42,25));//vertical segment not completely in the window, y2 is beyond the window in y
+
+		segments.add(new Segment(-42,42,25,25));//horizontal segment that cross over the window
+
+		ArrayList<Segment> verification=new ArrayList<>();
+		verification.addAll(segments);
+
+		segments.add(new Segment(6,28,2,2));//segments that are not in the window
+		segments.add(new Segment(-6,-28,2,2));
+		segments.add(new Segment(2,2,-6,-8));
+		segments.add(new Segment(41,43,-42,-42));
+
+		Pst abr = new Pst(segments);
+		ArrayList<Segment> segs = abr.getWindow(new Segment(0,5,0,Integer.MAX_VALUE));
+
+		assertTrue(segs.size()==verification.size());
+		for (Segment s:segs) {
+			assertTrue(verification.contains(s));
+		}
 	}
 
 }
