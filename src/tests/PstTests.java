@@ -131,6 +131,29 @@ public class PstTests {
 		}
 	}
 
+	@Test
+	public void balanceTest(){
+
+		Pst abrs = new Pst(list);
+		BasicPst abr=abrs.getOriginal();
+		Array<PstNode> nodes = getNodes(abr.getRoot());
+		int bal=0;
+
+		for (PstNode n:nodes) {
+
+			if (n.isLeaf())assertTrue(true);//useless but it's for the demonstration
+
+			else if (n.getLeft()==null)
+				bal=n.getRight().getHeight();
+			else if (n.getRight()==null)
+				bal= - n.getLeft().getHeight();
+			else
+				bal = n.getRight().getHeight() - n.getLeft().getHeight() ;
+
+			assertTrue(bal<=1 && bal>=-1);//the balance max and min are -1 and 1
+		}
+	}
+
 	/**
 	 * This test is used to verify all the differents type of segments are taken the windowing in a bordered window ([x;x']X[y;y']).
 	 */

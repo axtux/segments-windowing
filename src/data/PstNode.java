@@ -97,4 +97,22 @@ public class PstNode {
 		
 		return s;
 	}
+	public boolean isLeaf(){
+		return (left==null && right==null);
+	}
+
+	/**
+	 * This method is used to get the height of the Node in the Pst
+	 * @return A int.
+	 */
+	public int getHeight(){
+		if (isLeaf())
+			return 1;
+		else if (getLeft()==null)
+			return 1+getRight().getHeight();
+		else if (getRight()==null)
+			return 1+getLeft().getHeight();
+		else
+			return 1+Math.max( getLeft().getHeight(), getRight().getHeight() );
+	}
 }

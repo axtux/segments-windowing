@@ -41,6 +41,15 @@ public class BasicPst {
 	public PstNode getRoot(){
 		return root;
 	}
+
+	/**
+	 * This method is used to get the height of the Pst
+	 * @return A int.
+	 */
+	public int getHeight(){
+		return root.getHeight();
+	}
+
 	/**
 	 * Get index of the Segment owning the minimum X value.
 	 * @param list A list of segments.
