@@ -188,6 +188,7 @@ Afin d'effectuer la recherche de la fenêtre fermée efficacement, nous applique
 \section{Diagrammes de classes}
 \subsection{Pst et BasicPst}
 BasicPst correspond au PST gérant efficacement une fenêtre de type $[-\infty, X']$ x $[Y, Y']$. Afin de gérer toutes les transformations, nous avons créé une autre classe Pst qui comporte 4 BasicPst :
+\begin{enumerate}
 	\item un avec les segments originaux pour les fenêtres $[-\infty, X']$ x $[Y, Y']$ ;
 	\item un avec les segments échangés pour les fenêtres $[X, X']$ x $[-\infty, Y']$ ;
 	\item un avec les segments opposés pour les fenêtres $[X, +\infty]$ x $[Y, Y']$ ;
