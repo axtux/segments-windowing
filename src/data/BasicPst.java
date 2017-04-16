@@ -68,14 +68,10 @@ public class BasicPst {
 		return min;
 	}
 	/**
-	 * Print root node.
+	 * String representation of this tree.
 	 */
-	public void printPst() {
-		if(root == null) {
-			System.out.println("null");
-		} else {
-			System.out.println(root.toString());
-		}
+	public String toString() {
+		return root == null ? "null" : root.toString();
 	}
 	/**
 	 * Apply windowing algorithm using root node, reporting viewed segments through window.
