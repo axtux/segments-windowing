@@ -64,13 +64,28 @@ Dans le cadre du cours de structures de données 2, nous avons été amenés à 
 
 Un PST partage certaines caractéristiques avec les tas et les Arbres Binaires de Recherche ou ABR. Ces deux dernières structures de données ayant été étudiées en profondeur lors des séances de cours, nous les considérons ici comme connues.
 
+\section{Présentation du problème}
+Il nous a été demandé d'écrire un programme qui permette d'appliquer un "windowing" à un ensemble de segments de droite verticaux et horizontaux dans $\mathbb{R}^2$. Le windowing est une technique qui consiste à extraire tous les segments qui sont visibles dans une fenêtre donnée. Les différentes fenêtres à implémenter sont les suivantes :
+\begin{itemize}
+	\item $[X, X']$ x $[Y, Y']$ ;
+	\item $[-\infty, X']$ x $[Y, Y']$ ;
+	\item $[X, +\infty]$ x $[Y, Y']$ ;
+	\item $[X, X']$ x $[-\infty, Y']$ ;
+	\item $[X, X']$ x $[Y, +\infty]$.
+\end{itemize}
+La structure de données à implémenter devrait donc permettre un windowing efficace pour l'ensemble de ses fenêtres.
+
+
+\newpage
 \section{Priority Search Tree}
 
 \subsection{Objectif de la structure}
 Un PST est une structure de données de type arbre binaire (chaque nœud comporte au plus deux fils). Cette structure de données organise des points de l'espace défini par deux coordonnées X et Y. L'organisation des données permet d'effectuer efficacement la recherche des points présents dans une fenêtre de l'espace (sans avoir à parcourir l'ensemble des points).
 
 \subsection{Définition}
-Un PST est une structure de données mixte. Chaque nœud est constitué d'un point et d'un nombre appelé la médiane. Si l'on considère uniquement les coordonnées X, un PST est un tas avec le minimum à la racine. Si l'on considère uniquement les coordonnées Y, le PST est un ABR avec une petite particularité. Au lieu de trier les fils par rapport à la donnée du nœud courant, un PST trie les fils en fonction de la médiane du nœud courant. Ainsi, tout nœud n d'un PST respecte les contraintes suivantes :
+Un PST est une structure de données mixte. Chaque nœud est constitué d'un point et d'un nombre appelé la médiane. Si l'on considère uniquement les coordonnées X, un PST est un tas avec le minimum à la racine. Si l'on considère uniquement les coordonnées Y, le PST est un ABR avec une petite particularité. Au lieu de trier les fils par rapport à la donnée du nœud courant, un PST trie les fils en fonction de la médiane du nœud courant.
+
+Ainsi, tout nœud n d'un PST respecte les contraintes suivantes :
 \begin{itemize}
 	\item son fils gauche (s'il existe ainsi que ses descendants s'ils existent) aura sa coordonnée X plus grande que celle du nœud n et sa coordonnée Y plus petite que la médiane du nœud n ;
 	\item son fils droit (s'il existe ainsi que ses descendants s'ils existent) aura sa coordonnée X plus grande que celle du nœud n et sa coordonnée Y plus grande que la médiane du nœud n.
@@ -89,25 +104,61 @@ La coordonnée X d'un nœud devant être plus petite ou égale à celle de ses f
 
 % TODO insert code
 
-% TODO continue ...
-
-
-
+% TODO better explain windowing
 \subsection{Windowing}
 Le windowing est une technique très répandue qui consiste à sélectionner certaine une fenêtre parmis une énorme quantité de données. Un exemple pratique très répandu est l'affichage d'une carte sur un gps, le gps se voulant rapide n'affichera pas toutes les routes qui se trouvent dans le monde(énorme quantité de données) mais seulement celles qui nous entourent au moment où  nous roulons avec notre véhicule. 
 
-\subsection{Mise en place du problème}
-Pour ce projet, il nous été demandé de résoudre un problème de windowing utilisant la structure de donnée "Priority Search Tree". Il nous est donc fourni un fichier.txt qui contient un ensemble de segments que nous devons pouvoir afficher et sélectionner à travers la dite technique. \\
-Il faut donc pouvoir gérer différents type de fenêtres lors du windowing :
-\begin{enumerate}
-	\item \begin{Huge}
-	À remplir
-	\end{Huge}
-	\item 
-	
-\end{enumerate}
+\newpage
+\section{PST Adapté}
+Étant donné que notre windowing s'applique à des segments et non à des points, nous ne pouvons utiliser le PST tel que décrit ci-dessus. Nous avons donc adapté cette structure afin de permettre l'utilisation de segments.
 
-\section{Idées et Mise en pratique}
+Un segment est défini par 2 points, chacun ayant une coordonnée X et une coordonnée Y. Un segment possède donc 2 coordonnées X ainsi que 2 coordonnées Y. Un segment est soit horizontal soit vertical, c'est-à-dire soit les coordonnées X soit les coordonnées Y sont égales.
+
+Afin de garder les explications concises et faciles à comprendre, nous allons d'abord considérer uniquement une fenêtre de type $[X, X']$ x $[Y, Y']$ ou $[-\infty, X']$ x $[Y, Y']$ et nous expliquerons ensuite comment gérer les autres cas.
+
+\subsection{Objectif de la structure}
+L'objectif de cette structure est d'organiser l'ensemble des segments afin de faciliter la recherche de segments visibles dans une fenêtre de type $[X, X']$ x $[Y, Y']$ ou $[-\infty, X']$ x $[Y, Y']$.
+
+\subsection{Définition}
+Notre PST adapté respecte exactement la définition d'un PST excepté 2 adaptation :
+\begin{itemize}
+	\item un segment sera stoqué par nœud au lieu d'un point ;
+	\item les coordonnées utilisées pour effectuer la comparaison sont le minimum des coordonnées X du segment comme X, le minimum des coordonnées Y du segment comme Y.
+\end{itemize}
+
+Le choix des coordonnées de référence est judicieux car il permet lors de la recherche d'une fenêtre, d'élaguer tout nœud (ainsi que ses descendants par définition du tas) dont la coordonnée minimum en X est supérieure à X' et il permet de ne pas visiter le fils droit (ainsi que ses descendants par définition de l'ABR) de tout nœud dont la médiane est strictement supérieure à Y'.
+
+\subsection{Construction}
+Notre PST adapté se construit à la manière d'un PST excepté que les références pour la comparaison des données sont les coordonnées minimums en X ainsi qu'en Y. C'est-à-dire que nous trions les segments selon leur plus petite coordonnée en Y. Lorsque nous recherchons le minimum en X, nous recherchons le segment avec la plus petite coordonnée X.
+
+\subsection{Windowing}
+Étant donné que nous devons reporter tous les segments visible dans une certaine fenêtre, nous devons non seulement extraire les segments ayant un point dans la fenêtre, mais aussi les segments commençant avant et finissant après. C'est le cas notamment du segment possédant les coordonnées (X'-1, Y-1) (X'-1, Y'+1). La recherche sera donc un peut moins efficace que pour les points et nous allons devoir utiliser une approche différente.
+
+Nouvelle approche : se concentrer sur le point de départ du segment c'est-à-dire le point ayant la plus petite coordonnée X pour un segment horizontal, le point ayant la plus petite coordonnée Y pour un segment vertical. Nous avons ici 3 possibilités pour que le segment soit visible :
+\begin{itemize}
+	\item soit le point de départ est dans la fenêtre ;
+	\item soit le point de départ est à gauche de la fenêtre et le segment traverse la limite gauche de la fenêtre ;
+	\item soit le point de départ est en dessous de la fenêtre et le segment traverse la limite basse de la fenêtre.
+\end{itemize}
+Il est évident que si le point de départ se situe au dessus ou à droite de la fenêtre, ce segment ne sera pas visible dans la fenêtre.
+% TODO add schema of the window to help comprehension
+
+Nous allons donc parcourir l'arbre à partir de la racine et le traiter de la sorte :
+\begin{itemize}
+	\item si le minimum en X du segment est strictement supérieur à X', alors on laisse tomber ce nœud ainsi que tous ses descendants (le segment de ce nœud ainsi que celui de ses descendants a son point de départ à droite de la fenêtre) ;
+	% TODO add reference to ci-desssus
+	\item si ce segment est visible dans la fenêtre (voir conditions ci-dessus), le reporter ;
+	\item si la médiane du nœud est strictement supérieure à Y' (le segment du fils droit ainsi que celui de ses descendants a son point de départ au dessus de la fenêtre), alors parcourir le fils gauche uniquement sinon parcourir les deux fils.
+\end{itemize}
+% TODO image de l'arbre et des noeud parcourus
+
+% TODO insert code ?
+L'utilisation de cette structure pour réaliser un windowing de type $[-\infty, X']$ x $[Y, Y']$ est très efficace car aucun nœud inutile n'est parcouru.
+
+\subsection{Les autres fenêtres}
+Nous avons vu une structure de données très efficace pour réaliser un windowing de type $[-\infty, X']$ x $[Y, Y']$. Cependant, nous devons également réaliser les windowing suivants :
+% TODO continue ...
+
 \section{Diagramme de Classes}
 \section{Algorithmes et explications}
 
