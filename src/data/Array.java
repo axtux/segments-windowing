@@ -3,7 +3,10 @@ package data;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
-
+/**
+ * Extends {@link ArrayList} to add subArray and copy methods and replace sort by {@link Heap}sort.
+ * @param <E> Elements of this type compose Array.
+ */
 public class Array<E> extends ArrayList<E> {
 	private static final long serialVersionUID = 1L;
 	
