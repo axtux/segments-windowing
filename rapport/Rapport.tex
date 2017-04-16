@@ -7,11 +7,21 @@
 \usepackage{amssymb}
 \usepackage{graphicx}
 
+\usepackage{algorithm}
+\usepackage{algorithmic}
+
 \usepackage{libertine}
 \setlength{\parindent}{0cm}
 \setlength{\parskip}{1ex plus 0.5ex minus 0.2ex}
 \newcommand{\hsp}{\hspace{20pt}}
 \newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+
+\floatname{algorithm}{Algorithme}
+\renewcommand{\algorithmicrequire}{\textbf{Entrée:}}
+\renewcommand{\algorithmicensure}{\textbf{Sortie:}}
+\renewcommand{\algorithmicif}{\textbf{si}}
+\renewcommand{\algorithmicthen}{\textbf{alors}}
+\renewcommand{\algorithmicelse}{\textbf{sinon}}
 
 \begin{document}
 
@@ -94,10 +104,10 @@ La coordonnée X d'un nœud devant être plus petite ou égale à celle de ses f
 
 
 \subsection{Windowing}
-Le windowing est une technique très répandue qui consiste à sélectionner certaine une fenêtre parmis une énorme quantité de données. Un exemple pratique très répandu est l'affichage d'une carte sur un gps, le gps se voulant rapide n'affichera pas toutes les routes qui se trouvent dans le monde(énorme quantité de données) mais seulement celles qui nous entourent au moment où  nous roulons avec notre véhicule. 
+Le windowing est une technique très répandue qui consiste à sélectionner une certaine fenêtre parmis une énorme quantité de données. Un exemple pratique très répandu est l'affichage d'une carte sur un gps, le gps se voulant rapide n'affichera pas toutes les routes qui se trouvent dans le monde(énorme quantité de données) mais seulement celles qui nous entourent au moment où  nous roulons avec notre véhicule. 
 
 \subsection{Mise en place du problème}
-Pour ce projet, il nous été demandé de résoudre un problème de windowing utilisant la structure de donnée "Priority Search Tree". Il nous est donc fourni un fichier.txt qui contient un ensemble de segments que nous devons pouvoir afficher et sélectionner à travers la dite technique. \\
+Pour ce projet, il nous été demandé de résoudre un problème de windowing se basant sur la structure de donnée "Priority Search Tree". Il nous est ainsi fourni un fichier.txt qui contient un ensemble de segments que nous devons pouvoir afficher et sélectionner à travers la dite technique. \\
 Il faut donc pouvoir gérer différents type de fenêtres lors du windowing :
 \begin{enumerate}
 	\item \begin{Huge}
@@ -106,12 +116,47 @@ Il faut donc pouvoir gérer différents type de fenêtres lors du windowing :
 	\item 
 	
 \end{enumerate}
+Il nous a aussi été fournis comme aide un extrait du lire de \begin{Huge}
+à remplir
+\end{Huge}
+, qui nous explique la construction d'un Pst se construisant sur base de points dans le plan. La façon dont notre structure est adaptée à notre problème par rapport à cet article, ainsi que l'adaptation du windowing est expliquée dans les prochains points de ce rapport. 
 
 \section{Idées et Mise en pratique}
+\subsection{Passage des points au segments}
+
 \section{Diagramme de Classes}
+
 \section{Algorithmes et explications}
+Dans cette section, nous exposons nos différents algorithmes importants en pseudo-code ainsi que leur complexité en temps. Une courte explication en français y est aussi ajoutée afin de favoriser la compréhension de ceux-ci et leurs utilisations.
+\subsection{Construction de l'arbre}
+
+\begin{algorithm}
+\caption{Construction de l'arbre}
+\begin{algorithmic}[1]
+\REQUIRE une liste de Segment $A$
+\ENSURE /
+\STATE $max \leftarrow -\infty$
+\FOR{$i \leftarrow 1$ à $longueur[A]$}
+\IF{$max < A[i]$}
+\STATE $max \leftarrow A[i]$
+\ENDIF
+\ENDFOR
+\RETURN $max$
+\end{algorithmic}
+\end{algorithm}
+
+
+\section{Démonstrations}
+Durant cette section, nous allons démontrer certaines propriétés du Pst qui ne sont pas couvertes par nos algorithmes(certaines preuves ont été réalisées lors des tests).
+\subsection{Arbre équilibré}
+
+\subsection{Transformation des fenêtres}
 
 \section{Illustrations}
+Ce point du rapport sert d'illustration, vous permettant d'observer différents cas d'exemples d'application du windowing, et ceci via l'application que nous avons créer.
+
+\section{Mode d'emploi}
+Après vous avoir montrer en images notre application, nous vous expliquant ici comment faire fonctionner notre application. Vous pourrez ainsi constater cette réelle application par vous-même, qui est très intuitive et parfaitement fonctionnelle. 
 
 \section{Conclusion}
 

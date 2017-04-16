@@ -133,6 +133,7 @@ public class PstTests {
 
 	/**
 	 * This test is passed if the balance is not greater than 1 and lower than -1 for each node in the Pst
+	 *
 	 */
 	@Test
 	public void balanceTest(){
