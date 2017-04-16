@@ -13,10 +13,10 @@ import java.util.ArrayList;
  * Efficiency is got by using {@link BasicPst} with transformed segments.
  */
 public class Pst {
-	BasicPst original;
-	BasicPst opposed;
-	BasicPst exchanged;
-	BasicPst opposed_exchanged;
+	private BasicPst original;
+	private BasicPst opposed;
+	private BasicPst exchanged;
+	private BasicPst opposed_exchanged;
 	
 	public Pst(ArrayList<Segment> segments) {
 		// make 4 arrays from segments
@@ -66,12 +66,12 @@ public class Pst {
 		return getClosedWindow(window);
 	}
 	
-	public Array<Segment> getLeftWindow(Segment window) {
+	private Array<Segment> getLeftWindow(Segment window) {
 		// this one is always efficient using windowing
 		return original.windowing(window);
 	}
 	
-	public Array<Segment> getRightWindow(Segment window) {
+	private Array<Segment> getRightWindow(Segment window) {
 		// oppose coordinates to be able to use efficient windowing
 		Array<Segment> segments = opposed.windowing(window.oppose());
 		// recover coordinates to original state
@@ -79,7 +79,7 @@ public class Pst {
 		return segments;
 	}
 	
-	public Array<Segment> getDownWindow(Segment window) {
+	private Array<Segment> getDownWindow(Segment window) {
 		// exchange coordinates to be able to use efficient windowing
 		Array<Segment> segments = exchanged.windowing(window.exchange());
 		// recover coordinates to original state
@@ -87,7 +87,7 @@ public class Pst {
 		return segments;
 	}
 	
-	public Array<Segment> getUpWindow(Segment window) {
+	private Array<Segment> getUpWindow(Segment window) {
 		// oppose and exchange coordinates to be able to use efficient windowing
 		Array<Segment> segments = opposed_exchanged.windowing(window.oppose().exchange());
 		// recover coordinates to original state
@@ -96,7 +96,7 @@ public class Pst {
 		return segments;
 	}
 	
-	public Array<Segment> getClosedWindow(Segment window) {
+	private Array<Segment> getClosedWindow(Segment window) {
 		// get original left and center but not down to remove left children
 		Array<Segment> response = original.windowing(window, false, true);
 		
