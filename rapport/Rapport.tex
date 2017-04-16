@@ -155,11 +155,37 @@ Nous allons donc parcourir l'arbre à partir de la racine et le traiter de la so
 % TODO insert code ?
 L'utilisation de cette structure pour réaliser un windowing de type $[-\infty, X']$ x $[Y, Y']$ est très efficace car aucun nœud inutile n'est parcouru.
 
+
 \subsection{Les autres fenêtres}
-Nous avons vu une structure de données très efficace pour réaliser un windowing de type $[-\infty, X']$ x $[Y, Y']$. Cependant, nous devons également réaliser les windowing suivants :
-% TODO continue ...
+\subsubsection{De $[-\infty, X']$ x $[Y, Y']$ à $[X, X']$ x $[-\infty, Y']$}
+Nous avons vu une structure de données très efficace pour réaliser un windowing de type $[-\infty, X']$ x $[Y, Y']$. Cependant, nous devons également réaliser un windowing avec une fenêtre de type $[X, X']$ x $[-\infty, Y']$. Nous remarquons que pour obtenir cette fenêtre efficacement, il suffit d'échanger les coordonnées X et Y. Nous aurions pu implémenter une structure de donnée supplémentaire étant un tas selon Y et un ABR selon X (avec les médianes). Nous avons choisi de réutiliser la même structure de données et d'inverser les coordonnées des segments avant la construction de l'arbre. Ainsi le segment (X, X'),(Y, Y') devient après échange le segment (Y, Y'),(X, X'). Nous effectuons une recherche avec la fenêtre échangée $[-\infty, Y']$ x $[X, X']$ et effectuons un échange inverse sur les segments reportés afin de retrouver les segments originaux.
+
+\subsubsection{Les autres fenêtres semi-infinies}
+Maintenant que nous pouvons effectuer une recherche efficace sur des fenêtres de type $[-\infty, X']$ x $[Y, Y']$ et $[X, X']$ x $[-\infty, Y']$, il nous reste les fenêtres $[X, +\infty]$ x $[Y, Y']$et $[X, X']$ x $[Y, +\infty]$. Nous remarquons que pour obtenir ces fenêtres efficacement, il suffit d'opposer les coordonnées. Nous aurions pu ici aussi créer une structure de donnée avec une comparaison différente. Nous avons également choisi de réutiliser la même structure et d'opposer les coordonnées avant la construction de l'arbre. Ainsi, le segment (X, X'),(Y,Y') devient après opposition (-X',-X),(-Y',-Y).
+
+\subsubsection{La fenêtre fermée}
+Lors de la recherche dans une fenêtre fermée avec l'arbre décrit ci-dessus, nous ne pouvons jamais éliminer le fils gauche de nos recherches. En conséquence, les nœuds que nous parcourons ayant un minimum en X strictement inférieur au X de la fenêtre et ayant un minimum en Y strictement inférieur au Y de la fenêtre sont parcourus inutilement. Ces segment sont ceux qui commencent en bas à gauche de la fenêtre et il est évident qu'ils n'y seront pas visibles. Nous avons donc adapté notre windowing afin qu'il prenne deux paramètre :
+\begin{itemize}
+	\item center : définit si les segments commençant au centre de la fenêtre doivent être reportés ;
+	\item down : définit si les segments commençant en dessous de la fenêtre doivent être reportés.
+\end{itemize}
+Si center est faux, alors nous pouvons laisser tomber les nœuds qui ont un minimum en X plus grand que le X de la fenêtre.
+Si down est faux, alors nous pouvons laisser tomber les fils gauches des nœuds dont la médiane est strictement inférieure au Y de la fenêtre.
+
+Afin d'effectuer la recherche de la fenêtre fermée efficacement, nous appliquerons le windowing deux fois. Une première fois avec down à faux afin de reporter les segments ayant le point de départ à gauche et dans la fenêtre. Une seconde fois sur la fenêtre échangée avec la même technique que pour la fenêtre $[X, X']$ x $[-\infty, Y']$ avec center et down à faux afin de reporter tous les segments ayant leur point de départ en dessous.
 
 \section{Diagramme de Classes}
+\subsection{Pst et BasicPst}
+BasicPst correspond au PST gérant efficacement une fenêtre de type $[-\infty, X']$ x $[Y, Y']$. Afin de gérer toutes les transformations, nous avons créé une autre classe Pst qui comporte 4 BasicPst :
+\begin{enumerate}
+	\item un avec les segments originaux pour les fenêtres $[-\infty, X']$ x $[Y, Y']$ ;
+	\item un avec les segments échangés pour les fenêtres $[X, X']$ x $[-\infty, Y']$ ;
+	\item un avec les segments opposés pour les fenêtres $[X, +\infty]$ x $[Y, Y']$ ;
+	\item un avec les segments échangés et opposés pour les fenêtres $[X, X']$ x $[Y, +\infty]$ ;
+\end{enumerate}
+
+Cette classe s'occupe de choisir l'arbre sur lequel effectuer le windowing afin d'obtenir la meilleure efficacité.
+
 \section{Algorithmes et explications}
 
 \section{Illustrations}
