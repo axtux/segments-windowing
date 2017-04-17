@@ -245,7 +245,12 @@ Afin d'effectuer la recherche de la fenêtre fermée efficacement, nous applique
 
 \newpage
 \section{Diagrammes de classes}
-Nous vous présentons durant ce point l’entièreté de nos classes à travers deux diagrammes de classes distincts, l'un concernant le travail sur les données, et l'autre le travail sur l'interface graphique de l'application. Ils sont ensuite suivis de différents points afin de vous expliquer le but des différentes classes implémentées.
+Cette section comporte 2 diagrammes de classes :
+\begin{enumerate}
+	\item le premier concerne l'organisation et le traitement des données ;
+	\item le second concerne l'interface graphique.
+\end{enumerate}
+Ces diagrammes sont suivis de quelques explications sur les classes implémentées.
 
 \subsection{Diagramme de classe des données}
 \includegraphics[scale=0.35]{../src/UML/data.png}
@@ -262,7 +267,7 @@ BasicPst correspond au PST gérant efficacement une fenêtre de type $[-\infty, 
 	\item un avec les segments échangés et opposés pour les fenêtres $[X, X']$ x $[Y, +\infty]$ ;
 \end{enumerate}
 
-Cette classe s'occupe de choisir l'arbre sur lequel effectuer le windowing afin d'obtenir la meilleure efficacité.
+Cette classe s'occupe de choisir l'arbre sur lequel effectuer le windowing afin d'obtenir la meilleure efficacité. Plusieurs arbres sont utilisés pour les fenêtres $[X, X']$ x $[Y, Y']$.
 
 \newpage
 \section{Algorithmes et explications}
@@ -374,6 +379,13 @@ La quatrième et dernière partie de l'interface affiche l'état du programme. L
 
 \section{Illustrations}
 Ce point du rapport sert d'illustration, vous permettant d'observer différents cas d'exemples d'application du windowing, et ceci via l'application que nous avons créer.
+
+\section{Améliorations possibles}
+Plusieurs améliorations auraient encore été possibles :
+\begin{itemize}
+	\item calculer le point moyen (parmi tous les points définissant les segments) et décider des transformation à utiliser en fonction de la situation de la fenêtre fermée par rapport au point moyen ;
+	\item bien que les fenêtres ayant 2 bornes infinies ne nous ont pas été demandées, nous pourrions décider des transformations à utiliser en fonction de l'orientation des 2 bornes.
+\end{itemize}
 
 \section{Conclusion}
 Nous avons bien réalisé les objectifs fixés dans l'introduction à savoir créer et manipuler une structure de données non vue au cours.\\Il est clair que ce travail nous a demandé à plusieurs reprises de réfléchir sur des moyens algorithmiques de résoudre les problèmes rencontrés. Nous avons donc appliquer les différents concepts et structures vus durant le cours de SDD2 afin de trouver des solutions et savoir quelles structures sont les mieux adaptées et comment les appliquées.\\
