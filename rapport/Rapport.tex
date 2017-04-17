@@ -211,6 +211,7 @@ BasicPst correspond au PST gérant efficacement une fenêtre de type $[-\infty, 
 
 Cette classe s'occupe de choisir l'arbre sur lequel effectuer le windowing afin d'obtenir la meilleure efficacité.
 
+\newpage
 \section{Algorithmes et explications}
 Dans cette section, nous exposons nos différents algorithmes importants en pseudo-code ainsi que leur complexité en temps. Une courte explication en français y est aussi ajoutée afin de favoriser la compréhension de ceux-ci et leurs utilisations.
 \subsection{Construction de l'arbre}
@@ -218,25 +219,68 @@ Dans cette section, nous exposons nos différents algorithmes importants en pseu
 \begin{algorithm}
 \caption{Construction de l'arbre}
 \begin{algorithmic}[1]
-\REQUIRE une liste de Segment $A$
+\REQUIRE une liste de Segment $A$, un PstNode $Root$ qui est la racine de l'arbre 
 \ENSURE /
-\STATE $max \leftarrow -\infty$
-\FOR{$i \leftarrow 1$ à $longueur[A]$}
-\IF{$max < A[i]$}
-\STATE $max \leftarrow A[i]$
-\ENDIF
-\ENDFOR
-\RETURN $max$
+\STATE $A \leftarrow heapSort(A)$
+\STATE $root \leftarrow construct(A) $
 \end{algorithmic}
 \end{algorithm}
 
-\section{Illustrations}
-Ce point du rapport sert d'illustration, vous permettant d'observer différents cas d'exemples d'application du windowing, et ceci via l'application que nous avons créer.
+\begin{algorithm}
+\caption{Construct()}
+\begin{algorithmic}[1]
+\REQUIRE une liste de Segment triée en y $A$ 
+\ENSURE un PstNode qui représente la racine de l'arbre
+\IF{$A$ est vide}
+\RETURN $null$
+\ENDIF
+\STATE $node \leftarrow A[getMinX()] $
+\IF{$A$ est non vide}
+\STATE $node.median \leftarrow longueur(A)/2 $
+\STATE $node.left \leftarrow construct(A.sousListe(0,node.median)) $
+\STATE $node.right \leftarrow construct(A.sousListe(node.median,longueur(A))) $
+\ENDIF
+\RETURN node
+\end{algorithmic}
+\end{algorithm}
 
+\begin{algorithm}
+\caption{getMinX()}
+\begin{algorithmic}[1]
+\REQUIRE une liste de Segment $L$
+\ENSURE l'indice entier de l’élément minimum en X
+\IF{$L$ est vide}
+\RETURN -1
+\ENDIF
+\STATE $min \leftarrow 0$
+\FOR{$i \leftarrow 1$ à $longueur[A]$}
+\IF{$A[i].getMinX() < A[min].getMinX() $}
+\STATE $min \leftarrow i$
+\ENDIF
+\ENDFOR
+\RETURN $min$
+\end{algorithmic}
+\end{algorithm}
+
+\subsubsection{Explication}
+
+Nous construisons ici l'arbre de haut en bas, ayant initialement la racine qui est le minimum en x des segments, nous effectuons ensuite une séparation des données en deux vis à vis de la médiane en y, et ceci récursivement. Biensur pour que ceci soit possible, nous trions les segments en y avant d'utiliser la liste pour la création de l'arbre.
+
+\subsubsection{Complexité dans le pire des cas}
+Nous commençons d'abord par calculer la complexité dans le pire des cas en temps de l'algorithme 3.
+Les 4 premières lignes sont en $\mathcal{O} (1)$, ainsi que les lignes 7 et 10, car le retour est constant, la condition du if est constante et une affectation de valeur est constante en temps. La condition du if de la ligne 6 est elle aussi constante, car nous faisons une comparaison de valeurs (constante) et qu'avoir accès à la valeur du minimum x d'un segment se fait en temps constant. Nous aurons donc un for en ligne 5 qui sera en $\mathcal{O}(n)$ où n est la taille de la liste.
+L'algorithme possède donc une complexité de $\mathcal{O}(n)$ au total.
+
+Pour ce qui concerne l'algorithme 2, les lignes se font toutes en temps constant pour les mêmes raisons que celles énoncées pour le 3e algorithme mise à part pour les lignes 4,7 et 8. En effet pour les 7,8 nous effectuons un appel récursif qui sera exécuter  en $\mathcal{O}je sais pas$. Et pour la ligne 4, le getMinX() se résouds en $\mathcal{O}(n)$ par le point développer ci-dessus.
+
+Pour se qui concerne l'algorithme 1, celui ci possède une première ligne en $\mathcal{O}(n.log(n))$ (complexité en temps du heapSort), et une seconde en $\mathcal{O}(n^2)$. Nous aurons donc une complexité finale de $\mathcal{O}(n^2)$
+
+\subsection{Windowing}
+
+\subsection{Modification des fenêtres}
 \newpage
 \section{Mode d'emploi}
-Après vous avoir montrer en images notre application, nous vous expliquant ici comment faire fonctionner la faire fonctionner. Vous pourrez ainsi constater cette réelle application par vous-même, qui est très intuitive et parfaitement fonctionnelle.
-Pour lancer une commande, rendez-vous dans le dossier racine du projet.
+Pour lancer une commande, rendez-vous dans le dossier racine du projet à l'aide du terminal.
 
 \subsection{Javadoc}
 Pour compiler la Javadoc, entrez la commande \colorbox{lightgray}{ant javadoc}. La documentation compilée se trouve alors dans le répertoire \textbf{build/doc/}.
@@ -275,11 +319,13 @@ Si vous le désirez, il est possible de changer la taille de la visualisation à
 \subsubsection{Information sur l'état du programme}
 La quatrième et dernière partie de l'interface affiche l'état du programme. Les erreurs y sont affichées en rouge alors que les informations y sont en noir.
 
-\section{Améliorations possibles}
-
+\section{Illustrations}
+Ce point du rapport sert d'illustration, vous permettant d'observer différents cas d'exemples d'application du windowing, et ceci via l'application que nous avons créer.
 
 \section{Conclusion}
-Nous avons bien réalisé les objectifs fixés dans l'introduction à savoir créer et manipuler une structure de données non vue au cours. Nous tenons à remercier les personnes qui nous ont soutenues pour mener à bien ce projet à savoir BRUYÈRE Véronique et DEVILLEZ Gauvain.
+Nous avons bien réalisé les objectifs fixés dans l'introduction à savoir créer et manipuler une structure de données non vue au cours.\\Il est clair que ce travail nous a demandé à plusieurs reprises de réfléchir sur des moyens algorithmiques de résoudre les problèmes rencontrés. Nous avons donc appliquer les différents concepts et structures vus durant le cours de SDD2 afin de trouver des solutions et savoir quelles structures sont les mieux adaptées et comment les appliquées.\\
+Ce travail nous aura donc permis de finalement faire "un peu de recherche" en groupe, dans l'optique de résoudre un problème nouveau, ce qui nous a permis de découvrir lors de nos réunions de groupe nos différentes idées, de les comparer et de considérer le problème sous différents aspects. Nous aurons donc un souvenir très positif de se travail.\\   
+Nous tenons à remercier les personnes qui nous ont soutenues pour mener à bien ce projet à savoir BRUYÈRE Véronique et DEVILLEZ Gauvain.
 
 
 \end{document}
