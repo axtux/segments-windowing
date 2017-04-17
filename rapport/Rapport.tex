@@ -84,7 +84,7 @@ Il nous a été demandé d'écrire un programme qui permette d'appliquer un "win
 	\item $[X, X']$ x $[-\infty, Y']$ ;
 	\item $[X, X']$ x $[Y, +\infty]$.
 \end{itemize}
-La structure de données à implémenter devrait donc permettre un windowing efficace pour l'ensemble de ses fenêtres.
+La structure de données à imaginer devrait donc permettre un windowing efficace pour l'ensemble de ses fenêtres.
 
 
 \newpage
@@ -94,7 +94,7 @@ La structure de données à implémenter devrait donc permettre un windowing eff
 Un PST est une structure de données de type arbre binaire (chaque nœud comporte au plus deux fils). Cette structure de données organise des points de l'espace défini par deux coordonnées X et Y. L'organisation des données permet d'effectuer efficacement la recherche des points présents dans une fenêtre de l'espace (sans avoir à parcourir l'ensemble des points).
 
 \subsection{Définition}
-Un PST est une structure de données mixte. Chaque nœud est constitué d'un point et d'un nombre appelé la médiane. Si l'on considère uniquement les coordonnées X, un PST est un tas avec le minimum à la racine. Si l'on considère uniquement les coordonnées Y, le PST est un ABR avec une petite particularité. Au lieu de trier les fils par rapport à la donnée du nœud courant, un PST trie les fils en fonction de la médiane du nœud courant.
+Un PST est une structure de données mixte. Chaque nœud est constitué d'un point et d'un nombre appelé la médiane. Si l'on considère uniquement les coordonnées X, un PST est organisé tel un tas avec le minimum à la racine. Si l'on considère uniquement les coordonnées Y, le PST est organisé tel un ABR avec une petite particularité. Au lieu de trier ses fils par rapport à la donnée du nœud courant, un PST trie ses fils par rapport à la médiane du nœud courant.
 
 Ainsi, tout nœud n d'un PST respecte les contraintes suivantes :
 \begin{itemize}
@@ -103,6 +103,7 @@ Ainsi, tout nœud n d'un PST respecte les contraintes suivantes :
 \end{itemize}
 
 \subsection{Construction}
+Bien que la documentation suggérait une construction bottom-up similaire à celle d'un tas, nous avons opté pour une construction top-down qui nous semblait plus facile à implémenter.
 
 \subsubsection{Tri des données}
 La construction d'un PST est plus simple si l'on construit ce dernier à partir d'une liste de points triés selon la coordonnée Y. La première étape est donc de trier les points.
@@ -111,7 +112,7 @@ La construction d'un PST est plus simple si l'on construit ce dernier à partir 
 Pour créer un arbre, créons le nœud racine à partir de la liste des points triés.
 
 \subsubsection{Création d'un nœud}
-La coordonnée X d'un nœud devant être plus petite ou égale à celle de ses fils, commençons par rechercher le point avec la plus petite coordonnée X. Attribuons ce point au nœud courant. Séparons le reste des points en deux. Attribuons comme médiane du nœud courant, la moyenne de la coordonnée Y du dernier point de la partie 1 et du premier point de la partie 2. Les points étant triés selon la coordonnée Y, la première partie est dispose d'une coordonnée Y plus petite ou égale à la médiane du nœud alors que la deuxième partie aura une coordonnée Y plus grande ou égale à la médiane du nœud. Dans le cas où il ne reste aucun point après le retrait du minimum en X, la valeur de la moyenne n'a pas d'importance. Dans le cas où il ne reste qu'un point, la coordonnée Y du point restant peut être attribuée à la médiane du nœud.
+La coordonnée X d'un nœud devant être plus petite ou égale à celle de ses fils, commençons par rechercher le point avec la plus petite coordonnée X. Attribuons ce point au nœud courant. Séparons le reste des points en deux. Attribuons comme médiane au nœud courant, la moyenne de la coordonnée Y de 2 points. Le premier est le dernier point de la partie 1 et le second est le premier point de la partie 2. Les points étant triés selon la coordonnée Y, la première partie possède une coordonnée Y plus petite ou égale à la médiane du nœud alors que la deuxième partie possède une coordonnée Y plus grande ou égale à la médiane du nœud. Dans le cas où il ne reste aucun point après le retrait du minimum en X, la valeur de la moyenne n'a pas d'importance. Dans le cas où il ne reste qu'un point, la coordonnée Y du point restant peut être attribuée à la médiane du nœud.
 
 % TODO insert code
 
@@ -123,12 +124,19 @@ Le windowing est une technique très répandue qui consiste à sélectionner une
 \newpage
 \section{PST Adapté}
 
-Étant donné que notre structure s'applique à des segments et non à des points, nous ne pouvons utiliser le PST tel que décrit ci-dessus. Nous avons donc adapté cette structure afin de permettre l'utilisation de segments.\\
+Étant donné que notre structure utilise des segments au lieu des points, nous ne pouvons utiliser le PST tel que décrit ci-dessus. Nous avons donc adapté cette structure afin de permettre l'utilisation de segments.
 
-Nous avons donc considérer deux façons d'adapté le problème à la structure initiale.\\La première étant de considérer les deux points définissant un segment séparément, tout en gardant un lien vers le segment de base.\\La deuxième approche est de considérer les segments et adapter les différents algorithmes de la structure de base à des segments dans le plan.\\Nous avons après réflexion décider d'utiliser la deuxième façon d'adapté la structure.\\
+Un segment est défini par 2 points, chacun ayant une coordonnée X et une coordonnée Y. Un segment possède donc 2 coordonnées X ainsi que 2 coordonnées Y. Un segment est soit horizontal soit vertical, c'est-à-dire soit les coordonnées X soit les coordonnées Y sont égales.
 
-Un segment est défini par 2 points, chacun ayant une coordonnée X et une coordonnée Y. Un segment possède donc 2 coordonnées X ainsi que 2 coordonnées Y. Un segment est soit horizontal soit vertical, c'est-à-dire soit les coordonnées X soit les coordonnées Y sont égales.\\
-Afin de garder les explications concises et faciles à comprendre, nous allons d'abord considérer uniquement une fenêtre de type $[X, X']$ x $[Y, Y']$ ou $[-\infty, X']$ x $[Y, Y']$ et nous expliquerons ensuite comment gérer les autres cas.
+Nous avons considéré deux façons d'adapter le problème :
+\begin{enumerate}
+	\item stoquer les deux points définissant chaque segment séparément dans la structure initiale, tout en gardant un lien vers le segment initial ;
+	\item stoquer chaque segment dans une nouvelle structure et adapter les différents algorithmes.
+\end{enumerate}
+
+Après mûre réflexion, nous avons opté pour la seconde option qui est plus flexible et qui nous permet donc d'avantage d'optimisations.
+
+Afin de garder les explications concises et faciles à comprendre, nous allons d'abord considérer uniquement les fenêtres de type $[X, X']$ x $[Y, Y']$ et $[-\infty, X']$ x $[Y, Y']$ et nous expliquerons ensuite comment gérer les autres cas.
 
 \subsection{Objectif de la structure}
 L'objectif de cette structure est d'organiser l'ensemble des segments afin de faciliter la recherche de segments visibles dans une fenêtre de type $[X, X']$ x $[Y, Y']$ ou $[-\infty, X']$ x $[Y, Y']$.
@@ -137,15 +145,13 @@ L'objectif de cette structure est d'organiser l'ensemble des segments afin de fa
 Notre PST adapté respecte exactement la définition d'un PST excepté 2 adaptation :
 \begin{itemize}
 	\item un segment sera stocké par nœud au lieu d'un point ;
-	\item les coordonnées utilisées pour effectuer la comparaison sont le minimum des coordonnées X du segment comme X, le minimum des coordonnées Y du segment comme Y.
+	\item les coordonnées utilisées pour effectuer la comparaison sont le minimum des coordonnées X du segment comme X et le minimum des coordonnées Y du segment comme Y.
 \end{itemize}
 
 Le choix des coordonnées de référence est judicieux car il permet lors de la recherche d'une fenêtre, d'élaguer tout nœud (ainsi que ses descendants par définition du tas) dont la coordonnée minimum en X est supérieure à X' et il permet de ne pas visiter le fils droit (ainsi que ses descendants par définition de l'ABR) de tout nœud dont la médiane est strictement supérieure à Y'.
 
 \subsection{Construction}
-Notre PST adapté se construit à la manière d'un PST excepté que les références pour la comparaison des données sont les coordonnées minimums en X ainsi qu'en Y. C'est-à-dire que nous trions les segments selon leur plus petite coordonnée en Y. Lorsque nous recherchons le minimum en X, nous recherchons le segment avec la plus petite coordonnée X.\\
-
-L'article conseillait également lors de la construction de la structure d'utiliser une méthode bottom-up similaire à la construction d'un tas. Nous avons ici décidé de ne pas utiliser cette méthode mais de construire l'arbre de haut en bas à l'aide des segments fournis à la structure. Une explication plus détaillée est fournie lors de l'explication de l'algorithme au point 6.
+Notre PST adapté se construit à la manière d'un PST excepté que les références pour la comparaison des données sont les coordonnées minimums en X ainsi qu'en Y. C'est-à-dire que nous trions les segments selon leur plus petite coordonnée en Y. Lorsque nous recherchons le minimum en X, nous recherchons le segment avec la plus petite coordonnée X.
 
 \subsection{Windowing}
 Étant donné que nous devons reporter tous les segments visible dans une certaine fenêtre, nous devons non seulement extraire les segments ayant au moins un point dans la fenêtre, mais aussi les segments commençant avant et finissant après (qui passent au travers de la fenêtre). C'est le cas notamment du segment possédant les coordonnées (X', Y-1) (X', Y'+1). La recherche sera donc un peut moins efficace que pour les points et nous allons devoir utiliser une approche différente.
