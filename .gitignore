@@ -95,5 +95,4 @@ gradle-app.setting
 *.log
 *.synctex.gz
 *.toc
-
-/rapport/Rapport.pdf
+*.pdf

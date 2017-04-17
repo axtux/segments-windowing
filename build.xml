@@ -33,7 +33,7 @@
   </target>
   <target name="javadoc">
     <mkdir dir="${doc.dir}"/>
-    <javadoc destdir="${doc.dir}" sourcepath="${src.dir}" classpath="${class.path}" />
+    <javadoc destdir="${doc.dir}" sourcepath="${src.dir}" classpath="${class.path}" charset="UTF-8" link="https://docs.oracle.com/javase/8/docs/api/"/>
   </target>
   <target name="test" depends="build">
     <junit fork="true" printsummary="yes" showoutput="yes">
