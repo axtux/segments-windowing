@@ -73,10 +73,12 @@
 \section{Introduction}
 Dans le cadre du cours de structures de données 2, nous avons été amenés à réaliser un projet en Java. Ce projet a pour objectif de créer et manipuler une structure de données non vue au cours. Cette nouvelle structure se base sur un arbre de recherche à priorité (Priority Search Tree en anglais ou PST). De la documentation nous a été fournie afin de nous familiariser avec cette dernière structure qui elle non plus n'a pas été vue au cours.
 
+L'objectif du PST est d'appliquer un "windowing" efficace sur un ensemble de données. Le windowing est une technique qui consiste à extraire tous les points qui sont visibles dans une fenêtre donnée. Un exemple pratique et répandu est l'affichage d'une carte sur un GPS, le GPS n'affichera pas toutes les routes qui se trouvent dans le monde mais seulement celles qui nous entourent.
+
 Un PST partage certaines caractéristiques avec les tas et les Arbres Binaires de Recherche ou ABR. Ces deux dernières structures de données ayant été étudiées en profondeur lors des séances de cours, nous les considérons ici comme connues.
 
 \section{Présentation du problème}
-Il nous a été demandé d'écrire un programme qui permette d'appliquer un "windowing" à un ensemble de segments de droite verticaux et horizontaux dans $\mathbb{R}^2$. Le windowing est une technique qui consiste à extraire tous les segments qui sont visibles dans une fenêtre donnée. Les différentes fenêtres à implémenter sont les suivantes :
+Il nous a été demandé d'écrire un programme qui permette d'appliquer un windowing à un ensemble de segments de droite verticaux et horizontaux dans $\mathbb{R}^2$. Les différentes fenêtres à implémenter sont les suivantes :
 \begin{itemize}
 	\item $[X, X']$ x $[Y, Y']$ ;
 	\item $[-\infty, X']$ x $[Y, Y']$ ;
@@ -116,10 +118,16 @@ La coordonnée X d'un nœud devant être plus petite ou égale à celle de ses f
 
 % TODO insert code
 
-% TODO better explain windowing
 \subsection{Windowing}
-Le windowing est une technique très répandue qui consiste à sélectionner une certaine fenêtre parmis une énorme quantité de données. Un exemple pratique très répandu est l'affichage d'une carte sur un gps, le gps se voulant rapide n'affichera pas toutes les routes qui se trouvent dans le monde(énorme quantité de données) mais seulement celles qui nous entourent au moment où  nous roulons avec notre véhicule.
+L'application du windowing commence à la racine de l'arbre et se déroule comme ceci :
+\begin{itemize}
+	\item si la coordonnée X du nœud courant et strictement supérieure à la borne supérieure de la fenêtre X', alors laisser tomber ce nœud ainsi que tous ses descendants (par définition du PST, leur coordonnée X sera aussi supérieure à X') ;
+	\item si le point du nœud courant se trouve dans la fenêtre, le rapporter ;
+	\item si la médiane du nœud courant est inférieure ou égale à la borne supérieure de la fenêtre, parcourir le fils gauche ;
+	\item si la médiane du nœud courant est supérieure ou égale à la borne inférieure de la fenêtre, parcourir le fils droit ;
+\end{itemize}
 
+% TODO insert code
 
 \newpage
 \section{PST Adapté}
