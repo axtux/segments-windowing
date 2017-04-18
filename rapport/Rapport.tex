@@ -217,10 +217,9 @@ Cette classe s'occupe de choisir l'arbre sur lequel effectuer le windowing afin 
 \section{Algorithmes et explications}
 Dans cette section, nous exposons nos différents algorithmes importants en pseudo-code ainsi que leur complexité en temps. Une courte explication en français y est aussi ajoutée afin de favoriser la compréhension de ceux-ci et leurs utilisations.
 
-\subsection{Hauteur de l'arbre}
-Afin de compléter les différentes explications, nous allons en premier lieu vous expliquer et prouver que la hauteur de l'arbre est en $\mathcal{O} ( log_2(n) ) $ où n est le nombre de segments présents dans le plan. En effet, la structure du Pst adapté est un arbre complètement équilibré, nous pouvons donc comparer celui-ci à un AVL dont la balance de chaque nœud en valeur absolue ne dépasse pas 1.
-Nous avons effectué un test dans notre classe PstTests dans notre projet visant à vérifier ceci. L'intuition de cet équilibre s'explique par le fait que lors de la construction de l’arbre, pour chaque nœud de l'arbre, nous répartissons le nombre de segments restants en deux parties égales à un segment près, et chaque partie constitue toutes les données du sous-arbre gauche ou droit de ce nœud.
 
+Afin de compléter les différentes explications, nous allons en premier lieu vous expliquer et prouver que la hauteur de l'arbre est de log(n) où n est le nombre de segments présents dans le plan. En effet, la structure du Pst adapté est un arbre complètement équilibré, nous pouvons donc comparer celui-ci à un AVL dont la balance de chaque nœud en valeur absolue ne dépasse pas 1.
+Nous avons effectué un test à travers notre classe PstTests dans notre projet visant à vérifier que ceci est bien vrai. L'intuition de cet équilibre s'explique par le fait que lors de la construction de l’arbre, pour chaque nœud de l'arbre, nous répartissons le nombre de segments restants en deux parties égales à un segment près, et chaque partie constitue toutes les données du sous-arbre gauche ou droit de ce nœud.
 \subsection{Construction de l'arbre}
 
 \subsubsection{Algorithmes}
