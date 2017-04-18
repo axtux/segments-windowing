@@ -1,4 +1,3 @@
-
 \documentclass[10pt,a4paper]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[french]{babel}
@@ -78,7 +77,7 @@ Dans le cadre du cours de structures de données 2, nous avons été amenés à 
 Un PST partage certaines caractéristiques avec les tas et les Arbres Binaires de Recherche ou ABR. Ces deux dernières structures de données ayant été étudiées en profondeur lors des séances de cours, nous les considérons ici comme connues.
 
 \section{Présentation du problème}
-Il nous a été demandé d'écrire un programme qui permette d'appliquer un "windowing" à un ensemble de segments de droite verticaux et horizontaux dans $\mathbb{R}^2$. Le windowing est une technique qui consiste à extraire tous les segments qui sont visibles dans une fenêtre donnée. Les différentes fenêtres à implémenter sont les suivantes :
+Il nous a été demandé d'écrire un programme qui permette d'appliquer un windowing à un ensemble de segments de droite verticaux et horizontaux dans $\mathbb{R}^2$. Les différentes fenêtres à implémenter sont les suivantes :
 \begin{itemize}
 	\item $[X, X']$ x $[Y, Y']$ ;
 	\item $[-\infty, X']$ x $[Y, Y']$ ;
@@ -86,25 +85,26 @@ Il nous a été demandé d'écrire un programme qui permette d'appliquer un "win
 	\item $[X, X']$ x $[-\infty, Y']$ ;
 	\item $[X, X']$ x $[Y, +\infty]$.
 \end{itemize}
-La structure de données à implémenter devrait donc permettre un windowing efficace pour l'ensemble de ses fenêtres.
+La structure de données à imaginer devrait donc permettre un windowing efficace pour l'ensemble de ses fenêtres.
 
 
 \newpage
 \section{Priority Search Tree}
 
 \subsection{Objectif de la structure}
-Un PST est une structure de données de type arbre binaire (chaque nœud comporte au plus deux fils). Cette structure de données organise des points de l'espace défini par deux coordonnées X et Y. L'organisation des données permet d'effectuer efficacement la recherche des points présents dans une fenêtre de l'espace (sans avoir à parcourir l'ensemble des points).
+Un PST est une structure de données de type arbre binaire (chaque nœud comporte au plus deux fils). Cette structure de données organise des points de l'espace définis par deux coordonnées X et Y. L'organisation des données permet d'effectuer efficacement la recherche des points présents dans une fenêtre de l'espace (sans avoir à parcourir l'ensemble des points).
 
 \subsection{Définition}
-Un PST est une structure de données mixte. Chaque nœud est constitué d'un point et d'un nombre appelé la médiane. Si l'on considère uniquement les coordonnées X, un PST est un tas avec le minimum à la racine. Si l'on considère uniquement les coordonnées Y, le PST est un ABR avec une petite particularité. Au lieu de trier les fils par rapport à la donnée du nœud courant, un PST trie les fils en fonction de la médiane du nœud courant.
+Un PST est une structure de données mixte. Chaque nœud est constitué d'un point et d'un nombre appelé la médiane. Si l'on considère uniquement les coordonnées X, un PST est organisé tel un tas avec le minimum à la racine. Si l'on considère uniquement les coordonnées Y, le PST est organisé tel un ABR avec une petite particularité. Au lieu de trier ses fils par rapport à la donnée du nœud courant, un PST trie ses fils par rapport à la médiane du nœud courant.
 
 Ainsi, tout nœud n d'un PST respecte les contraintes suivantes :
 \begin{itemize}
-	\item son fils gauche (s'il existe ainsi que ses descendants s'ils existent) aura sa coordonnée X plus grande que celle du nœud n et sa coordonnée Y plus petite que la médiane du nœud n ;
-	\item son fils droit (s'il existe ainsi que ses descendants s'ils existent) aura sa coordonnée X plus grande que celle du nœud n et sa coordonnée Y plus grande que la médiane du nœud n.
+	\item son fils gauche (s'il existe, ainsi que ses descendants s'ils existent) aura sa coordonnée X plus grande que celle du nœud n et sa coordonnée Y plus petite que la médiane du nœud n ;
+	\item son fils droit (s'il existe, ainsi que ses descendants s'ils existent) aura sa coordonnée X plus grande que celle du nœud n et sa coordonnée Y plus grande que la médiane du nœud n.
 \end{itemize}
 
 \subsection{Construction}
+Bien que la documentation suggérait une construction bottom-up similaire à celle d'un tas, nous avons opté pour une construction top-down qui nous semblait plus facile à implémenter.
 
 \subsubsection{Tri des données}
 La construction d'un PST est plus simple si l'on construit ce dernier à partir d'une liste de points triée selon la coordonnée Y. La première étape est donc de trier les points.
@@ -113,46 +113,62 @@ La construction d'un PST est plus simple si l'on construit ce dernier à partir 
 Pour créer un arbre, créons le nœud racine à partir de la liste des points triée.
 
 \subsubsection{Création d'un nœud}
-La coordonnée X d'un nœud devant être plus petite ou égale à celle de ses fils, commençons par rechercher le point avec la plus petite coordonnée X. Attribuons ce point au nœud courant. Séparons le reste des points en deux. Attribuons comme médiane du nœud courant, la moyenne de la coordonnée Y du dernier point de la partie 1 et du premier point de la partie 2. Les points étant triés selon la coordonnée Y, la première partie est dispose d'une coordonnée Y plus petite ou égale à la médiane du nœud alors que la deuxième partie aura une coordonnée Y plus grande ou égale à la médiane du nœud. Dans le cas où il ne reste aucun point après le retrait du minimum en X, la valeur de la moyenne n'a pas d'importance. Dans le cas où il ne reste qu'un point, la coordonnée Y du point restant peut être attribuée à la médiane du nœud.
+La coordonnée X d'un nœud devant être plus petite ou égale à celle de ses fils, commençons par rechercher le point avec la plus petite coordonnée X. Attribuons ce point au nœud courant. Séparons le reste des points en deux. Attribuons, comme médiane au nœud courant, la moyenne de la coordonnée Y de 2 points. Le premier est le dernier point de la partie 1 et le second est le premier point de la partie 2. Les points étant triés selon la coordonnée Y, la première partie possède une coordonnée Y plus petite ou égale à la médiane du nœud alors que la deuxième partie possède une coordonnée Y plus grande ou égale à la médiane du nœud. Dans le cas où il ne reste aucun point après le retrait du minimum en X, la valeur de la moyenne n'a pas d'importance. Dans le cas où il ne reste qu'un point, la coordonnée Y du point restant peut être attribuée à la médiane du nœud.
 
 % TODO insert code
 
-% TODO better explain windowing
 \subsection{Windowing}
-Le windowing est une technique très répandue qui consiste à sélectionner une certaine fenêtre parmi une énorme quantité de données. Un exemple pratique très répandu est l'affichage d'une carte sur un gps, le gps se voulant rapide n'affichera pas toutes les routes qui se trouvent dans le monde(énorme quantité de données) mais seulement celles qui nous entourent au moment où  nous roulons avec notre véhicule.
+L'application du windowing commence à la racine de l'arbre et se déroule comme suit :
+\begin{itemize}
+	\item si la coordonnée X du nœud courant et strictement supérieure à la borne supérieure de la fenêtre X', alors laisser tomber ce nœud ainsi que tous ses descendants (par définition du PST, leur coordonnée X sera aussi supérieure à X') ;
+	\item si le point du nœud courant se trouve dans la fenêtre, le rapporter ;
+	\item si la médiane du nœud courant est inférieure ou égale à la borne supérieure de la fenêtre, parcourir le fils gauche ;
+	\item si la médiane du nœud courant est supérieure ou égale à la borne inférieure de la fenêtre, parcourir le fils droit ;
+\end{itemize}
 
+% TODO insert code
 
 \newpage
 \section{PST Adapté}
 
-Étant donné que notre structure s'applique à des segments et non à des points, nous ne pouvons utiliser le PST tel que décrit ci-dessus. Nous avons donc adapté cette structure afin de permettre l'utilisation de segments.\\
+Étant donné que notre structure utilise des segments au lieu des points, nous ne pouvons utiliser le PST tel que décrit ci-dessus. Nous avons donc adapté cette structure afin de permettre l'utilisation de segments.
 
-Nous avons donc considérer deux façons d'adapté le problème à la structure initiale.\\La première étant de considérer les deux points définissant un segment séparément, tout en gardant un lien vers le segment de base.\\La deuxième approche est de considérer les segments et adapter les différents algorithmes de la structure de base à des segments dans le plan.\\Nous avons après réflexion décider d'utiliser la deuxième façon d'adapté la structure.\\
-
-Un segment est défini par 2 points, chacun ayant une coordonnée X et une coordonnée Y. Un segment possède donc 2 coordonnées X ainsi que 2 coordonnées Y. Un segment est soit horizontal soit vertical, c'est-à-dire soit les coordonnées X soit les coordonnées Y sont égales.\\
-Afin de garder les explications concises et faciles à comprendre, nous allons d'abord considérer uniquement une fenêtre de type $[X, X']$ x $[Y, Y']$ ou $[-\infty, X']$ x $[Y, Y']$ et nous expliquerons ensuite comment gérer les autres cas.
-
-\subsection{Objectif de la structure}
-L'objectif de cette structure est d'organiser l'ensemble des segments afin de faciliter la recherche de segments visibles dans une fenêtre de type $[X, X']$ x $[Y, Y']$ ou $[-\infty, X']$ x $[Y, Y']$.
-
-\subsection{Définition}
-Notre PST adapté respecte exactement la définition d'un PST excepté 2 adaptations :
+Un segment :
 \begin{itemize}
-	\item un segment sera stocké par nœud au lieu d'un point ;
-	\item les coordonnées utilisées pour effectuer la comparaison sont le minimum des coordonnées X du segment comme X, le minimum des coordonnées Y du segment comme Y.
+	\item est défini par 2 points, chacun ayant une coordonnée X et une coordonnée Y ;
+	\item possède donc 2 coordonnées X ainsi que 2 coordonnées Y ;
+	\item est soit horizontal soit vertical, c'est-à-dire soit les coordonnées X soit les coordonnées Y sont égales.
 \end{itemize}
 
-Le choix des coordonnées de référence est judicieux car il permet lors de la recherche d'une fenêtre, d'élaguer tout nœud (ainsi que ses descendants par définition du tas) dont la coordonnée minimum en X est supérieure à X' et il permet de ne pas visiter le fils droit (ainsi que ses descendants par définition de l'ABR) de tout nœud dont la médiane est strictement supérieure à Y'.
+Nous avons considéré deux façons d'adapter le problème :
+\begin{enumerate}
+	\item stocker les deux points définissant chaque segment séparément dans la structure initiale, tout en gardant un lien vers le segment initial ;
+	\item stocker chaque segment dans une nouvelle structure et adapter les différents algorithmes.
+\end{enumerate}
+
+Après mûre réflexion, nous avons opté pour la seconde option, plus flexible et qui nous permet donc davantage d'optimisations.
+
+Afin de garder les explications concises et faciles à comprendre, nous allons d'abord considérer uniquement les fenêtres de type $[X, X']$ x $[Y, Y']$ et $[-\infty, X']$ x $[Y, Y']$ et nous expliquerons ensuite comment gérer les autres cas.
+
+\subsection{Objectif de la structure}
+L'objectif de cette structure est d'organiser l'ensemble des segments afin de faciliter la recherche de segments visibles dans les fenêtres de type $[X, X']$ x $[Y, Y']$ et $[-\infty, X']$ x $[Y, Y']$.
+
+\subsection{Définition}
+Notre PST adapté respecte exactement la définition d'un PST excepté 2 adaptation :
+\begin{itemize}
+	\item un segment, plutôt qu'un point, sera stocké par nœud ;
+	\item les coordonnées utilisées pour effectuer la comparaison sont le minimum des coordonnées X et le minimum des coordonnées Y du segment, plutôt que les coordonnées X et Y du point.
+\end{itemize}
+
+Le choix des coordonnées de référence est judicieux car il permet, lors de la recherche d'une fenêtre, d'élaguer tout nœud (ainsi que ses descendants par définition du tas) dont la coordonnée minimum en X est strictement supérieure à X' et il permet de ne pas visiter le fils droit (ainsi que ses descendants par définition de l'ABR) de tout nœud dont la médiane est strictement supérieure à Y'.
 
 \subsection{Construction}
-Notre PST adapté se construit à la manière d'un PST excepté que les références pour la comparaison des données sont les coordonnées minimums en X ainsi qu'en Y. C'est-à-dire que nous trions les segments selon leur plus petite coordonnée en Y. Lorsque nous recherchons le minimum en X, nous recherchons le segment avec la plus petite coordonnée X.\\
-
-L'article conseillait également lors de la construction de la structure d'utiliser une méthode bottom-up similaire à la construction d'un tas. Nous avons ici décidé de ne pas utiliser cette méthode mais de construire l'arbre de haut en bas à l'aide des segments fournis à la structure. Une explication plus détaillée est fournie lors de l'explication de l'algorithme au point 6.
+Notre PST adapté se construit à la manière d'un PST excepté les références pour la comparaison des données, qui sont les coordonnées minimales en X ainsi qu'en Y. C'est-à-dire que nous trions les segments selon leur plus petite coordonnée en Y. Lorsque nous recherchons le minimum en X, nous recherchons le segment avec la plus petite coordonnée X.
 
 \subsection{Windowing}
-Étant donné que nous devons reporter tous les segments visibles dans une certaine fenêtre, nous devons non seulement extraire les segments ayant au moins un point dans la fenêtre, mais aussi les segments commençant avant et finissant après (qui passent au travers de la fenêtre). C'est le cas notamment du segment possédant les coordonnées (X', Y-1) (X', Y'+1). La recherche sera donc un peu moins efficace que pour les points et nous allons devoir utiliser une approche différente.
+Étant donné que nous devons rapporter tous les segments visibles dans une certaine fenêtre, nous devons non seulement extraire les segments ayant au moins un point dans la fenêtre, mais aussi les segments commençant avant et finissant après (ceux qui passent à travers la fenêtre). C'est le cas notamment du segment possédant les coordonnées (X', Y-1) (X', Y'+1). La recherche sera donc un peu moins efficace que pour les points et nous allons devoir utiliser une approche différente.
 
-Nouvelle approche : se concentrer sur le point de départ du segment c'est-à-dire le point ayant la plus petite coordonnée X pour un segment horizontal, le point ayant la plus petite coordonnée Y pour un segment vertical. Nous avons ici 3 possibilités pour que le segment soit visible :
+Nouvelle approche : nous concentrer sur le point de départ du segment, c'est-à-dire le point ayant la plus petite coordonnée X pour un segment horizontal ou le point ayant la plus petite coordonnée Y pour un segment vertical. Nous avons ici 3 possibilités pour que le segment soit visible :
 \begin{itemize}
 	\item soit le point de départ est dans la fenêtre ;
 	\item soit le point de départ est à gauche de la fenêtre et le segment traverse la limite gauche de la fenêtre ;
@@ -163,10 +179,10 @@ Il est évident que si le point de départ se situe au-dessus ou à droite de la
 
 Nous allons donc parcourir l'arbre à partir de la racine et le traiter de la sorte :
 \begin{itemize}
-	\item si le minimum en X du segment est strictement supérieur à X', alors on laisse tomber ce nœud ainsi que tous ses descendants (le segment de ce nœud ainsi que celui de ses descendants a son point de départ à droite de la fenêtre) ;
+	\item si le minimum en X du segment est strictement supérieur à X', laisser tomber ce nœud ainsi que tous ses descendants (le point de départ de leurs segments se situe à droite de la fenêtre) ;
 	% TODO add reference to ci-desssus
-	\item si ce segment est visible dans la fenêtre (voir conditions ci-dessus), le reporter ;
-	\item si la médiane du nœud est strictement supérieure à Y' (le segment du fils droit ainsi que celui de ses descendants a son point de départ au-dessus de la fenêtre), alors parcourir le fils gauche uniquement sinon parcourir les deux fils.
+	\item si ce segment est visible dans la fenêtre (voir conditions ci-dessus), le rapporter ;
+	\item si la médiane du nœud est strictement supérieure à Y', laisser tomber le fils droit ainsi que tous ses descendants (le point de départ de leurs segments se situe au dessus de la fenêtre) et parcourir uniquement le fils gauche, sinon parcourir les deux fils.
 \end{itemize}
 % TODO image de l'arbre et des noeud parcourus
 
@@ -175,14 +191,53 @@ L'utilisation de cette structure pour réaliser un windowing de type $[-\infty, 
 
 
 \subsection{Les autres fenêtres}
-\subsubsection{De $[-\infty, X']$ x $[Y, Y']$ à $[X, X']$ x $[-\infty, Y']$}
-Nous avons vu une structure de données très efficace pour réaliser un windowing de type $[-\infty, X']$ x $[Y, Y']$. Cependant, nous devons également réaliser un windowing avec une fenêtre de type $[X, X']$ x $[-\infty, Y']$. Nous remarquons que pour obtenir cette fenêtre efficacement, il suffit d'échanger les coordonnées X et Y. Nous aurions pu implémenter une structure de donnée supplémentaire étant un tas selon Y et un ABR selon X (avec les médianes). Nous avons choisi de réutiliser la même structure de données et d'inverser les coordonnées des segments avant la construction de l'arbre. Ainsi le segment (X, X'),(Y, Y') devient après échange le segment (Y, Y'),(X, X'). Nous effectuons une recherche avec la fenêtre échangée $[-\infty, Y']$ x $[X, X']$ et effectuons un échange inverse sur les segments reportés afin de retrouver les segments originaux.
+Nous avons implémenté un algorithme efficace pour les fenêtres de type $[X, X']$ x $[Y, Y']$ et $[-\infty, X']$ x $[Y, Y']$. Voyons comment l'adapter aux autres fenêtres, à savoir $[X, +\infty]$ x $[Y, Y']$, $[X, X']$ x $[-\infty, Y']$ et $[X, X']$ x $[Y, +\infty]$.
 
-\subsubsection{Les autres fenêtres partiellement bornées}
-Maintenant que nous pouvons effectuer une recherche efficace sur des fenêtres de type $[-\infty, X']$ x $[Y, Y']$ et $[X, X']$ x $[-\infty, Y']$, il nous reste les fenêtres $[X, +\infty]$ x $[Y, Y']$et $[X, X']$ x $[Y, +\infty]$. Nous remarquons que pour obtenir ces fenêtres efficacement, il suffit d'opposer les coordonnées. Nous aurions pu ici aussi créer une structure de données avec une comparaison différente. Nous avons également choisi de réutiliser la même structure et d'opposer les coordonnées avant la construction de l'arbre. Ainsi, le segment (X, X'),(Y,Y') devient après opposition (-X',-X),(-Y',-Y).
+Nous remarquons que 4 des 5 fenêtres partagent une particularité :  elles sont semi-bornées. Nous remarquons également que la place de la borne infinie dépend du système d'axe utilisé. Deux choix sont alors possibles :
+\begin{enumerate}
+	\item implémenter 3 autres arbres supplémentaires qui sont efficaces pour chacune des autres bornes infinies ;
+	\item effectuer une transformation du système d'axe avant la création de l'arbre afin de réutiliser le PST existant.
+\end{enumerate}
+
+Maintenir 4 implémentations différentes du PST ne nous a pas semblé être une bonne idée et, la transformation du système d'axe pouvant se faire en temps constant, nous avons opté pour le second choix.
+
+Pour effectuer un windowing avec une fenêtre de type $[X, +\infty]$ x $[Y, Y']$, $[X, X']$ x $[-\infty, Y']$ ou $[X, X']$ x $[Y, +\infty]$, il faudra construire le PST avec les segments transformés dans le nouveau système d'axe, appliquer le windowing sur la fenêtre transformée et appliquer la transformation inverse sur la réponse du windowing.
+
+\subsubsection{L'échange}
+Pour passer d'une fenêtre de type $[-\infty, X']$ x $[Y, Y']$ à une fenêtre de type $[X, X']$ x $[-\infty, Y']$, nous remarquons qu'il suffit d'échanger les coordonnées X et Y :
+\begin{enumerate}
+	\item $X \rightarrow Y$
+	\item $Y \rightarrow X$
+\end{enumerate}
+
+Nous appellerons cette transformation du système d'axe l'\textbf{échange}.
+
+Nous remarquons qu'effectuer une transformation inverse revient à appliquer la transformation une seconde fois.
+
+\subsubsection{L'opposition}
+Pour passer d'une fenêtre de type $[-\infty, X']$ x $[Y, Y']$ à une fenêtre de type $[X, +\infty]$ x $[Y, Y']$, nous remarquons qu'il suffit d'opposer les coordonnées :
+\begin{enumerate}
+	\item $X \rightarrow -X$
+	\item $Y \rightarrow -Y$
+\end{enumerate}
+
+Nous appellerons cette transformation du système d'axe l'\textbf{opposition}.
+
+Nous remarquons que, comme pour l'échange, effectuer une transformation inverse revient à appliquer la transformation une seconde fois.
+
+\subsubsection{La combinaison des deux}
+Pour passer d'une fenêtre de type $[-\infty, X']$ x $[Y, Y']$ à une fenêtre de type $[X, X']$ x $[Y, +\infty]$, nous remarquons qu'il suffit d'appliquer les deux transformations vues précédemment :
+\begin{enumerate}
+	\item $X \rightarrow -Y$
+	\item $Y \rightarrow -X$
+\end{enumerate}
+
+Nous appellerons cette transformation du système d'axe la \textbf{combinaison}.
+
+Encore une fois, effectuer une transformation inverse revient à appliquer la transformation une seconde fois.
 
 \subsubsection{La fenêtre fermée}
-Lors de la recherche dans une fenêtre fermée avec l'arbre décrit ci-dessus, nous ne pouvons jamais éliminer le fils gauche de nos recherches. En conséquence, les nœuds que nous parcourons ayant un minimum en X strictement inférieur au X de la fenêtre et ayant un minimum en Y strictement inférieur au Y de la fenêtre sont parcourus inutilement. Ces segments sont ceux qui commencent en bas à gauche de la fenêtre et il est évident qu'ils n'y seront pas visibles. Nous avons donc adapté notre windowing afin qu'il prenne deux paramètres :
+Lors de la recherche dans une fenêtre fermée avec le PST original, nous ne pouvons jamais éliminer le fils gauche de nos recherches. En conséquence, les nœuds que nous parcourons, ayant un minimum en X strictement inférieur au X de la fenêtre et ayant un minimum en Y strictement inférieur au Y de la fenêtre, sont parcourus inutilement. Ces segment sont ceux qui commencent en bas à gauche de la fenêtre et il est évident qu'ils n'y sont pas visibles. Nous avons donc adapté notre windowing afin qu'il prenne deux paramètres :
 \begin{itemize}
 	\item center : définit si les segments commençant au centre de la fenêtre doivent être reportés ;
 	\item down : définit si les segments commençant en dessous de la fenêtre doivent être reportés.
@@ -190,11 +245,17 @@ Lors de la recherche dans une fenêtre fermée avec l'arbre décrit ci-dessus, n
 Si center est faux, alors nous pouvons laisser tomber les nœuds qui ont un minimum en X plus grand que le X de la fenêtre.
 Si down est faux, alors nous pouvons laisser tomber les fils gauches des nœuds dont la médiane est strictement inférieure au Y de la fenêtre.
 
-Afin d'effectuer la recherche de la fenêtre fermée efficacement, nous appliquerons le windowing deux fois. Une première fois avec down à faux afin de reporter les segments ayant le point de départ à gauche et dans la fenêtre. Une seconde fois sur la fenêtre échangée avec la même technique que pour la fenêtre $[X, X']$ x $[-\infty, Y']$ avec center et down à faux afin de reporter tous les segments ayant leur point de départ en dessous.
+Afin d'effectuer la recherche de la fenêtre fermée efficacement, nous appliquerons le windowing deux fois. Une première fois avec down à faux afin de rapporter les segments ayant le point de départ à gauche et dans la fenêtre. Une seconde fois sur la fenêtre échangée avec la même technique que pour la fenêtre $[X, X']$ x $[-\infty, Y']$ avec center et down à faux afin de rapporter tous les segments ayant leur point de départ en dessous.
 
 \newpage
 \section{Diagrammes de classes}
-Nous vous présentons durant ce point l’entièreté de nos classes à travers deux diagrammes de classes distincts, l'un concernant le travail sur les données, et l'autre le travail sur l'interface graphique de l'application. Ils sont ensuite suivis de différents points afin de vous expliquer le but des différentes classes implémentées.
+Cette section comporte 2 diagrammes de classes :
+\begin{enumerate}
+	\item le premier concerne l'organisation et le traitement des données ;
+	\item le second concerne l'interface graphique.
+\end{enumerate}
+Ces diagrammes sont suivis de quelques explications sur les classes implémentées. Si vous désirez de plus amples d'informations, n'hésitez pas à consulter la Javadoc.
+% TODO make link to javadoc
 
 \subsection{Diagramme de classe des données}
 \includegraphics[scale=0.35]{../src/UML/data.png}
@@ -203,22 +264,22 @@ Nous vous présentons durant ce point l’entièreté de nos classes à travers 
 \includegraphics[scale=0.25]{../src/UML/graphics.png}
 
 \subsection{Pst et BasicPst}
-BasicPst correspond au PST gérant efficacement une fenêtre de type $[-\infty, X']$ x $[Y, Y']$. Afin de gérer toutes les transformations, nous avons créé une autre classe Pst qui comporte 4 BasicPst :
+BasicPst correspond au PST gérant efficacement une fenêtre de type $[-\infty, X']$ x $[Y, Y']$. Afin de gérer toutes les transformations, nous avons créé une autre classe Pst qui comporte 4 BasicPst avec :
 \begin{enumerate}
-	\item un avec les segments originaux pour les fenêtres $[-\infty, X']$ x $[Y, Y']$ ;
-	\item un avec les segments échangés pour les fenêtres $[X, X']$ x $[-\infty, Y']$ ;
-	\item un avec les segments opposés pour les fenêtres $[X, +\infty]$ x $[Y, Y']$ ;
-	\item un avec les segments échangés et opposés pour les fenêtres $[X, X']$ x $[Y, +\infty]$ ;
+	\item les segments originaux pour les fenêtres $[-\infty, X']$ x $[Y, Y']$ ;
+	\item les segments échangés pour les fenêtres $[X, X']$ x $[-\infty, Y']$ ;
+	\item les segments opposés pour les fenêtres $[X, +\infty]$ x $[Y, Y']$ ;
+	\item les segments échangés et opposés pour les fenêtres $[X, X']$ x $[Y, +\infty]$ ;
 \end{enumerate}
 
-Cette classe s'occupe de choisir l'arbre sur lequel effectuer le windowing afin d'obtenir la meilleure efficacité.
+Cette classe s'occupe de choisir l'arbre sur lequel effectuer le windowing afin d'obtenir la meilleure efficacité. Plusieurs arbres sont utilisés pour les fenêtres $[X, X']$ x $[Y, Y']$.
 
 \newpage
 \section{Algorithmes et explications}
 Dans cette section, nous exposons nos différents algorithmes importants en pseudo-code ainsi que leur complexité en temps. Une courte explication en français y est aussi ajoutée afin de favoriser la compréhension de ceux-ci et leurs utilisations.
 
 
-Afin de compléter les différentes explications, nous allons en premier lieu vous expliquer et prouver que la hauteur de l'arbre est de log(n) où n est le nombre de segments présents dans le plan. En effet, la structure du Pst adapté est un arbre complètement équilibré, nous pouvons donc comparer celui-ci à un AVL dont la balance de chaque nœud en valeur absolue ne dépasse pas 1. 
+Afin de compléter les différentes explications, nous allons en premier lieu vous expliquer et prouver que la hauteur de l'arbre est de log(n) où n est le nombre de segments présents dans le plan. En effet, la structure du Pst adapté est un arbre complètement équilibré, nous pouvons donc comparer celui-ci à un AVL dont la balance de chaque nœud en valeur absolue ne dépasse pas 1.
 Nous avons effectué un test à travers notre classe PstTests dans notre projet visant à vérifier que ceci est bien vrai. L'intuition de cet équilibre s'explique par le fait que lors de la construction de l’arbre, pour chaque nœud de l'arbre, nous répartissons le nombre de segments restants en deux parties égales à un segment près, et chaque partie constitue toutes les données du sous-arbre gauche ou droit de ce nœud.
 \subsection{Construction de l'arbre}
 
@@ -272,7 +333,7 @@ Nous avons effectué un test à travers notre classe PstTests dans notre projet 
 
 \subsubsection{Explication}
 
-Nous construisons ici l'arbre de haut en bas, ayant initialement la racine qui est le minimum en x des segments, nous effectuons ensuite une séparation des données en deux vis-à-vis de la médiane, qui est la valeur en y1 (minimum en y du segment) se trouvant au milieu de la liste, et ceci récursivement. 
+Nous construisons ici l'arbre de haut en bas, ayant initialement la racine qui est le minimum en x des segments, nous effectuons ensuite une séparation des données en deux vis-à-vis de la médiane, qui est la valeur en y1 (minimum en y du segment) se trouvant au milieu de la liste, et ceci récursivement.
 
 Nous séparons ainsi à chaque étape la liste des segments en deux parties égales en taille à une valeur près, que nous répartissons entre les deux fils (première moitié au fils gauche et deuxième moitié au fils droit). Bien sûr pour que ceci soit possible, nous avons trié les segments par ordre croissant suivant leur composante en y1 avant d'utiliser la liste pour la création de l'arbre.
 
@@ -337,21 +398,21 @@ Finalement, pour ce qui concerne l'algorithme 1, celui-ci possède une première
 
 
 \IF{$center$ est vrai et $reportCenter(S,window)$ est vrai}
-\STATE Ajout de $S$ dans $reported$  
+\STATE Ajout de $S$ dans $reported$
 \ENDIF
 \IF{$down$ est vrai et $reportDown(S,window)$ est vrai}
-\STATE Ajout de $S$ dans $reported$  
+\STATE Ajout de $S$ dans $reported$
 \ENDIF
 \IF{$reportLeft(S,window)$ est vrai}
-\STATE Ajout de $S$ dans $reported$  
+\STATE Ajout de $S$ dans $reported$
 \ENDIF
 
 \IF{$down$ est vrai ou $node.median >= window.y1$}
-\STATE subWindowing($node.left,window,reported,down,center)$  
+\STATE subWindowing($node.left,window,reported,down,center)$
 \ENDIF
 
 \IF{$node.median <= window.y2$}
-\STATE subWindowing($node.right,window,reported,down,center)$  
+\STATE subWindowing($node.right,window,reported,down,center)$
 \ENDIF
 
 \end{algorithmic}
@@ -366,7 +427,7 @@ Le windowing appliqué dans les algorithmes ci-dessus sont basés sur un windowi
 \end{itemize}
 Selon cette hypothèse, nous avons considéré tous les différents cas de segments devant être considérés dans la fenêtre (au moins un point dans la fenêtre ou passant au travers) et ceux qui ne devaient pas s'y trouver. Afin de favoriser la compréhension de notre algorithme, nous expliquons les deux algorithmes l'un après l'autre.
 
-En ce qui concerne le windowing (algorithme 4), il ne nécessite pas d'explication supplémentaire, le pseudo-code est très clair. 
+En ce qui concerne le windowing (algorithme 4), il ne nécessite pas d'explication supplémentaire, le pseudo-code est très clair.
 
 Pour l'algorithme 5 (windowing2), l'algorithme effectue dans cet ordre ces différentes actions : rendre la structure représentant la fenêtre ordonnée(x1<x2 et y1<y2) afin de respecter la notion mathématique d'une fenêtre et simplifier le code, et ensuite calculer à l'aide de l'algorithme 6 les segments dans la fenêtre pour pouvoir les retourner dans une liste.
 
@@ -374,7 +435,7 @@ L'algorithme 6 est la partie plus délicate de l'algorithme. En effet, c'est ici
 
 Tout d'abord nous vérifions que le nœud n'est pas vide(cas se produisant après l'exploration d'une feuille).
 
-Pour les deux conditions suivantes, nous cherchons les conditions d'arrêt de l'algorithme qui pourraient se produire avant d'arriver à la fin de l'arbre. 
+Pour les deux conditions suivantes, nous cherchons les conditions d'arrêt de l'algorithme qui pourraient se produire avant d'arriver à la fin de l'arbre.
 
 La première condition vérifie que nous ne devons plus prendre de segments se trouvant à l'intérieur de la fenêtre et que le nœud courant dans lequel nous nous trouvons se trouve soit dans la fenêtre, soit à droite de la fenêtre pour ses coordonnées en x. Par définition de la structure, nous savons donc que tous les nœuds fils se trouvent soit dans la fenêtre, soit à droite de la fenêtre en x (car le nœud courant est le minimum en x). Nous pouvons donc arrêter l'algorithme et ignorer ses descendants.
 
@@ -390,7 +451,7 @@ Les différentes conditions de reports sont donc celles -ci :\begin{itemize}
 \item[\textbf{reportDown()}] Pour détecter les segments verticaux passants à travers la borne inférieure de la fenêtre, donc avec le premier point en y commençant avant la fenêtre et le deuxième point se terminant dans ou après la fenêtre (cas d'un segment qui traverse). Nous testons si le premier point en y se trouve avant la fenêtre, et le second après, ainsi que les coordonnées en x devant se trouver toutes les deux dans la fenêtre (puisqu'elles sont égales car segment vertical, un seul test sur un seul x est nécessaire)
 
 \item[\textbf{reportLeft()}] Pour détecter les segments horizontaux qui traversent complètement la fenêtre ou qui commencent avant pour finir dans celle-ci. Nous testons si les coordonnées y se trouvent dans la fenêtre (puisqu'elles sont égales car segment horizontal, un seul test sur un seul y est nécessaire), et ensuite vérifions que le segment commence en ses coordonnées en x avant la fenêtre pour se terminer après ou dedans.
-    
+
 \end{itemize}
 Nous avons ainsi géré tous les différents segments pouvant se produire dans nos deux types de fenêtre. En effet, ces différents cas s'appliquent tous pour une fenêtre complètement bornée et le reportleft() n'aura pas lieu dans une fenêtre non bornée en x1 ($-\infty$)
 
@@ -400,20 +461,20 @@ Finalement nous regardons par rapport à la médiane du nœud courant où nous d
 
 Les différentes lignes dans les algorithmes 4 et 5 sont tous en $\mathcal{O}(1)$ car nous ne faisons que des appels à des fonctions , des retour de valeurs et un appel à getWindow() dans l'algorithme 5-ligne 1 , qui s'effectue aussi en $\mathcal{O}(1)$ aussi car il ne fait que donner un nouveau segment en prenant les données du premier. Le coût du windowing sera donc dû à l’exécution à la fonction subwindowing() qui va effectuer le réel travail d'exploration dans le Pst.
 
-Nous calculons donc la complexité en temps de l'algorithme 6. 
+Nous calculons donc la complexité en temps de l'algorithme 6.
 Pour les lignes 1 à 10, elles s’exécutent toutes en $\mathcal{O}(1)$ car nous faisons de simples tests booléen sur des valeurs, des accès à des variables d'objets, une affectation à une variable, et que le corps de toutes les conditions sont en $\mathcal{O}(1)$ aussi.
 Pour les lignes 11 à 19, les différents tests booléens s'effectuent en $\mathcal{O}(1)$, ainsi que l'ajout à une liste et l'appel aux différents report. En effet ceux-ci testent juste des conditions sur les coordonnées d'après les cas et retournent un booléen, elles s’exécutent donc en un temps constant également.
 
-Il nous reste donc les lignes 20 à 24. Pour ce qui concerne ces lignes, l'étude de leur complexité est plus particulière. En effet elles effectuent un appel récursif selon certaines conditions qui un coût en temps de $\mathcal{O}(1)$. 
+Il nous reste donc les lignes 20 à 24. Pour ce qui concerne ces lignes, l'étude de leur complexité est plus particulière. En effet elles effectuent un appel récursif selon certaines conditions qui un coût en temps de $\mathcal{O}(1)$.
 Considérant que l'algorithme est jusque là en $\mathcal{O}(1)$ par ce que nous avons expliqué ci-dessus, l'algorithme se réalisera en $\mathcal{O}(1)$ x le nombre d'appels récursifs.
 
-Si nous analysons les appels nous constatons que les appels récursifs peuvent se réaliser soit sur le sous-arbre gauche du nœud courant (initialement la racine) si la fenêtre se trouve totalement à gauche de la médiane, soit le sous-arbre droit si la fenêtre se trouve totalement à droite de la médiane, soit les deux sous-arbres si la médiane se trouve dans la fenêtre. Nous considérons bien sur que les segments sont répartis plus ou moins uniformément dans l'espace (tous les segments ne se trouvent pas dans un même petit espace). Nous considérons aussi qu'à chaque avancement dans l'arbre, la médiane du nouveau nœud courant diminue(fils gauche) ou augmente (fils droit) par rapport à son père 
+Si nous analysons les appels nous constatons que les appels récursifs peuvent se réaliser soit sur le sous-arbre gauche du nœud courant (initialement la racine) si la fenêtre se trouve totalement à gauche de la médiane, soit le sous-arbre droit si la fenêtre se trouve totalement à droite de la médiane, soit les deux sous-arbres si la médiane se trouve dans la fenêtre. Nous considérons bien sur que les segments sont répartis plus ou moins uniformément dans l'espace (tous les segments ne se trouvent pas dans un même petit espace). Nous considérons aussi qu'à chaque avancement dans l'arbre, la médiane du nouveau nœud courant diminue(fils gauche) ou augmente (fils droit) par rapport à son père
 
 Lors de la recherche de notre fenêtre en y, donc lorsque la médiane n'est pas encore dans la fenêtre, nous explorons les différents nœuds et testons les différents report le long du chemin jusqu'à ce que la médiane soit dans la fenêtre. Nous effectuons donc un appel récursif soit sur le fils gauche, soit sur le fils droit. Dans le pire des cas nous explorons donc la hauteur de l'arbre pour arriver au cas où la médiane se trouve dans la fenêtre. Celle-ci étant en log(n) comme vu précédemment, nous ferons log(n) appels dans le pire des cas pour arriver à la fenêtre que nous cherchons. Nous ferons ensuite k appels récursifs correspondants au nombre de Segments se trouvant dans la fenêtre. Nous aurons donc log(n)+k appels récursifs dans le pire des cas.
 
 
 Nous avons donc une complexité en temps dans le pire des cas pour cet algorithme en $\mathcal{O}(log(n)+k)$ où n est le nombre de segments et k le nombre de segments dans la fenêtre.
- 
+
 
 \newpage
 \section{Mode d'emploi}
@@ -441,11 +502,11 @@ La première partie contient un sélecteur de fichier qui vous proposera par dé
 La seconde partie vous permet d'indiquer au programme la fenêtre à utiliser pour effectuer le windowing. Entrez "min" et "max" pour indiquer respectivement $-\infty$ et $+\infty$.
 
 \subsubsection{Ouvreur de scène}
-La troisième partie vous propose deux boutons. L'un ouvrira toute la scène contenue dans le fichier sélectionné par le sélecteur de fichier dans une nouvelle fenêtre. Exemple :
+La troisième partie vous propose deux boutons. L'un ouvrira, dans une nouvelle fenêtre, toute la scène contenue dans le fichier sélectionné par le sélecteur de fichier. Exemple :
 
 \centerline{\includegraphics[scale=0.5]{images/ui_whole_scene.png}}
 
-L'autre bouton ouvrira la scène contenue dans le fichier sélectionné après y avoir appliqué le windowing en utilisant la fenêtre fournie par le sélecteur de fenêtre. La fenêtre sélectionnée s'affichera en rouge par dessus la scène. Exemple :
+L'autre bouton ouvrira, également dans une nouvelle fenêtre, la scène contenue dans le fichier sélectionné, après y avoir appliqué le windowing en utilisant la fenêtre fournie par le sélecteur de fenêtre. La fenêtre sélectionnée s'affichera en rouge par dessus la scène. Exemple :
 
 \centerline{\includegraphics[scale=0.5]{images/ui_restricted_window.png}}
 
@@ -454,23 +515,29 @@ Si la scène est trop grande pour entrer dans la fenêtre de visualisation nouve
 Si vous le désirez, il est possible de changer la taille de la visualisation à l'aide de la molette de votre souris.
 
 \subsubsection{Information sur l'état du programme}
-La quatrième et dernière partie de l'interface affiche l'état du programme. Les erreurs y sont affichées en rouge alors que les informations y sont en noir.
+La quatrième et dernière partie de l'interface affiche l'état du programme. Les erreurs y sont affichées en rouge, alors que les informations y sont en noir.
 
 \section{Illustrations}
-Ce point du rapport sert d'illustration, vous permettant d'observer différents cas d'exemples d'applications du windowing, et ceci via l'application que nous avons créée.
-
-
+Cette section sert d'illustration, afin de vous permettre d'observer différents cas d'application du windowing via l'application que nous avons créée.
 Cette image concerne des applications du windowing sur des segments horizontaux:
 \includegraphics[scale=0.25]{images/test_horizontal.png}
 
 Cette image concerne des applications du windowing sur des segments verticaux:
 \includegraphics[scale=0.25]{images/test_vertical.png}
 
+\section{Améliorations possibles}
+Plusieurs améliorations auraient encore été possibles :
+\begin{itemize}
+	\item calculer le point moyen (parmi tous les points définissant les segments) et décider des transformations à utiliser en fonction de la situation de la fenêtre fermée par rapport au point moyen ;
+	\item bien qu'il ne nous ait pas été demandé de traiter les fenêtres ayant 2 bornes infinies, décider des transformations à utiliser en fonction de l'orientation des 2 bornes.
+\end{itemize}
+
 \newpage
+
 \section{Conclusion}
-Nous avons bien réalisé les objectifs fixés dans l'introduction à savoir créer et manipuler une structure de données non vue au cours.\\Il est clair que ce travail nous a demandé à plusieurs reprises de réfléchir sur des moyens algorithmiques de résoudre les problèmes rencontrés. Nous avons donc appliqué les différents concepts et structures vus durant le cours de SDD2 afin de trouver des solutions et savoir quelles structures sont les mieux adaptées et comment les appliquées.\\
-Ce travail nous aura donc permis de finalement faire "un peu de recherche" en groupe, dans l'optique de résoudre un problème nouveau, ce qui nous a permis de découvrir lors de nos réunions de groupe nos différentes idées, de les comparer et de considérer le problème sous différents aspects. Nous aurons donc un souvenir très positif de ce travail.\\   
-Nous tenons à remercier les personnes qui nous ont soutenues pour mener à bien ce projet à savoir BRUYÈRE Véronique et DEVILLEZ Gauvain.
+Nous avons bien réalisé les objectifs fixés dans l'introduction, à savoir créer et manipuler une structure de données non vue au cours. Pour ce faire, nous avons utilisé différents concepts vus au cours "Structure de données 2", comme les tas et les ABR.
+
+Ce travail nous a permis de faire un peu de "recherche" en groupe, dans l'optique de résoudre un problème nouveau. Lors de nos réunions de groupe, nous avons pu partager nos points de vue individuels et ainsi considérer le problème sous différents aspects. Nous gardons un souvenir très positif de ce travail. Nous tenons à remercier les professeur et assistant qui nous ont soutenues pour mener à bien ce projet, à savoir BRUYÈRE Véronique et DEVILLEZ Gauvain.
 
 
 \end{document}

@@ -28,7 +28,7 @@ public class SceneFrame extends JFrame implements WindowStateListener {
 	 * @param scene Scene to display.
 	 */
 	public SceneFrame(Scene scene) {
-		super("Segments Window");
+		super("Scene");
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		
 		self = this;
