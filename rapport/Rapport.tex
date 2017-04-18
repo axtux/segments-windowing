@@ -292,12 +292,12 @@ Nous avons effectué un test dans notre classe PstTests dans notre projet visant
 \REQUIRE une liste de Segment $A$, un PstNode $Root$ qui est la racine de l'arbre 
 \ENSURE /
 \STATE $A \leftarrow heapSort(A)$
-\STATE $root \leftarrow construct(A) $
+\STATE $root \leftarrow makePstNode(A) $
 \end{algorithmic}
 \end{algorithm}
 
 \begin{algorithm}
-\caption{Construct}
+\caption{makePstNode}
 \begin{algorithmic}[1]
 \REQUIRE une liste de Segment triée en y $A$ 
 \ENSURE un PstNode qui représente la racine de l'arbre
@@ -306,13 +306,15 @@ Nous avons effectué un test dans notre classe PstTests dans notre projet visant
 \ENDIF
 \STATE $node \leftarrow A[getMinX()] $
 \IF{$A$ est non vide}
-\STATE $node.median \leftarrow A[longueur(A)/2].y1 $
-\STATE $node.left \leftarrow construct(A.sousListe(0,node.median)) $
-\STATE $node.right \leftarrow construct(A.sousListe(node.median,longueur(A))) $
+\STATE $i \leftarrow longueur(A)/2$
+\STATE $node.median \leftarrow A[i].y1 $
+\STATE $node.left \leftarrow construct(A.sousListe(0,i)) $
+\STATE $node.right \leftarrow construct(A.sousListe(i,longueur(A))) $
 \ENDIF
 \RETURN node
 \end{algorithmic}
 \end{algorithm}
+
 \newpage
 \begin{algorithm}
 \caption{getMinX}
@@ -334,7 +336,7 @@ Nous avons effectué un test dans notre classe PstTests dans notre projet visant
 
 \subsubsection{Explication}
 
-Nous construisons ici l'arbre de haut en bas, ayant initialement la racine qui est le minimum en x des segments, nous effectuons ensuite une séparation des données en deux vis-à-vis de la médiane, qui est la valeur en y1 (minimum en y du segment) se trouvant au milieu de la liste, et ceci récursivement.
+Nous construisons ici l'arbre de haut en bas, ayant initialement la racine qui est le minimum en x des segments, nous effectuons ensuite une séparation des données en deux vis-à-vis de la médiane, qui est la valeur en y1 (minimum en y du segment) se trouvant au milieu de la liste, et ceci récursivement. 
 
 Nous séparons ainsi à chaque étape la liste des segments en deux parties égales en taille à une valeur près, que nous répartissons entre les deux fils (première moitié au fils gauche et deuxième moitié au fils droit). Bien sûr pour que ceci soit possible, nous avons trié les segments par ordre croissant suivant leur composante en y1 avant d'utiliser la liste pour la création de l'arbre.
 
