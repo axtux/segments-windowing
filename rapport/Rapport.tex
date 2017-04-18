@@ -294,12 +294,12 @@ Nous avons effectué un test dans notre classe PstTests dans notre projet visant
 \REQUIRE une liste de Segment $A$, un PstNode $Root$ qui est la racine de l'arbre 
 \ENSURE /
 \STATE $A \leftarrow heapSort(A)$
-\STATE $root \leftarrow construct(A) $
+\STATE $root \leftarrow makePstNode(A) $
 \end{algorithmic}
 \end{algorithm}
 
 \begin{algorithm}
-\caption{Construct}
+\caption{makePstNode}
 \begin{algorithmic}[1]
 \REQUIRE une liste de Segment triée en y $A$ 
 \ENSURE un PstNode qui représente la racine de l'arbre
@@ -308,13 +308,15 @@ Nous avons effectué un test dans notre classe PstTests dans notre projet visant
 \ENDIF
 \STATE $node \leftarrow A[getMinX()] $
 \IF{$A$ est non vide}
-\STATE $node.median \leftarrow A[longueur(A)/2].y1 $
-\STATE $node.left \leftarrow construct(A.sousListe(0,node.median)) $
-\STATE $node.right \leftarrow construct(A.sousListe(node.median,longueur(A))) $
+\STATE $i \leftarrow longueur(A)/2$
+\STATE $node.median \leftarrow A[i].y1 $
+\STATE $node.left \leftarrow construct(A.sousListe(0,i)) $
+\STATE $node.right \leftarrow construct(A.sousListe(i,longueur(A))) $
 \ENDIF
 \RETURN node
 \end{algorithmic}
 \end{algorithm}
+
 \newpage
 \begin{algorithm}
 \caption{getMinX}
@@ -344,16 +346,16 @@ Nous séparons ainsi à chaque étape la liste des segments en deux parties éga
 Nous commençons d'abord par calculer la complexité dans le pire des cas en temps de l'algorithme 3.
 Les 4 premières lignes sont en $\mathcal{O} (1)$, ainsi que les lignes 7 et 10, car le retour est constant, la condition du if est constante et une affectation de valeur est constante en temps. La condition du if de la ligne 6 est elle aussi constante, car nous faisons une comparaison de valeurs (temps constant) et qu'avoir accès à la valeur du minimum x d'un segment se fait en temps constant aussi (minX() ).
 
-Nous aurons donc un for en ligne 5 qui sera en $\mathcal{O}(n)$ où n est la taille de la liste.
+Nous avons donc un for en ligne 5 qui est en $\mathcal{O}(n)$ où n est la taille de la liste.
 L'algorithme possède donc une complexité de $\mathcal{O}(n)$ au total.
 \\
-Pour ce qui concerne l'algorithme 2, les lignes s'exécutent toutes en temps constant pour les mêmes raisons que celles énoncées pour le $3^e$ algorithme mise à part pour les lignes 4,7 et 8.
+En ce qui concerne l'algorithme 2, les lignes s'exécutent toutes en temps constant pour les mêmes raisons que celles énoncées pour le $3^e$ algorithme exceptées les lignes 4,7 et 8.
 En effet, la ligne 4 s’exécute en $\mathcal{O}(n)$ où n est la taille de la liste donnée en paramètre, par la preuve ci-dessus. Nous effectuons ensuite deux appels récursifs aux lignes 7 et 8, ce qui nous donnera une complexité finale de l'algorithme en temps de $\mathcal{O}(n.log(n))$. Voici le raisonnement pour trouver cette complexité finale :
 
-Notre algorithme s'effectue à chaque étape de la récursivité en $\mathcal{O}(n)$ dût à la recherche du minimum dans la liste. Nous effectuons ensuite un appel récursif sur une moitié de liste, et un autre appel sur l'autre moitié.\\ Ce qui nous donne donc une complexité de $\mathcal{O}(n)$ + $\mathcal{O}(n/2)$ + $\mathcal{O}(n/2)$ + $\mathcal{O}$(de la prochaine étape de la récursivité) + ...\\Ce qui nous donne donc une complexité de $\mathcal{O}(n)$ + $\mathcal{O}(n)$ + $\mathcal{O}$(de la prochaine étape) + ...\\ On voit donc qu'à chaque niveau de l'arbre, nous effectuons des calculs en $\mathcal{O}(n)$, nous les effectuons log(n) fois qui est la hauteur de l'arbre. Nous aurons donc une complexité finale de l’algorithme 2 en $\mathcal{O}(n.log(n))$ où n est la taille de la liste initialement donnée en paramètre à la fonction.
+Notre algorithme s'effectue à chaque étape de la récursivité en $\mathcal{O}(n)$ dû à la recherche du minimum dans la liste. Nous effectuons ensuite un appel récursif sur une moitié de liste, et un autre appel sur l'autre moitié.\\ Ce qui nous donne donc une complexité de $\mathcal{O}(n)$ + $\mathcal{O}(n/2)$ + $\mathcal{O}(n/2)$ + $\mathcal{O}$(de la prochaine étape de la récursivité) + ...\\Ce qui nous donne donc une complexité de $\mathcal{O}(n)$ + $\mathcal{O}(n)$ + $\mathcal{O}$(de la prochaine étape) + ...\\ On voit donc qu'à chaque niveau de l'arbre, nous effectuons des calculs en $\mathcal{O}(n)$, nous les effectuons log(n) fois qui est la hauteur de l'arbre. Nous aurons donc une complexité finale de l’algorithme 2 en $\mathcal{O}(n.log(n))$ où n est la taille de la liste initialement donnée en paramètre à la fonction.
 \\
 
-Finalement, pour ce qui concerne l'algorithme 1, celui-ci possède une première ligne en $\mathcal{O}(n)$ (complexité en temps du heapSort, notion étudiée au cours), et une seconde en $\mathcal{O}(n.log(n))$. Nous aurons donc une complexité finale de $\mathcal{O}(n.log(n))$
+Finalement, en ce qui concerne l'algorithme 1, celui-ci possède une première ligne en $\mathcal{O}(n)$ (complexité en temps du heapSort, notion étudiée au cours), et une seconde en $\mathcal{O}(n.log(n))$. Nous aurons donc une complexité finale de $\mathcal{O}(n.log(n))$
 
 \subsection{Windowing}
 
@@ -425,8 +427,8 @@ Finalement, pour ce qui concerne l'algorithme 1, celui-ci possède une première
 \subsubsection{Explication}
 
 Le windowing appliqué dans les algorithmes ci-dessus est basé sur un windowing d'une fenêtre de type : \begin{itemize}
-\item Soit : $[-\infty;x2]X[y1;y2]$
-\item Soit : $[x1;x2]X[y1;y2]$
+\item soit $[-\infty;x2]X[y1;y2]$,
+\item soit $[x1;x2]X[y1;y2]$.
 \end{itemize}
 Selon cette hypothèse, nous avons considéré tous les cas de segments devant être considérés dans la fenêtre (au moins un point dans la fenêtre ou passant au travers) et ceux qui ne devaient pas s'y trouver. Afin de favoriser la compréhension de notre algorithme, nous expliquons les deux algorithmes l'un après l'autre.
 
@@ -434,9 +436,9 @@ En ce qui concerne le windowing (algorithme 4), il ne nécessite pas d'explicati
 
 Pour l'algorithme 5 (windowing2), l'algorithme effectue dans cet ordre ces différentes actions : rendre la structure représentant la fenêtre ordonnée(x1<x2 et y1<y2) afin de respecter la notion mathématique d'une fenêtre et simplifier le code, et ensuite calculer à l'aide de l'algorithme 6 les segments dans la fenêtre pour pouvoir les retourner dans une liste.
 
-L'algorithme 6 est la partie plus délicate de l'algorithme. En effet, c'est ici que nous avons mis en œuvre l'exploration de l'arbre pour prendre tous les segments qui nous intéressent. Nous avons donc procédé par toute une série de conditions.
+L'algorithme 6 est la partie plus délicate de l'algorithme. En effet, c'est ici que nous avons mis en œuvre l'exploration de l'arbre pour prendre tous les segments qui nous intéressent. Nous avons donc procédé à une série de vérifications de conditions.
 
-Tout d'abord nous vérifions que le nœud n'est pas vide(cas se produisant après l'exploration d'une feuille).
+Tout d'abord, nous vérifions que le nœud n'est pas vide (cas se produisant après l'exploration d'une feuille).
 
 Pour les deux conditions suivantes, nous cherchons les conditions d'arrêt de l'algorithme qui pourraient se produire avant d'arriver à la fin de l'arbre.
 
@@ -446,17 +448,17 @@ La deuxième condition d'arrêt est le cas où le segment du nœud courant se tr
 
 En ce qui concerne les 3 conditions suivantes dans l'algorithme, celles-ci sont utilisées pour détecter quels segments se trouvent réellement dans la fenêtre, cette détection est faite durant toute l'exploration de l'algorithme dans l'arbre. Les conditions booléenne $down$ et $center$ sont utilisées afin de savoir quel type de report nous devons effectuer. En effet nous devons pouvoir détecter les différents types de segments énoncés lors de l'explication du windowing dans le point précédent "Pst adapté".
 
-Nous appelons donc trois méthodes qui testent ces différentes conditions. Nous n'avons pas fourni les pseudo-codes correspondant à ces méthodes qui effectuent simplement une condition et un retour booléen décrivant si le segment est à prendre en compte ou pas. Nous avons favorisé une explication écrite plutôt qu'algorithmique ce qui est plus compréhensible pour la compréhension du lecteur et moins fastidieux à lire. Bien sur pour plus de détails, le code source est disponible vous donnant un exemple pratique d'appliquer les différents reports.
+Nous appelons donc trois méthodes qui testent ces différentes conditions. Nous n'avons pas fourni les pseudo-codes correspondant à ces méthodes qui effectuent simplement une condition et un retour booléen décrivant si le segment est à prendre en compte ou pas. Nous avons favorisé une explication écrite plutôt qu'algorithmique ce qui est plus compréhensible pour le lecteur et moins fastidieux à lire. Bien sûr pour plus de détails, le code source est disponible vous donnant un exemple pratique d'appliquer les différents reports.
 
-Les différentes conditions de reports sont donc celles -ci :\begin{itemize}
-\item[\textbf{reportCenter()}] Pour détecter les segments se trouvant dans la fenêtre totalement ou avec le premier point en y dans la fenêtre(y1 est la plus petite coordonnée en y), nous testons si le premier point du segment en y se trouve dans la fenêtre.
+Les différentes conditions de reports sont donc celles-ci :\begin{itemize}
+\item[\textbf{reportCenter()}] Pour détecter les segments ayant leur point de départ dans la fenêtre.
 
-\item[\textbf{reportDown()}] Pour détecter les segments verticaux passants à travers la borne inférieure de la fenêtre, donc avec le premier point en y commençant avant la fenêtre et le deuxième point se terminant dans ou après la fenêtre (cas d'un segment qui traverse). Nous testons si le premier point en y se trouve avant la fenêtre, et le second après, ainsi que les coordonnées en x devant se trouver toutes les deux dans la fenêtre (puisqu'elles sont égales car segment vertical, un seul test sur un seul x est nécessaire)
+\item[\textbf{reportDown()}] Pour détecter les segments verticaux ayant leur point de départ en dessous de la fenêtre et passant à travers la borne inférieure de la fenêtre.
 
-\item[\textbf{reportLeft()}] Pour détecter les segments horizontaux qui traversent complètement la fenêtre ou qui commencent avant pour finir dans celle-ci. Nous testons si les coordonnées y se trouvent dans la fenêtre (puisqu'elles sont égales car segment horizontal, un seul test sur un seul y est nécessaire), et ensuite vérifions que le segment commence en ses coordonnées en x avant la fenêtre pour se terminer après ou dedans.
+\item[\textbf{reportLeft()}] Pour détecter les segments horizontaux ayant leur point de départ à gauche de la fenêtre et passant à travers la borne gauche de la fenêtre.
 
 \end{itemize}
-Nous avons ainsi géré tous les différents segments pouvant se produire dans nos deux types de fenêtre. En effet, ces différents cas s'appliquent tous pour une fenêtre complètement bornée et le reportleft() n'aura pas lieu dans une fenêtre non bornée en x1 ($-\infty$)
+Nous avons ainsi géré tous les segments visibles dans nos deux types de fenêtre.
 
 Finalement nous regardons par rapport à la médiane du nœud courant où nous devons nous déplacer dans l'arbre. Nous considérons donc les deux limites en y de la fenêtre pour savoir quand se déplacer à gauche dans l'arbre (éléments <= à la médiane en y1) ou à droite (éléments >= à la médiane en y1). Nous faisons donc des appels récursifs pour avancer toujours dans la bonne direction dans l'arbre et éviter des reports inutiles.
 
