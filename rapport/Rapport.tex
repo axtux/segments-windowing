@@ -1,3 +1,4 @@
+
 \documentclass[10pt,a4paper]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[french]{babel}
@@ -21,6 +22,7 @@
 \renewcommand{\algorithmicrequire}{\textbf{Entrée:}}
 \renewcommand{\algorithmicensure}{\textbf{Sortie:}}
 \renewcommand{\algorithmicif}{\textbf{si}}
+\renewcommand{\algorithmicendif}{\textbf{fin si}}
 \renewcommand{\algorithmicthen}{\textbf{alors}}
 \renewcommand{\algorithmicelse}{\textbf{sinon}}
 
@@ -105,10 +107,10 @@ Ainsi, tout nœud n d'un PST respecte les contraintes suivantes :
 \subsection{Construction}
 
 \subsubsection{Tri des données}
-La construction d'un PST est plus simple si l'on construit ce dernier à partir d'une liste de points triés selon la coordonnée Y. La première étape est donc de trier les points.
+La construction d'un PST est plus simple si l'on construit ce dernier à partir d'une liste de points triée selon la coordonnée Y. La première étape est donc de trier les points.
 
 \subsubsection{Création de l'arbre}
-Pour créer un arbre, créons le nœud racine à partir de la liste des points triés.
+Pour créer un arbre, créons le nœud racine à partir de la liste des points triée.
 
 \subsubsection{Création d'un nœud}
 La coordonnée X d'un nœud devant être plus petite ou égale à celle de ses fils, commençons par rechercher le point avec la plus petite coordonnée X. Attribuons ce point au nœud courant. Séparons le reste des points en deux. Attribuons comme médiane du nœud courant, la moyenne de la coordonnée Y du dernier point de la partie 1 et du premier point de la partie 2. Les points étant triés selon la coordonnée Y, la première partie est dispose d'une coordonnée Y plus petite ou égale à la médiane du nœud alors que la deuxième partie aura une coordonnée Y plus grande ou égale à la médiane du nœud. Dans le cas où il ne reste aucun point après le retrait du minimum en X, la valeur de la moyenne n'a pas d'importance. Dans le cas où il ne reste qu'un point, la coordonnée Y du point restant peut être attribuée à la médiane du nœud.
@@ -117,7 +119,7 @@ La coordonnée X d'un nœud devant être plus petite ou égale à celle de ses f
 
 % TODO better explain windowing
 \subsection{Windowing}
-Le windowing est une technique très répandue qui consiste à sélectionner une certaine fenêtre parmis une énorme quantité de données. Un exemple pratique très répandu est l'affichage d'une carte sur un gps, le gps se voulant rapide n'affichera pas toutes les routes qui se trouvent dans le monde(énorme quantité de données) mais seulement celles qui nous entourent au moment où  nous roulons avec notre véhicule.
+Le windowing est une technique très répandue qui consiste à sélectionner une certaine fenêtre parmi une énorme quantité de données. Un exemple pratique très répandu est l'affichage d'une carte sur un gps, le gps se voulant rapide n'affichera pas toutes les routes qui se trouvent dans le monde(énorme quantité de données) mais seulement celles qui nous entourent au moment où  nous roulons avec notre véhicule.
 
 
 \newpage
@@ -134,7 +136,7 @@ Afin de garder les explications concises et faciles à comprendre, nous allons d
 L'objectif de cette structure est d'organiser l'ensemble des segments afin de faciliter la recherche de segments visibles dans une fenêtre de type $[X, X']$ x $[Y, Y']$ ou $[-\infty, X']$ x $[Y, Y']$.
 
 \subsection{Définition}
-Notre PST adapté respecte exactement la définition d'un PST excepté 2 adaptation :
+Notre PST adapté respecte exactement la définition d'un PST excepté 2 adaptations :
 \begin{itemize}
 	\item un segment sera stocké par nœud au lieu d'un point ;
 	\item les coordonnées utilisées pour effectuer la comparaison sont le minimum des coordonnées X du segment comme X, le minimum des coordonnées Y du segment comme Y.
@@ -148,7 +150,7 @@ Notre PST adapté se construit à la manière d'un PST excepté que les référe
 L'article conseillait également lors de la construction de la structure d'utiliser une méthode bottom-up similaire à la construction d'un tas. Nous avons ici décidé de ne pas utiliser cette méthode mais de construire l'arbre de haut en bas à l'aide des segments fournis à la structure. Une explication plus détaillée est fournie lors de l'explication de l'algorithme au point 6.
 
 \subsection{Windowing}
-Étant donné que nous devons reporter tous les segments visible dans une certaine fenêtre, nous devons non seulement extraire les segments ayant au moins un point dans la fenêtre, mais aussi les segments commençant avant et finissant après (qui passent au travers de la fenêtre). C'est le cas notamment du segment possédant les coordonnées (X', Y-1) (X', Y'+1). La recherche sera donc un peut moins efficace que pour les points et nous allons devoir utiliser une approche différente.
+Étant donné que nous devons reporter tous les segments visibles dans une certaine fenêtre, nous devons non seulement extraire les segments ayant au moins un point dans la fenêtre, mais aussi les segments commençant avant et finissant après (qui passent au travers de la fenêtre). C'est le cas notamment du segment possédant les coordonnées (X', Y-1) (X', Y'+1). La recherche sera donc un peu moins efficace que pour les points et nous allons devoir utiliser une approche différente.
 
 Nouvelle approche : se concentrer sur le point de départ du segment c'est-à-dire le point ayant la plus petite coordonnée X pour un segment horizontal, le point ayant la plus petite coordonnée Y pour un segment vertical. Nous avons ici 3 possibilités pour que le segment soit visible :
 \begin{itemize}
@@ -156,7 +158,7 @@ Nouvelle approche : se concentrer sur le point de départ du segment c'est-à-di
 	\item soit le point de départ est à gauche de la fenêtre et le segment traverse la limite gauche de la fenêtre ;
 	\item soit le point de départ est en dessous de la fenêtre et le segment traverse la limite basse de la fenêtre.
 \end{itemize}
-Il est évident que si le point de départ se situe au dessus ou à droite de la fenêtre, ce segment ne sera pas visible dans la fenêtre.
+Il est évident que si le point de départ se situe au-dessus ou à droite de la fenêtre, ce segment ne sera pas visible dans la fenêtre.
 % TODO add schema of the window to help comprehension
 
 Nous allons donc parcourir l'arbre à partir de la racine et le traiter de la sorte :
@@ -164,7 +166,7 @@ Nous allons donc parcourir l'arbre à partir de la racine et le traiter de la so
 	\item si le minimum en X du segment est strictement supérieur à X', alors on laisse tomber ce nœud ainsi que tous ses descendants (le segment de ce nœud ainsi que celui de ses descendants a son point de départ à droite de la fenêtre) ;
 	% TODO add reference to ci-desssus
 	\item si ce segment est visible dans la fenêtre (voir conditions ci-dessus), le reporter ;
-	\item si la médiane du nœud est strictement supérieure à Y' (le segment du fils droit ainsi que celui de ses descendants a son point de départ au dessus de la fenêtre), alors parcourir le fils gauche uniquement sinon parcourir les deux fils.
+	\item si la médiane du nœud est strictement supérieure à Y' (le segment du fils droit ainsi que celui de ses descendants a son point de départ au-dessus de la fenêtre), alors parcourir le fils gauche uniquement sinon parcourir les deux fils.
 \end{itemize}
 % TODO image de l'arbre et des noeud parcourus
 
@@ -177,10 +179,10 @@ L'utilisation de cette structure pour réaliser un windowing de type $[-\infty, 
 Nous avons vu une structure de données très efficace pour réaliser un windowing de type $[-\infty, X']$ x $[Y, Y']$. Cependant, nous devons également réaliser un windowing avec une fenêtre de type $[X, X']$ x $[-\infty, Y']$. Nous remarquons que pour obtenir cette fenêtre efficacement, il suffit d'échanger les coordonnées X et Y. Nous aurions pu implémenter une structure de donnée supplémentaire étant un tas selon Y et un ABR selon X (avec les médianes). Nous avons choisi de réutiliser la même structure de données et d'inverser les coordonnées des segments avant la construction de l'arbre. Ainsi le segment (X, X'),(Y, Y') devient après échange le segment (Y, Y'),(X, X'). Nous effectuons une recherche avec la fenêtre échangée $[-\infty, Y']$ x $[X, X']$ et effectuons un échange inverse sur les segments reportés afin de retrouver les segments originaux.
 
 \subsubsection{Les autres fenêtres partiellement bornées}
-Maintenant que nous pouvons effectuer une recherche efficace sur des fenêtres de type $[-\infty, X']$ x $[Y, Y']$ et $[X, X']$ x $[-\infty, Y']$, il nous reste les fenêtres $[X, +\infty]$ x $[Y, Y']$et $[X, X']$ x $[Y, +\infty]$. Nous remarquons que pour obtenir ces fenêtres efficacement, il suffit d'opposer les coordonnées. Nous aurions pu ici aussi créer une structure de donnée avec une comparaison différente. Nous avons également choisi de réutiliser la même structure et d'opposer les coordonnées avant la construction de l'arbre. Ainsi, le segment (X, X'),(Y,Y') devient après opposition (-X',-X),(-Y',-Y).
+Maintenant que nous pouvons effectuer une recherche efficace sur des fenêtres de type $[-\infty, X']$ x $[Y, Y']$ et $[X, X']$ x $[-\infty, Y']$, il nous reste les fenêtres $[X, +\infty]$ x $[Y, Y']$et $[X, X']$ x $[Y, +\infty]$. Nous remarquons que pour obtenir ces fenêtres efficacement, il suffit d'opposer les coordonnées. Nous aurions pu ici aussi créer une structure de données avec une comparaison différente. Nous avons également choisi de réutiliser la même structure et d'opposer les coordonnées avant la construction de l'arbre. Ainsi, le segment (X, X'),(Y,Y') devient après opposition (-X',-X),(-Y',-Y).
 
 \subsubsection{La fenêtre fermée}
-Lors de la recherche dans une fenêtre fermée avec l'arbre décrit ci-dessus, nous ne pouvons jamais éliminer le fils gauche de nos recherches. En conséquence, les nœuds que nous parcourons ayant un minimum en X strictement inférieur au X de la fenêtre et ayant un minimum en Y strictement inférieur au Y de la fenêtre sont parcourus inutilement. Ces segment sont ceux qui commencent en bas à gauche de la fenêtre et il est évident qu'ils n'y seront pas visibles. Nous avons donc adapté notre windowing afin qu'il prenne deux paramètre :
+Lors de la recherche dans une fenêtre fermée avec l'arbre décrit ci-dessus, nous ne pouvons jamais éliminer le fils gauche de nos recherches. En conséquence, les nœuds que nous parcourons ayant un minimum en X strictement inférieur au X de la fenêtre et ayant un minimum en Y strictement inférieur au Y de la fenêtre sont parcourus inutilement. Ces segments sont ceux qui commencent en bas à gauche de la fenêtre et il est évident qu'ils n'y seront pas visibles. Nous avons donc adapté notre windowing afin qu'il prenne deux paramètres :
 \begin{itemize}
 	\item center : définit si les segments commençant au centre de la fenêtre doivent être reportés ;
 	\item down : définit si les segments commençant en dessous de la fenêtre doivent être reportés.
@@ -214,7 +216,13 @@ Cette classe s'occupe de choisir l'arbre sur lequel effectuer le windowing afin 
 \newpage
 \section{Algorithmes et explications}
 Dans cette section, nous exposons nos différents algorithmes importants en pseudo-code ainsi que leur complexité en temps. Une courte explication en français y est aussi ajoutée afin de favoriser la compréhension de ceux-ci et leurs utilisations.
+
+
+Afin de compléter les différentes explications, nous allons en premier lieu vous expliquer et prouver que la hauteur de l'arbre est de log(n) où n est le nombre de segments présents dans le plan. En effet, la structure du Pst adapté est un arbre complètement équilibré, nous pouvons donc comparer celui-ci à un AVL dont la balance de chaque nœud en valeur absolue ne dépasse pas 1. 
+Nous avons effectué un test à travers notre classe PstTests dans notre projet visant à vérifier que ceci est bien vrai. L'intuition de cet équilibre s'explique par le fait que lors de la construction de l’arbre, pour chaque nœud de l'arbre, nous répartissons le nombre de segments restants en deux parties égales à un segment près, et chaque partie constitue toutes les données du sous-arbre gauche ou droit de ce nœud.
 \subsection{Construction de l'arbre}
+
+\subsubsection{Algorithmes}
 
 \begin{algorithm}
 \caption{Construction de l'arbre}
@@ -227,7 +235,7 @@ Dans cette section, nous exposons nos différents algorithmes importants en pseu
 \end{algorithm}
 
 \begin{algorithm}
-\caption{Construct()}
+\caption{Construct}
 \begin{algorithmic}[1]
 \REQUIRE une liste de Segment triée en y $A$ 
 \ENSURE un PstNode qui représente la racine de l'arbre
@@ -236,16 +244,16 @@ Dans cette section, nous exposons nos différents algorithmes importants en pseu
 \ENDIF
 \STATE $node \leftarrow A[getMinX()] $
 \IF{$A$ est non vide}
-\STATE $node.median \leftarrow longueur(A)/2 $
+\STATE $node.median \leftarrow A[longueur(A)/2].y1 $
 \STATE $node.left \leftarrow construct(A.sousListe(0,node.median)) $
 \STATE $node.right \leftarrow construct(A.sousListe(node.median,longueur(A))) $
 \ENDIF
 \RETURN node
 \end{algorithmic}
 \end{algorithm}
-
+\newpage
 \begin{algorithm}
-\caption{getMinX()}
+\caption{getMinX}
 \begin{algorithmic}[1]
 \REQUIRE une liste de Segment $L$
 \ENSURE l'indice entier de l’élément minimum en X
@@ -254,7 +262,7 @@ Dans cette section, nous exposons nos différents algorithmes importants en pseu
 \ENDIF
 \STATE $min \leftarrow 0$
 \FOR{$i \leftarrow 1$ à $longueur[A]$}
-\IF{$A[i].getMinX() < A[min].getMinX() $}
+\IF{$A[i].minX() < A[min].minX() $}
 \STATE $min \leftarrow i$
 \ENDIF
 \ENDFOR
@@ -264,20 +272,149 @@ Dans cette section, nous exposons nos différents algorithmes importants en pseu
 
 \subsubsection{Explication}
 
-Nous construisons ici l'arbre de haut en bas, ayant initialement la racine qui est le minimum en x des segments, nous effectuons ensuite une séparation des données en deux vis à vis de la médiane en y, et ceci récursivement. Biensur pour que ceci soit possible, nous trions les segments en y avant d'utiliser la liste pour la création de l'arbre.
+Nous construisons ici l'arbre de haut en bas, ayant initialement la racine qui est le minimum en x des segments, nous effectuons ensuite une séparation des données en deux vis-à-vis de la médiane, qui est la valeur en y1 (minimum en y du segment) se trouvant au milieu de la liste, et ceci récursivement. 
+
+Nous séparons ainsi à chaque étape la liste des segments en deux parties égales en taille à une valeur près, que nous répartissons entre les deux fils (première moitié au fils gauche et deuxième moitié au fils droit). Bien sûr pour que ceci soit possible, nous avons trié les segments par ordre croissant suivant leur composante en y1 avant d'utiliser la liste pour la création de l'arbre.
 
 \subsubsection{Complexité dans le pire des cas}
 Nous commençons d'abord par calculer la complexité dans le pire des cas en temps de l'algorithme 3.
-Les 4 premières lignes sont en $\mathcal{O} (1)$, ainsi que les lignes 7 et 10, car le retour est constant, la condition du if est constante et une affectation de valeur est constante en temps. La condition du if de la ligne 6 est elle aussi constante, car nous faisons une comparaison de valeurs (constante) et qu'avoir accès à la valeur du minimum x d'un segment se fait en temps constant. Nous aurons donc un for en ligne 5 qui sera en $\mathcal{O}(n)$ où n est la taille de la liste.
+Les 4 premières lignes sont en $\mathcal{O} (1)$, ainsi que les lignes 7 et 10, car le retour est constant, la condition du if est constante et une affectation de valeur est constante en temps. La condition du if de la ligne 6 est elle aussi constante, car nous faisons une comparaison de valeurs (temps constant) et qu'avoir accès à la valeur du minimum x d'un segment se fait en temps constant aussi (minX() ).
+
+Nous aurons donc un for en ligne 5 qui sera en $\mathcal{O}(n)$ où n est la taille de la liste.
 L'algorithme possède donc une complexité de $\mathcal{O}(n)$ au total.
+\\
+Pour ce qui concerne l'algorithme 2, les lignes s'exécutent toutes en temps constant pour les mêmes raisons que celles énoncées pour le $3^e$ algorithme mise à part pour les lignes 4,7 et 8.
+En effet, la ligne 4 s’exécute en $\mathcal{O}(n)$ où n est la taille de la liste donnée en paramètre, par la preuve ci-dessus. Nous effectuons ensuite deux appels récursifs aux lignes 7 et 8, ce qui nous donnera une complexité finale de l'algorithme en temps de $\mathcal{O}(n.log(n))$. Voici le raisonnement pour trouver cette complexité finale :
 
-Pour ce qui concerne l'algorithme 2, les lignes se font toutes en temps constant pour les mêmes raisons que celles énoncées pour le 3e algorithme mise à part pour les lignes 4,7 et 8. En effet pour les 7,8 nous effectuons un appel récursif qui sera exécuter  en $\mathcal{O}je sais pas$. Et pour la ligne 4, le getMinX() se résouds en $\mathcal{O}(n)$ par le point développer ci-dessus.
+Notre algorithme s'effectue à chaque étape de la récursivité en $\mathcal{O}(n)$ dût à la recherche du minimum dans la liste. Nous effectuons ensuite un appel récursif sur une moitié de liste, et un autre appel sur l'autre moitié.\\ Ce qui nous donne donc une complexité de $\mathcal{O}(n)$ + $\mathcal{O}(n/2)$ + $\mathcal{O}(n/2)$ + $\mathcal{O}$(de la prochaine étape de la récursivité) + ...\\Ce qui nous donne donc une complexité de $\mathcal{O}(n)$ + $\mathcal{O}(n)$ + $\mathcal{O}$(de la prochaine étape) + ...\\ On voit donc qu'à chaque niveau de l'arbre, nous effectuons des calculs en $\mathcal{O}(n)$, nous les effectuons log(n) fois qui est la hauteur de l'arbre. Nous aurons donc une complexité finale de l’algorithme 2 en $\mathcal{O}(n.log(n))$ où n est la taille de la liste initialement donnée en paramètre à la fonction.
+\\
 
-Pour se qui concerne l'algorithme 1, celui ci possède une première ligne en $\mathcal{O}(n.log(n))$ (complexité en temps du heapSort), et une seconde en $\mathcal{O}(n^2)$. Nous aurons donc une complexité finale de $\mathcal{O}(n^2)$
+Finalement, pour ce qui concerne l'algorithme 1, celui-ci possède une première ligne en $\mathcal{O}(n)$ (complexité en temps du heapSort, notion étudiée au cours), et une seconde en $\mathcal{O}(n.log(n))$. Nous aurons donc une complexité finale de $\mathcal{O}(n.log(n))$
 
 \subsection{Windowing}
 
-\subsection{Modification des fenêtres}
+
+\subsubsection{Algorithmes}
+
+\begin{algorithm}
+\caption{Windowing}
+\begin{algorithmic}[1]
+\REQUIRE un Segment $window$ représentant la fenêtre à appliquer
+\ENSURE Une liste contenant tous les Segments dans la fenêtre
+\RETURN window2($window$,$true$,$true$)
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+\caption{Windowing2}
+\begin{algorithmic}[1]
+\REQUIRE un Segment $window$(objet) représentant la fenêtre à appliquer, un booléen $down$ et un booléen $center$ représentant les type de report à appliquer
+\ENSURE Une liste contenant tous les Segments dans la fenêtre
+\STATE $window \leftarrow window.getWindow()$
+\STATE $reported \leftarrow$ nouvelle liste vide
+\STATE subwindow($root$,$window$,$reported$,$true$,$true$)
+\RETURN $reported$
+\end{algorithmic}
+\end{algorithm}
+
+\newpage
+
+\begin{algorithm}
+\caption{Subwindowing}
+\begin{algorithmic}[1]
+\REQUIRE un Node $node$, un Segment $window$, une liste de Segment $reported$, un booléen $down$ et un booléen $center$
+\ENSURE / Mais effet de bord : $reported$ contient tous les Segments dans la fenêtre
+\IF{$node$ est vide}
+\STATE fin de l'algorithme
+\ENDIF
+\STATE $S \leftarrow node.getSegment()$
+\IF{$center$ est faux et $S.minX()>window.x1$}
+\STATE fin de l'algorithme
+\ENDIF
+\IF{$S.minX()>window.x2$}
+\STATE fin de l'algorithme
+\ENDIF
+
+
+\IF{$center$ est vrai et $reportCenter(S,window)$ est vrai}
+\STATE Ajout de $S$ dans $reported$  
+\ENDIF
+\IF{$down$ est vrai et $reportDown(S,window)$ est vrai}
+\STATE Ajout de $S$ dans $reported$  
+\ENDIF
+\IF{$reportLeft(S,window)$ est vrai}
+\STATE Ajout de $S$ dans $reported$  
+\ENDIF
+
+\IF{$down$ est vrai ou $node.median >= window.y1$}
+\STATE subWindowing($node.left,window,reported,down,center)$  
+\ENDIF
+
+\IF{$node.median <= window.y2$}
+\STATE subWindowing($node.right,window,reported,down,center)$  
+\ENDIF
+
+\end{algorithmic}
+\end{algorithm}
+
+
+\subsubsection{Explication}
+
+Le windowing appliqué dans les algorithmes ci-dessus sont basés sur un windowing d'une fenêtre de type : \begin{itemize}
+\item Soit : $[-\infty;x2]X[y1;y2]$
+\item Soit : $[x1;x2]X[y1;y2]$
+\end{itemize}
+Selon cette hypothèse, nous avons considéré tous les différents cas de segments devant être considérés dans la fenêtre (au moins un point dans la fenêtre ou passant au travers) et ceux qui ne devaient pas s'y trouver. Afin de favoriser la compréhension de notre algorithme, nous expliquons les deux algorithmes l'un après l'autre.
+
+En ce qui concerne le windowing (algorithme 4), il ne nécessite pas d'explication supplémentaire, le pseudo-code est très clair. 
+
+Pour l'algorithme 5 (windowing2), l'algorithme effectue dans cet ordre ces différentes actions : rendre la structure représentant la fenêtre ordonnée(x1<x2 et y1<y2) afin de respecter la notion mathématique d'une fenêtre et simplifier le code, et ensuite calculer à l'aide de l'algorithme 6 les segments dans la fenêtre pour pouvoir les retourner dans une liste.
+
+L'algorithme 6 est la partie plus délicate de l'algorithme. En effet, c'est ici que nous avons mis en œuvre l'exploration de l'arbre pour prendre tous les segments qui nous intéressent. Nous avons donc procédé par toute une série de conditions.
+
+Tout d'abord nous vérifions que le nœud n'est pas vide(cas se produisant après l'exploration d'une feuille).
+
+Pour les deux conditions suivantes, nous cherchons les conditions d'arrêt de l'algorithme qui pourraient se produire avant d'arriver à la fin de l'arbre. 
+
+La première condition vérifie que nous ne devons plus prendre de segments se trouvant à l'intérieur de la fenêtre et que le nœud courant dans lequel nous nous trouvons se trouve soit dans la fenêtre, soit à droite de la fenêtre pour ses coordonnées en x. Par définition de la structure, nous savons donc que tous les nœuds fils se trouvent soit dans la fenêtre, soit à droite de la fenêtre en x (car le nœud courant est le minimum en x). Nous pouvons donc arrêter l'algorithme et ignorer ses descendants.
+
+La deuxième condition d'arrêt est le cas où le segment du nœud courant se trouve complètement à droite de la fenêtre en x, nous pouvons donc l'ignorer et ignorer les sous-arbres qui suivent car ils seront tous à droite de la fenêtre (donc pas dedans) par la définition de la structure comme ci-dessus. Dis autrement, les coordonnées en x du segment se trouvant dans le nœud courant nous indiquent qu'elles sont strictement plus grandes que la fenêtre, or ce segment possède la coordonnée en x minimum du sous-arbre dans lequel elle se trouve, il faut donc ignorer ses descendants.
+
+En ce qui concerne les 3 conditions suivantes dans l'algorithme, celles-ci sont utilisées pour détecter quels segments se trouvent réellement dans la fenêtre, cette détection est faite durant toute l'exploration de l'algorithme dans l'arbre. Les conditions booléenne $down$ et $center$ sont utilisées afin de savoir quel type de report nous devons effectuer. En effet nous devons pouvoir détecter les différents types de segments énoncés lors de l'explication du windowing dans le point précédent "Pst adapté".
+
+Nous appelons donc trois méthodes qui testent ces différentes conditions. Nous n'avons pas fourni les pseudo-codes correspondant à ces méthodes qui effectuent simplement une condition et un retour booléen décrivant si le segment est à prendre en compte ou pas. Nous avons favorisé une explication écrite plutôt qu'algorithmique ce qui est plus compréhensible pour la compréhension du lecteur et moins fastidieux à lire. Bien sur pour plus de détails, le code source est disponible vous donnant un exemple pratique d'appliquer les différents reports.
+
+Les différentes conditions de reports sont donc celles -ci :\begin{itemize}
+\item[\textbf{reportCenter()}] Pour détecter les segments se trouvant dans la fenêtre totalement ou avec le premier point en y dans la fenêtre(y1 est la plus petite coordonnée en y), nous testons si le premier point du segment en y se trouve dans la fenêtre.
+
+\item[\textbf{reportDown()}] Pour détecter les segments verticaux passants à travers la borne inférieure de la fenêtre, donc avec le premier point en y commençant avant la fenêtre et le deuxième point se terminant dans ou après la fenêtre (cas d'un segment qui traverse). Nous testons si le premier point en y se trouve avant la fenêtre, et le second après, ainsi que les coordonnées en x devant se trouver toutes les deux dans la fenêtre (puisqu'elles sont égales car segment vertical, un seul test sur un seul x est nécessaire)
+
+\item[\textbf{reportLeft()}] Pour détecter les segments horizontaux qui traversent complètement la fenêtre ou qui commencent avant pour finir dans celle-ci. Nous testons si les coordonnées y se trouvent dans la fenêtre (puisqu'elles sont égales car segment horizontal, un seul test sur un seul y est nécessaire), et ensuite vérifions que le segment commence en ses coordonnées en x avant la fenêtre pour se terminer après ou dedans.
+    
+\end{itemize}
+Nous avons ainsi géré tous les différents segments pouvant se produire dans nos deux types de fenêtre. En effet, ces différents cas s'appliquent tous pour une fenêtre complètement bornée et le reportleft() n'aura pas lieu dans une fenêtre non bornée en x1 ($-\infty$)
+
+Finalement nous regardons par rapport à la médiane du nœud courant où nous devons nous déplacer dans l'arbre. Nous considérons donc les deux limites en y de la fenêtre pour savoir quand se déplacer à gauche dans l'arbre (éléments <= à la médiane en y1) ou à droite (éléments >= à la médiane en y1). Nous faisons donc des appels récursifs pour avancer toujours dans la bonne direction dans l'arbre et éviter des reports inutiles.
+
+\subsubsection{Complexité dans le pire des cas}
+
+Les différentes lignes dans les algorithmes 4 et 5 sont tous en $\mathcal{O}(1)$ car nous ne faisons que des appels à des fonctions , des retour de valeurs et un appel à getWindow() dans l'algorithme 5-ligne 1 , qui s'effectue aussi en $\mathcal{O}(1)$ aussi car il ne fait que donner un nouveau segment en prenant les données du premier. Le coût du windowing sera donc dû à l’exécution à la fonction subwindowing() qui va effectuer le réel travail d'exploration dans le Pst.
+
+Nous calculons donc la complexité en temps de l'algorithme 6. 
+Pour les lignes 1 à 10, elles s’exécutent toutes en $\mathcal{O}(1)$ car nous faisons de simples tests booléen sur des valeurs, des accès à des variables d'objets, une affectation à une variable, et que le corps de toutes les conditions sont en $\mathcal{O}(1)$ aussi.
+Pour les lignes 11 à 19, les différents tests booléens s'effectuent en $\mathcal{O}(1)$, ainsi que l'ajout à une liste et l'appel aux différents report. En effet ceux-ci testent juste des conditions sur les coordonnées d'après les cas et retournent un booléen, elles s’exécutent donc en un temps constant également.
+
+Il nous reste donc les lignes 20 à 24. Pour ce qui concerne ces lignes, l'étude de leur complexité est plus particulière. En effet elles effectuent un appel récursif selon certaines conditions qui un coût en temps de $\mathcal{O}(1)$. 
+Considérant que l'algorithme est jusque là en $\mathcal{O}(1)$ par ce que nous avons expliqué ci-dessus, l'algorithme se réalisera en $\mathcal{O}(1)$ x le nombre d'appels récursifs.
+
+Si nous analysons les appels nous constatons que les appels récursifs peuvent se réaliser soit sur le sous-arbre gauche du nœud courant (initialement la racine) si la fenêtre se trouve totalement à gauche de la médiane, soit le sous-arbre droit si la fenêtre se trouve totalement à droite de la médiane, soit les deux sous-arbres si la médiane se trouve dans la fenêtre. Nous considérons bien sur que les segments sont répartis plus ou moins uniformément dans l'espace (tous les segments ne se trouvent pas dans un même petit espace). Nous considérons aussi qu'à chaque avancement dans l'arbre, la médiane du nouveau nœud courant diminue(fils gauche) ou augmente (fils droit) par rapport à son père 
+
+Lors de la recherche de notre fenêtre en y, donc lorsque la médiane n'est pas encore dans la fenêtre, nous explorons les différents nœuds et testons les différents report le long du chemin jusqu'à ce que la médiane soit dans la fenêtre. Nous effectuons donc un appel récursif soit sur le fils gauche, soit sur le fils droit. Dans le pire des cas nous explorons donc la hauteur de l'arbre pour arriver au cas où la médiane se trouve dans la fenêtre. Celle-ci étant en log(n) comme vu précédemment, nous ferons log(n) appels dans le pire des cas pour arriver à la fenêtre que nous cherchons. Nous ferons ensuite k appels récursifs correspondants au nombre de Segments se trouvant dans la fenêtre. Nous aurons donc log(n)+k appels récursifs dans le pire des cas.
+
+
+Nous avons donc une complexité en temps dans le pire des cas pour cet algorithme en $\mathcal{O}(log(n)+k)$ où n est le nombre de segments et k le nombre de segments dans la fenêtre.
+ 
+
 \newpage
 \section{Mode d'emploi}
 Pour lancer une commande, rendez-vous dans le dossier racine du projet à l'aide du terminal.
@@ -320,11 +457,19 @@ Si vous le désirez, il est possible de changer la taille de la visualisation à
 La quatrième et dernière partie de l'interface affiche l'état du programme. Les erreurs y sont affichées en rouge alors que les informations y sont en noir.
 
 \section{Illustrations}
-Ce point du rapport sert d'illustration, vous permettant d'observer différents cas d'exemples d'application du windowing, et ceci via l'application que nous avons créer.
+Ce point du rapport sert d'illustration, vous permettant d'observer différents cas d'exemples d'applications du windowing, et ceci via l'application que nous avons créée.
 
+
+Cette image concerne des applications du windowing sur des segments horizontaux:
+\includegraphics[scale=0.25]{images/test_horizontal.png}
+
+Cette image concerne des applications du windowing sur des segments verticaux:
+\includegraphics[scale=0.25]{images/test_vertical.png}
+
+\newpage
 \section{Conclusion}
-Nous avons bien réalisé les objectifs fixés dans l'introduction à savoir créer et manipuler une structure de données non vue au cours.\\Il est clair que ce travail nous a demandé à plusieurs reprises de réfléchir sur des moyens algorithmiques de résoudre les problèmes rencontrés. Nous avons donc appliquer les différents concepts et structures vus durant le cours de SDD2 afin de trouver des solutions et savoir quelles structures sont les mieux adaptées et comment les appliquées.\\
-Ce travail nous aura donc permis de finalement faire "un peu de recherche" en groupe, dans l'optique de résoudre un problème nouveau, ce qui nous a permis de découvrir lors de nos réunions de groupe nos différentes idées, de les comparer et de considérer le problème sous différents aspects. Nous aurons donc un souvenir très positif de se travail.\\   
+Nous avons bien réalisé les objectifs fixés dans l'introduction à savoir créer et manipuler une structure de données non vue au cours.\\Il est clair que ce travail nous a demandé à plusieurs reprises de réfléchir sur des moyens algorithmiques de résoudre les problèmes rencontrés. Nous avons donc appliqué les différents concepts et structures vus durant le cours de SDD2 afin de trouver des solutions et savoir quelles structures sont les mieux adaptées et comment les appliquées.\\
+Ce travail nous aura donc permis de finalement faire "un peu de recherche" en groupe, dans l'optique de résoudre un problème nouveau, ce qui nous a permis de découvrir lors de nos réunions de groupe nos différentes idées, de les comparer et de considérer le problème sous différents aspects. Nous aurons donc un souvenir très positif de ce travail.\\   
 Nous tenons à remercier les personnes qui nous ont soutenues pour mener à bien ce projet à savoir BRUYÈRE Véronique et DEVILLEZ Gauvain.
 
 
