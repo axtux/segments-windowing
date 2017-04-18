@@ -483,12 +483,15 @@ Pour les lignes 1 à 10, elles s’exécutent toutes en $\mathcal{O}(1)$ car nou
 Pour les lignes 11 à 19, les différents tests booléens s'effectuent en $\mathcal{O}(1)$, ainsi que l'ajout à une liste et l'appel aux différents reports. En effet ceux-ci testent juste des conditions sur les coordonnées d'après les cas et retournent un booléen, elles s’exécutent donc en un temps constant également.
 
 Il nous reste donc les lignes 20 à 24. En ce qui concerne ces lignes, l'étude de leur complexité est plus particulière. En effet elles effectuent un appel récursif selon certaines conditions qui ont un coût en temps de $\mathcal{O}(1)$.
-Considérant que l'algorithme est jusqu'ici en $\mathcal{O}(1)$, l'algorithme se réalisera en $\mathcal{O}(1)$ x le nombre d'appels récursifs.
+Considérant que l'algorithme est jusqu'ici en $\mathcal{O}(1)$, l'algorithme se réalisera en $\mathcal{O}(1)$ x nombres de nœuds visités.
 
-Si nous analysons les appels nous constatons que les appels récursifs peuvent se réaliser soit sur le sous-arbre gauche du nœud courant (initialement la racine) si la fenêtre se trouve totalement à gauche de la médiane, soit le sous-arbre droit si la fenêtre se trouve totalement à droite de la médiane, soit les deux sous-arbres si la médiane se trouve dans la fenêtre. Nous remarquons aussi qu'à chaque avancement dans l'arbre, la médiane du nouveau nœud courant diminue(fils gauche) ou augmente (fils droit) par rapport à son père.
+Le pire cas est certainement celui où tous les segments sont dans la fenêtre. Dans ce cas, il faut parcourir tous les nœuds et la complexité en temps de notre algorithme est en $\mathcal{O}(n)$.
 
-Le pire cas est certainement celui où tous les segments sont dans la fenêtre. Dans ce cas, il faut parcourir tous les nœuds et la complexité de notre algorithme est en $\mathcal{O}(n)$.
+En pratique, l'algorithme est plus rapide qu'un simple parcourt de tous les segments. En effet, nous élaguons une partie des sous arbres.
 
+Cette structure est tout de même bien moins performante que le Pst de base avec des points, qui ne doit pas considérer plus que ce qui se trouve dans la fenêtre. Par exemple pour le cas de la fenêtre non bornée, l'algorithme doit explorer une grande partie du plan.
+
+Nous remarquons tout de même que le cas le plus idéal, c'est-à-dire le moins coûteux, est la fenêtre totalement bornée qui évite, par rapport aux autres fenêtres, d'explorer beaucoup de nœuds. En effet, elle ne considérons que la bande inférieur et la bande de gauche.
 \subsection{Modification des fenêtres}
 
 \subsubsection{Explication}
