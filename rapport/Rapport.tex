@@ -464,24 +464,20 @@ Finalement nous regardons par rapport à la médiane du nœud courant où nous d
 
 \subsubsection{Complexité dans le pire des cas}
 
-Les différentes lignes dans les algorithmes 4 et 5 sont tous en $\mathcal{O}(1)$ car nous ne faisons que des appels à des fonctions , des retour de valeurs et un appel à getWindow() dans l'algorithme 5-ligne 1 , qui s'effectue aussi en $\mathcal{O}(1)$ aussi car il ne fait que donner un nouveau segment en prenant les données du premier. Le coût du windowing sera donc dû à l’exécution à la fonction subwindowing() qui va effectuer le réel travail d'exploration dans le Pst.
+Les différentes lignes dans les algorithmes 4 et 5 sont tous en $\mathcal{O}(1)$ car nous ne faisons que des appels à des fonctions, des retours de valeur et un appel à getWindow() dans l'algorithme 5-ligne 1, qui s'effectue aussi en $\mathcal{O}(1)$ aussi car il ne fait que donner un nouveau segment en prenant les données du premier. Le coût du windowing sera donc dû à l’exécution de la fonction subwindowing() qui va effectuer le réel travail d'exploration dans le Pst.
 
 Nous calculons donc la complexité en temps de l'algorithme 6.
-Pour les lignes 1 à 10, elles s’exécutent toutes en $\mathcal{O}(1)$ car nous faisons de simples tests booléen sur des valeurs, des accès à des variables d'objets, une affectation à une variable, et que le corps de toutes les conditions sont en $\mathcal{O}(1)$ aussi.
-Pour les lignes 11 à 19, les différents tests booléens s'effectuent en $\mathcal{O}(1)$, ainsi que l'ajout à une liste et l'appel aux différents report. En effet ceux-ci testent juste des conditions sur les coordonnées d'après les cas et retournent un booléen, elles s’exécutent donc en un temps constant également.
+Pour les lignes 1 à 10, elles s’exécutent toutes en $\mathcal{O}(1)$ car nous faisons de simples tests booléens sur des valeurs, des accès à des variables d'objets, une affectation à une variable, et le corps de toutes les conditions est en $\mathcal{O}(1)$ aussi.
+Pour les lignes 11 à 19, les différents tests booléens s'effectuent en $\mathcal{O}(1)$, ainsi que l'ajout à une liste et l'appel aux différents reports. En effet ceux-ci testent juste des conditions sur les coordonnées d'après les cas et retournent un booléen, elles s’exécutent donc en un temps constant également.
 
-Il nous reste donc les lignes 20 à 24. Pour ce qui concerne ces lignes, l'étude de leur complexité est plus particulière. En effet elles effectuent un appel récursif selon certaines conditions qui un coût en temps de $\mathcal{O}(1)$.
-Considérant que l'algorithme est jusque là en $\mathcal{O}(1)$ par ce que nous avons expliqué ci-dessus, l'algorithme se réalisera en $\mathcal{O}(1)$ x le nombre d'appels récursifs.
+Il nous reste donc les lignes 20 à 24. En ce qui concerne ces lignes, l'étude de leur complexité est plus particulière. En effet elles effectuent un appel récursif selon certaines conditions qui ont un coût en temps de $\mathcal{O}(1)$.
+Considérant que l'algorithme est jusqu'ici en $\mathcal{O}(1)$, l'algorithme se réalisera en $\mathcal{O}(1)$ x le nombre d'appels récursifs.
 
-Si nous analysons les appels nous constatons que les appels récursifs peuvent se réaliser soit sur le sous-arbre gauche du nœud courant (initialement la racine) si la fenêtre se trouve totalement à gauche de la médiane, soit le sous-arbre droit si la fenêtre se trouve totalement à droite de la médiane, soit les deux sous-arbres si la médiane se trouve dans la fenêtre. Nous considérons bien sur que les segments sont répartis plus ou moins uniformément dans l'espace (tous les segments ne se trouvent pas dans un même petit espace). Nous considérons aussi qu'à chaque avancement dans l'arbre, la médiane du nouveau nœud courant diminue(fils gauche) ou augmente (fils droit) par rapport à son père
+Si nous analysons les appels nous constatons que les appels récursifs peuvent se réaliser soit sur le sous-arbre gauche du nœud courant (initialement la racine) si la fenêtre se trouve totalement à gauche de la médiane, soit le sous-arbre droit si la fenêtre se trouve totalement à droite de la médiane, soit les deux sous-arbres si la médiane se trouve dans la fenêtre. Nous remarquons aussi qu'à chaque avancement dans l'arbre, la médiane du nouveau nœud courant diminue(fils gauche) ou augmente (fils droit) par rapport à son père.
 
-Lors de la recherche de notre fenêtre en y, donc lorsque la médiane n'est pas encore dans la fenêtre, nous explorons les différents nœuds et testons les différents report le long du chemin jusqu'à ce que la médiane soit dans la fenêtre. Nous effectuons donc un appel récursif soit sur le fils gauche, soit sur le fils droit. Dans le pire des cas nous explorons donc la hauteur de l'arbre pour arriver au cas où la médiane se trouve dans la fenêtre. Celle-ci étant en log(n) comme vu précédemment, nous ferons log(n) appels dans le pire des cas pour arriver à la fenêtre que nous cherchons. Nous ferons ensuite k appels récursifs correspondants au nombre de Segments se trouvant dans la fenêtre. Nous aurons donc log(n)+k appels récursifs dans le pire des cas.
-
-
-Nous avons donc une complexité en temps dans le pire des cas pour cet algorithme en $\mathcal{O}(log(n)+k)$ où n est le nombre de segments et k le nombre de segments dans la fenêtre.
+Le pire cas est certainement celui où tous les segments sont dans la fenêtre. Dans ce cas, il faut parcourir tous les nœuds et la complexité de notre algorithme est en $\mathcal{O}(n)$.
 
 \subsection{Modification des fenêtres}
-
 
 \subsubsection{Explication}
 Le but de cette classe est de créer différents Pst en changeant les coordonnées des segments afin de transformer n'importe quel type de fenêtre lors du windowing en notre fenêtre idéale. Nous ne réexpliquons pas tout le principe en détail, car il a déjà été expliquer précédemment dans le rapport.
