@@ -480,6 +480,24 @@ Lors de la recherche de notre fenêtre en y, donc lorsque la médiane n'est pas 
 
 Nous avons donc une complexité en temps dans le pire des cas pour cet algorithme en $\mathcal{O}(log(n)+k)$ où n est le nombre de segments et k le nombre de segments dans la fenêtre.
 
+\subsection{Modification des fenêtres}
+
+
+\subsubsection{Explication}
+Le but de cette classe est de créer différents Pst en changeant les coordonnées des segments afin de transformer n'importe quel type de fenêtre lors du windowing en notre fenêtre idéale. Nous ne réexpliquons pas tout le principe en détail, car il a déjà été expliquer précédemment dans le rapport.
+
+Nous créons donc 4 listes avec les segments changés afin de construire 4 Pst différents sur lesquels nous appliquerons nos différents windowing. Nous réutiliserons la même méthode à la fin d'un windowing pour avoir les segments d'origine.
+
+\subsubsection{Complexité dans le pire des cas}
+Deux calculs de complexité en temps doivent être pris en compte :
+\begin{itemize}
+\item Les transformations de segments, qui se font en $\mathcal{O}(n)$ chacune. Nous additionnons donc 4 fois cette complexité, ce qui nous donne du $\mathcal{O}(n)$
+
+\item Les constructions des 4 arbres , qui se font chacune en $\mathcal{O}(n.log(n))$, ce qui nous donne aussi un total de $\mathcal{O}(n.log(n))$.
+
+\end{itemize}
+
+Notre complexité finale pour la construction généralisée sera donc en $\mathcal{O}(n.log(n))$ dans le pire des cas.
 
 \newpage
 \section{Mode d'emploi}
@@ -525,9 +543,11 @@ La quatrième et dernière partie de l'interface affiche l'état du programme. L
 \section{Illustrations}
 Cette section sert d'illustration, afin de vous permettre d'observer différents cas d'application du windowing via l'application que nous avons créée.
 Cette image concerne des applications du windowing sur des segments horizontaux:
+
 \includegraphics[scale=0.25]{images/test_horizontal.png}
 
 Cette image concerne des applications du windowing sur des segments verticaux:
+
 \includegraphics[scale=0.25]{images/test_vertical.png}
 
 \section{Améliorations possibles}
@@ -536,8 +556,6 @@ Plusieurs améliorations auraient encore été possibles :
 	\item calculer le point moyen (parmi tous les points définissant les segments) et décider des transformations à utiliser en fonction de la situation de la fenêtre fermée par rapport au point moyen ;
 	\item bien qu'il ne nous ait pas été demandé de traiter les fenêtres ayant 2 bornes infinies, décider des transformations à utiliser en fonction de l'orientation des 2 bornes.
 \end{itemize}
-
-\newpage
 
 \section{Conclusion}
 Nous avons bien réalisé les objectifs fixés dans l'introduction, à savoir créer et manipuler une structure de données non vue au cours. Pour ce faire, nous avons utilisé différents concepts vus au cours "Structure de données 2", comme les tas et les ABR.
